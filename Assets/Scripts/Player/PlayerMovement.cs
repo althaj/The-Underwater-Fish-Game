@@ -11,6 +11,14 @@ namespace TUFG.Prototype
     {
         [SerializeField] private float speed = 5f;
 
+        private Vector3[] groundRayOrigins = {
+            new Vector3(-0.3f, 0.15f),
+            new Vector3(0.3f, 0.15f)
+        };
+        private float groundRayLength = 0.3f;
+        private bool isGrounded = true;
+        private float gravity = 0;
+
         private PrototypeControlsInput controlsInput;
         private float moveVector = 0f;
 
@@ -18,6 +26,11 @@ namespace TUFG.Prototype
         {
             controlsInput = new PrototypeControlsInput();
             controlsInput.World.Move.performed += OnMove;
+        }
+
+        private void Start()
+        {
+            gravity = Physics2D.gravity.y;
         }
 
         private void OnEnable()
@@ -30,9 +43,26 @@ namespace TUFG.Prototype
             controlsInput.World.Move.Disable();
         }
 
-        void Update()
+        void FixedUpdate()
         {
-            transform.Translate(Vector3.right * moveVector * speed * Time.deltaTime);
+            isGrounded = false;
+            RaycastHit2D hit;
+
+            foreach(Vector3 groundRayOrigin in groundRayOrigins)
+            {
+                hit = Physics2D.Raycast(transform.position + groundRayOrigin, Vector2.down, groundRayLength);
+                if (hit.collider != null)
+                {
+                    isGrounded = true;
+                    transform.position = new Vector2(transform.position.x, hit.point.y);
+                    break;
+                }
+            }
+
+            if(isGrounded)
+                transform.Translate(Vector3.right * moveVector * speed * Time.fixedDeltaTime);
+            else
+                transform.Translate(Vector3.up * gravity * Time.fixedDeltaTime);
         }
 
         void OnMove(CallbackContext ctx)
