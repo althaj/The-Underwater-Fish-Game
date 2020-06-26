@@ -9,7 +9,7 @@
                     "name": "Move",
                     "type": "PassThrough",
                     "id": "2ee9ffd7-db98-48a5-993f-6b54c288c174",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
                 }
@@ -17,8 +17,8 @@
             "bindings": [
                 {
                     "name": "WASD",
-                    "id": "d5f9c067-ec80-4382-b5db-9e3a76a0b614",
-                    "path": "1DAxis(whichSideWins=1)",
+                    "id": "5dbd38b2-eb1e-44e0-a59e-87cf2cab9e5e",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -27,8 +27,30 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "e9753f3c-efeb-4fb6-9831-80dd0e8e4027",
+                    "name": "up",
+                    "id": "5d138d3f-a147-4f40-bf7a-462c7367a5de",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "f50bbef8-0c90-43b6-a71e-1e64bb0d4965",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "cf6199e6-ae01-4ac3-9c67-924fddbdc1c1",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -38,8 +60,8 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "b6fff8ab-b212-4cff-ad82-e4505049461b",
+                    "name": "right",
+                    "id": "7ab867dd-2d06-4262-b526-743ddfbcf8e9",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -49,19 +71,41 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "ArrowKeys",
-                    "id": "816a467c-bf34-43a3-8d2a-8dce3ca0001e",
-                    "path": "1DAxis(whichSideWins=1)",
+                    "name": "Arrow keys",
+                    "id": "9113b0ef-a254-4d95-9b47-7eb1ca8b2b0d",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard",
                     "action": "Move",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "6793f58e-e6a6-4250-848f-78afcea2a1f2",
+                    "name": "up",
+                    "id": "e3a232de-255d-44af-841c-af93fa070a99",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "d0145b1b-f31a-4990-8340-cebb3111479d",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "0c4a9951-aa22-4493-9418-7e3f2d8e2ccb",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
@@ -71,8 +115,8 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "0bef1a1d-ab3b-4e3e-aa8a-e93938337d03",
+                    "name": "right",
+                    "id": "ebb475b5-ef35-4cb9-9f7f-7f3e4bab21c5",
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
@@ -80,6 +124,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "aaff1d98-b60b-4861-acd5-7f5bb605fb83",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
@@ -91,6 +146,17 @@
             "devices": [
                 {
                     "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Gamepad",
+            "bindingGroup": "Gamepad",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
                     "isOptional": false,
                     "isOR": false
                 }

@@ -20,7 +20,7 @@ namespace TUFG.Prototype
         private float gravity = 0;
 
         private PrototypeControlsInput controlsInput;
-        private float moveVector = 0f;
+        private Vector2 moveVector = Vector2.zero;
 
         void Awake()
         {
@@ -60,14 +60,14 @@ namespace TUFG.Prototype
             }
 
             if(isGrounded)
-                transform.Translate(Vector3.right * moveVector * speed * Time.fixedDeltaTime);
+                transform.Translate(Vector3.right * moveVector.x * speed * Time.fixedDeltaTime);
             else
                 transform.Translate(Vector3.up * gravity * Time.fixedDeltaTime);
         }
 
         void OnMove(CallbackContext ctx)
         {
-            moveVector = ctx.ReadValue<float>();
+            moveVector = ctx.ReadValue<Vector2>();
         }
     }
 }
