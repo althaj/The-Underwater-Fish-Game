@@ -29,6 +29,8 @@ namespace TUFG.Prototype
         private Vector2[] ladderTops;
         private int currentLadderID = -1;
 
+        private Animator playerAnimator;
+
         #region Unity functions
         void Awake()
         {
@@ -40,6 +42,7 @@ namespace TUFG.Prototype
         {
             gravity = Physics2D.gravity.y;
             BuildLadderData();
+            playerAnimator = GetComponentInChildren<Animator>();
         }
 
         private void OnEnable()
@@ -62,9 +65,10 @@ namespace TUFG.Prototype
         #region Player Movement functions
         private void Move()
         {
+            Vector2 translation = Vector2.zero;
             if (isClimbing)
             {
-                if(moveVector.x != 0)
+                if(Mathf.Abs(moveVector.x) > 0.5f)
                 {
                     int ladderPosition = GetCloseLadder(World.LadderType.Any);
                     if (ladderPosition >= 0)
@@ -75,31 +79,38 @@ namespace TUFG.Prototype
                 {
                     if(moveVector.y < 0 && transform.position.y >= ladderBottoms[currentLadderID].y || moveVector.y > 0 && transform.position.y <= ladderTops[currentLadderID].y)
                     {
-                        transform.Translate(Vector3.up * moveVector.y * speed * Time.fixedDeltaTime);
+                        translation = Vector3.up * moveVector.y * speed * Time.fixedDeltaTime;
                     }
                 }
 
+                playerAnimator.SetFloat("Speed", translation.y);
+
             } else
             {
-                if (moveVector.y > 0)
+                if (moveVector.y > 0.5f)
                 {
                     int ladderID = GetCloseLadder(World.LadderType.Bottom);
                     if (ladderID >= 0)
                         StartClimbing(ladderID, World.LadderType.Bottom);
-                } else if (moveVector.y < 0)
+                } else if (moveVector.y < -0.5f)
                 {
                     int ladderID = GetCloseLadder(World.LadderType.Top);
                     if (ladderID >= 0)
                         StartClimbing(ladderID, World.LadderType.Top);
                 }
 
-                if(!isClimbing)
+                if (!isClimbing)
                     if (isGrounded)
-                        transform.Translate(Vector3.right * moveVector.x * speed * Time.fixedDeltaTime);
+                        translation = Vector3.right * moveVector.x * speed * Time.fixedDeltaTime;
                     else
-                        transform.Translate(Vector3.up * gravity * Time.fixedDeltaTime);
+                        translation = Vector3.up * gravity * Time.fixedDeltaTime;
 
+                playerAnimator.SetFloat("Speed", translation.x);
             }
+
+            transform.Translate(translation);
+            playerAnimator.SetBool("IsClimbing", isClimbing);
+            playerAnimator.SetBool("IsGrounded", isGrounded);
         }
 
         private void BuildLadderData()
