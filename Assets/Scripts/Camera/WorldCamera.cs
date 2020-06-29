@@ -9,7 +9,8 @@ namespace TUFG.Camera
         private Transform player;
         private Transform target = null;
 
-        [SerializeField] private float speed = 4f;
+        [SerializeField]
+        private float speed = 4f;
 
         private void Start()
         {
