@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Controls/PrototypeControls.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Controls/Contols.inputactions'
 
 using System;
 using System.Collections;
@@ -6,15 +6,15 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace TUFG.Prototype.Controls
+namespace TUFG.Controls
 {
-    public class @PrototypeControlsInput : IInputActionCollection, IDisposable
+    public class @ControlsInput : IInputActionCollection, IDisposable
     {
         public InputActionAsset asset { get; }
-        public @PrototypeControlsInput()
+        public @ControlsInput()
         {
             asset = InputActionAsset.FromJson(@"{
-    ""name"": ""PrototypeControls"",
+    ""name"": ""Contols"",
     ""maps"": [
         {
             ""name"": ""World"",
@@ -234,8 +234,8 @@ namespace TUFG.Prototype.Controls
         private readonly InputAction m_World_Move;
         public struct WorldActions
         {
-            private @PrototypeControlsInput m_Wrapper;
-            public WorldActions(@PrototypeControlsInput wrapper) { m_Wrapper = wrapper; }
+            private @ControlsInput m_Wrapper;
+            public WorldActions(@ControlsInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_World_Move;
             public InputActionMap Get() { return m_Wrapper.m_World; }
             public void Enable() { Get().Enable(); }

@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TUFG.Prototype.Controls;
+using TUFG.Controls;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
-namespace TUFG.Prototype
+namespace TUFG
 {
     public class PlayerMovement : MonoBehaviour
     {
@@ -20,7 +20,7 @@ namespace TUFG.Prototype
         private bool isGrounded = true;
         private float gravity = 0;
 
-        private PrototypeControlsInput controlsInput;
+        private ControlsInput controlsInput;
         private Vector2 moveVector = Vector2.zero;
 
         private readonly float distanceToClimb = 0.33f;
@@ -34,7 +34,7 @@ namespace TUFG.Prototype
         #region Unity functions
         void Awake()
         {
-            controlsInput = new PrototypeControlsInput();
+            controlsInput = new ControlsInput();
             controlsInput.World.Move.performed += OnMoveInput;
         }
 

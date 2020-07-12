@@ -14,7 +14,7 @@ namespace TUFG.Camera
 
         private void Start()
         {
-            player = FindObjectOfType<TUFG.Prototype.PlayerMovement>().transform;
+            player = FindObjectOfType<TUFG.PlayerMovement>().transform;
             if (player == null)
                 Debug.LogError("WorldCamera: No player found!!");
         }
