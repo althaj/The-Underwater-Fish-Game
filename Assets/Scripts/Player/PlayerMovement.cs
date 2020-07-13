@@ -19,6 +19,7 @@ namespace TUFG
         private readonly float groundRayLength = 0.3f;
         private bool isGrounded = true;
         private float gravity = 0;
+        private LayerMask groundLayer;
 
         private ControlsInput controlsInput;
         private Vector2 moveVector = Vector2.zero;
@@ -43,6 +44,8 @@ namespace TUFG
             gravity = Physics2D.gravity.y;
             BuildLadderData();
             playerAnimator = GetComponentInChildren<Animator>();
+
+            groundLayer = LayerMask.GetMask("Ground");
         }
 
         private void OnEnable()
@@ -176,7 +179,7 @@ namespace TUFG
 
             foreach (Vector3 groundRayOrigin in groundRayOrigins)
             {
-                hit = Physics2D.Raycast(transform.position + groundRayOrigin, Vector2.down, groundRayLength);
+                hit = Physics2D.Raycast(transform.position + groundRayOrigin, Vector2.down, groundRayLength, groundLayer);
                 if (hit.collider != null)
                 {
                     transform.position = new Vector2(transform.position.x, hit.point.y);
