@@ -69,12 +69,35 @@ namespace TUFG.Dialogue
 
             NodeContent content = currentNode.GetNodeContent();
             Debug.LogFormat("{0} says:\n{1}", content.characterName, content.dialogueText);
+            FindObjectOfType<TUFG.UI.DialogueContainer>().ShowMessage(content.characterName, content.dialogueText, content.avatar, content.avatarPosition);
         }
 
         public static void InitConversation(DialogueConversation conversation)
         {
             currentConversation = conversation.dialogueNodes;
             currentNodeID = 0;
+        }
+
+        public static void GoToNextNode()
+        {
+            if (HasNextNode)
+            {
+                currentNodeID++;
+                CurrentDialogueNode.Process();
+                DebugCurrentDialogueNode();
+            } else
+            {
+                currentNodeID = -1;
+                currentConversation = null;
+            }
+        }
+
+        public static bool HasNextNode
+        {
+            get
+            {
+                return (currentConversation != null && currentNodeID >= 0 && currentNodeID < currentConversation.Length - 1);
+            }
         }
     }
 }

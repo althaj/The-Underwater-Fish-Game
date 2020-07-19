@@ -20,5 +20,7 @@ namespace TUFG.Dialogue
             nodeContent.dialogueButtons = dialogueButtons;
             return nodeContent;
         }
+
+        public virtual void Process() { }
     }
 }
