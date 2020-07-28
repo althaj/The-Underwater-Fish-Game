@@ -50,32 +50,21 @@ namespace TUFG.Dialogue
             }
         }
 
-        public static void DebugCurrentDialogueNode()
+        public static void DisplayCurrentDialogueNode()
         {
             DialogueNode currentNode = CurrentDialogueNode;
             if (currentNode == null)
                 return;
 
-            /*
-                public string characterName;
-                public Sprite avatar;
-                public DialogueAvatarPosition avatarPosition;
-                public string dialogueText;
-                public float textSpeed;
-                public AudioClip textSound;
-                public Font font;
-                public DialogueButton[] dialogueButtons;
-            */
-
             NodeContent content = currentNode.GetNodeContent();
-            Debug.LogFormat("{0} says:\n{1}", content.characterName, content.dialogueText);
-            FindObjectOfType<TUFG.UI.DialogueContainer>().ShowMessage(content.characterName, content.dialogueText, content.avatar, content.avatarPosition);
+            FindObjectOfType<TUFG.UI.DialogueContainer>().ShowMessage(content.characterName, content.dialogueText, content.avatar, content.dialogueButtons, content.avatarPosition);
         }
 
         public static void InitConversation(DialogueConversation conversation)
         {
             currentConversation = conversation.dialogueNodes;
             currentNodeID = 0;
+            DisplayCurrentDialogueNode();
         }
 
         public static void GoToNextNode()
@@ -84,7 +73,7 @@ namespace TUFG.Dialogue
             {
                 currentNodeID++;
                 CurrentDialogueNode.Process();
-                DebugCurrentDialogueNode();
+                DisplayCurrentDialogueNode();
             } else
             {
                 currentNodeID = -1;

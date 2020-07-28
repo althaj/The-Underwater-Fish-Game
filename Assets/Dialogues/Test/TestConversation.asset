@@ -14,4 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   conversationID: TestConversation
   dialogueNodes:
-  - {fileID: 11400000, guid: 0ad4fab451899be45955565c29363668, type: 2}
+  - nodeID: TestNode1
+    characterName: Althaj
+    avatar: {fileID: 21300000, guid: 8a698063c580aa74498ba40ac412b042, type: 3}
+    avatarPosition: 0
+    text: Hello sir, my name is <color="red">Althaj</color>
+    textSpeed: 2
+    textSound: {fileID: 0}
+    font: {fileID: 0}
+    dialogueButtons: []

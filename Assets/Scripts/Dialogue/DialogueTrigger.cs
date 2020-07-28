@@ -14,7 +14,6 @@ namespace TUFG.Dialogue
             if (collision.GetComponent<PlayerMovement>() != null)
             {
                 DialogueManager.InitConversation(conversation);
-                DialogueManager.DebugCurrentDialogueNode();
             }
         }
     }
