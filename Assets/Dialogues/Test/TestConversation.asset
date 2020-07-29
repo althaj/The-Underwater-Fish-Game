@@ -23,3 +23,21 @@ MonoBehaviour:
     textSound: {fileID: 0}
     font: {fileID: 0}
     dialogueButtons: []
+  - nodeID: TestNode2
+    characterName: Althaj
+    avatar: {fileID: 21300000, guid: 8a698063c580aa74498ba40ac412b042, type: 3}
+    avatarPosition: 0
+    text: 'Do you want to keep talking with me?
+
+      Or do you want to end this
+      conversatoin?'
+    textSpeed: 2
+    textSound: {fileID: 0}
+    font: {fileID: 0}
+    dialogueButtons:
+    - text: Keep talking
+      function: 1
+      jumpToNodeId: TestNode1
+    - text: End conversation
+      function: 4
+      jumpToNodeId: 

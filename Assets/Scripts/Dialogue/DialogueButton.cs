@@ -1,14 +1,26 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace TUFG.Dialogue
 {
-    [CreateAssetMenu(fileName = "New Dialogue Button", menuName = "Dialogues/Dialogue Button")]
-    public class DialogueButton : ScriptableObject
+    public enum DialogueButtonFunction
+    {
+        GoToNextNode,
+        JumpToNode,
+        SetGameValue,
+        SetDialogueValue,
+        EndConversation
+    }
+
+    [Serializable]
+    public class DialogueButton
     {
         public string text;
-        public UnityEvent function;
+        public DialogueButtonFunction function;
+
+        public string jumpToNodeId;
     }
 }

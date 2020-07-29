@@ -21,7 +21,7 @@ namespace TUFG.Dialogue
         public DialogueButton[] dialogueButtons;
 
         public virtual NodeContent GetNodeContent() {
-            NodeContent nodeContent = new NodeContent();
+            NodeContent nodeContent = ScriptableObject.CreateInstance<NodeContent>();
             nodeContent.characterName = characterName;
             nodeContent.avatar = avatar;
             nodeContent.avatarPosition = avatarPosition;

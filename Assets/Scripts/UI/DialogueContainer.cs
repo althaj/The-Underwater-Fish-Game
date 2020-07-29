@@ -50,13 +50,21 @@ namespace TUFG.UI
             if(buttons == null || buttons.Length == 0)
             {
                 // Create "Next" button
+                DialogueButton continueButton = new DialogueButton();
+                continueButton.text = "Continue";
+                continueButton.function = DialogueButtonFunction.GoToNextNode;
+
+                GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
+                buttonInstance.transform.SetParent(buttonPanel.transform);
+                buttonInstance.GetComponent<DialogueButtonUI>().InitButton(continueButton);
+
             } else
             {
                 for(int i = 0; i < buttons.Length; i++)
                 {
                     GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
                     buttonInstance.transform.SetParent(buttonPanel.transform);
-                    buttonInstance.GetComponent<DialogueButtonUI>().InitButton(buttons[i].text, buttons[i].function);
+                    buttonInstance.GetComponent<DialogueButtonUI>().InitButton(buttons[i]);
                 }
             }
 
@@ -67,12 +75,13 @@ namespace TUFG.UI
         {
             isOpen = false;
             dialoguePanel.SetActive(false);
+            buttonPanel.SetActive(false);
         }
 
         private void ClearButtons()
         {
             for (int i = 0; i < buttonPanel.transform.childCount; i++)
-                Destroy(buttonPanel.transform.GetChild(i));
+                Destroy(buttonPanel.transform.GetChild(i).gameObject);
         }
     }
 }

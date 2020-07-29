@@ -37,7 +37,6 @@ namespace TUFG.Dialogue
             {
                 if(currentConversation == null)
                 {
-                    Debug.LogError("CurrentDialogueNode: Current conversation is null!");
                     return null;
                 }
 
@@ -50,24 +49,28 @@ namespace TUFG.Dialogue
             }
         }
 
-        public static void DisplayCurrentDialogueNode()
+        public void DisplayCurrentDialogueNode()
         {
             DialogueNode currentNode = CurrentDialogueNode;
             if (currentNode == null)
-                return;
-
-            NodeContent content = currentNode.GetNodeContent();
-            FindObjectOfType<TUFG.UI.DialogueContainer>().ShowMessage(content.characterName, content.dialogueText, content.avatar, content.dialogueButtons, content.avatarPosition);
+            {
+                FindObjectOfType<TUFG.UI.DialogueContainer>().HideMessage();
+            }
+            else
+            {
+                NodeContent content = currentNode.GetNodeContent();
+                FindObjectOfType<TUFG.UI.DialogueContainer>().ShowMessage(content.characterName, content.dialogueText, content.avatar, content.dialogueButtons, content.avatarPosition);
+            }
         }
 
-        public static void InitConversation(DialogueConversation conversation)
+        public void InitConversation(DialogueConversation conversation)
         {
             currentConversation = conversation.dialogueNodes;
             currentNodeID = 0;
             DisplayCurrentDialogueNode();
         }
 
-        public static void GoToNextNode()
+        public void GoToNextNode()
         {
             if (HasNextNode)
             {
@@ -76,17 +79,42 @@ namespace TUFG.Dialogue
                 DisplayCurrentDialogueNode();
             } else
             {
-                currentNodeID = -1;
-                currentConversation = null;
+                EndConversation();
             }
         }
 
-        public static bool HasNextNode
+        public void EndConversation()
+        {
+            currentNodeID = -1;
+            currentConversation = null;
+            DisplayCurrentDialogueNode();
+        }
+
+        public bool HasNextNode
         {
             get
             {
                 return (currentConversation != null && currentNodeID >= 0 && currentNodeID < currentConversation.Length - 1);
             }
+        }
+
+        public void JumpToNode(string nodeId)
+        {
+            for(int i = 0; i < currentConversation.Length; i++)
+            {
+                if (currentConversation[i].nodeID.CompareTo(nodeId) == 0)
+                {
+                    JumpToNode(i);
+                    return;
+                }
+            }
+            Debug.LogErrorFormat("JumpToNode: Could not find a node with ID {0}", nodeId);
+        }
+
+        public void JumpToNode(int nodeIndex)
+        {
+            currentNodeID = nodeIndex;
+            DisplayCurrentDialogueNode();
         }
     }
 }
