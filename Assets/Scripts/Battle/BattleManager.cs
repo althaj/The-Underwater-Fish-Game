@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
-using System.Diagnostics;
 
 namespace TUFG.Battle
 {
@@ -32,7 +31,8 @@ namespace TUFG.Battle
         #endregion
 
         private static Battle currentBattle = null;
-        private static Unit[] turnOrder = null;
+        // Array of units with bool representing wheter the unit is ally or not
+        private static Tuple<Unit, bool>[] turnOrder = null;
 
         /// <summary>
         /// Builds turn order based on speed attribute of units in the current battle.
@@ -45,17 +45,21 @@ namespace TUFG.Battle
                 return;
             }
 
-            List<Tuple<Unit, int>> unitsWithSpeed = new List<Tuple<Unit, int>>();
-            foreach(Unit units in currentBattle.allies.Union(currentBattle.enemies))
+            List<Tuple<Tuple<Unit, bool>, int>> unitsWithSpeed = new List<Tuple<Tuple<Unit, bool>, int>>();
+            foreach(Unit ally in currentBattle.allies)
             {
-                unitsWithSpeed.Add(new Tuple<Unit, int>(units, ResolveDiceRoll(units.UnitData.speed)));
+                unitsWithSpeed.Add(new Tuple<Tuple<Unit, bool>, int>(new Tuple<Unit, bool>(ally, true), ResolveDiceRoll(ally.UnitData.speed)));
+            }
+            foreach (Unit enemy in currentBattle.enemies)
+            {
+                unitsWithSpeed.Add(new Tuple<Tuple<Unit, bool>, int>(new Tuple<Unit, bool>(enemy, false), ResolveDiceRoll(enemy.UnitData.speed)));
             }
 
-            unitsWithSpeed.OrderBy(x => x.Item2);
-            turnOrder = new Unit[unitsWithSpeed.Count];
+            Tuple<Unit, bool>[] orderedUnits = unitsWithSpeed.OrderBy(x => x.Item2).Select(x => x.Item1).ToArray();
+            turnOrder = new Tuple<Unit, bool>[orderedUnits.Count()];
             for (int i = 0; i < turnOrder.Length; i++)
             {
-                turnOrder[i] = unitsWithSpeed[i].Item1;
+                turnOrder[i] = orderedUnits[i];
             }
 
             DebugBattle();
@@ -72,9 +76,10 @@ namespace TUFG.Battle
         internal static void DebugBattle()
         {
             string message = "Current turn order: ";
-            foreach(Unit unit in turnOrder)
+            foreach(Tuple<Unit, bool> unit in turnOrder)
             {
-                message += unit.name + ", ";
+                string ally = unit.Item2 ? "ally" : "enemy";
+                message += $"{unit.Item1.name} ({ally}), ";
             }
             Debug.Log(message);
         }

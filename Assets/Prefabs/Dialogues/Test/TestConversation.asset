@@ -38,6 +38,18 @@ MonoBehaviour:
     - text: Keep talking
       function: 1
       jumpToNodeId: TestNode1
+      allies: []
+      enemies: []
+    - text: Let's fight!!
+      function: 5
+      jumpToNodeId: 
+      allies:
+      - {fileID: 1767323786502011922, guid: 948706a11b9353a478fdc91e2e96f684, type: 3}
+      - {fileID: 1767323786502011922, guid: 948706a11b9353a478fdc91e2e96f684, type: 3}
+      enemies:
+      - {fileID: 1767323786502011922, guid: 948706a11b9353a478fdc91e2e96f684, type: 3}
     - text: End conversation
       function: 4
       jumpToNodeId: 
+      allies: []
+      enemies: []

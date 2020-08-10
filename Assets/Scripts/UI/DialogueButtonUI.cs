@@ -1,5 +1,6 @@
 ﻿using System;
 using TMPro;
+using TUFG.Battle;
 using TUFG.Dialogue;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,6 +38,9 @@ namespace TUFG.UI
                     throw new NotImplementedException();
                 case DialogueButtonFunction.SetGameValue:
                     throw new NotImplementedException();
+                case DialogueButtonFunction.StartBattle:
+                    BattleManager.InitBattle(button.allies, button.enemies);
+                    break;
             }
         }
     }

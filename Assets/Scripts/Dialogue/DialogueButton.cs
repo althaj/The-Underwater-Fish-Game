@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TUFG.Battle;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,7 +13,8 @@ namespace TUFG.Dialogue
         JumpToNode,
         SetGameValue,
         SetDialogueValue,
-        EndConversation
+        EndConversation,
+        StartBattle
     }
 
     [Serializable]
@@ -22,5 +24,8 @@ namespace TUFG.Dialogue
         public DialogueButtonFunction function;
 
         public string jumpToNodeId;
+
+        public Unit[] allies;
+        public Unit[] enemies;
     }
 }
