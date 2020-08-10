@@ -11,6 +11,7 @@ namespace TUFG.Battle
         [SerializeField] private new string name;
         [SerializeField] private UnitData unitData;
 
-        public Ability[] Abilities { get => unitData.abilities; set => unitData.abilities = value; }
+        public Ability[] Abilities { get => UnitData.abilities; set => UnitData.abilities = value; }
+        public UnitData UnitData { get => unitData; private set => unitData = value; }
     }
 }
