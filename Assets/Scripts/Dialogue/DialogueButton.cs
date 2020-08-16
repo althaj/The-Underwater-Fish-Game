@@ -47,6 +47,7 @@ namespace TUFG.Dialogue
                     throw new NotImplementedException();
                 case DialogueButtonFunction.StartBattle:
                     BattleManager.InitBattle(allies, enemies);
+                    DialogueManager.Instance.EndConversation();
                     break;
             }
         }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using TUFG.World;
+using TUFG.Camera;
 
 namespace TUFG.Battle
 {
@@ -55,26 +57,36 @@ namespace TUFG.Battle
             if (currentBattle == null)
                 return;
 
-            currentBattle.allies = new Unit[alliesData.Length];
-            currentBattle.enemies = new Unit[enemyData.Length];
-
-            Vector2 position = new Vector2(-4, 1);
-
-            for (int i = 0; i < alliesData.Length; i++)
+            Transform battleArena = FindObjectOfType<WorldInfo>().GetRandomArena();
+            if (battleArena != null)
             {
-                currentBattle.allies[i] = InstantiateUnit(alliesData[i], position);
-                currentBattle.allies[i].IsAlly = true;
+                WorldCamera camera = FindObjectOfType<WorldCamera>();
+                camera.SetPosition(battleArena.position + (Vector3.up * 2));
+                camera.SetTarget(battleArena);
 
-                position.x++;
-            }
+                currentBattle.allies = new Unit[alliesData.Length];
+                currentBattle.enemies = new Unit[enemyData.Length];
 
-            position.x++;
+                Vector2 position = battleArena.position - (Vector3.up * 2);
+                position.x -= 2;
 
-            for (int i = 0; i < enemyData.Length; i++)
-            {
-                currentBattle.enemies[i] = InstantiateUnit(enemyData[i], position);
-                currentBattle.allies[i].IsAlly = false;
-                position.x++;
+                for (int i = 0; i < alliesData.Length; i++)
+                {
+                    currentBattle.allies[i] = InstantiateUnit(alliesData[i], position, true);
+                    currentBattle.allies[i].IsAlly = true;
+
+                    position.x--;
+                }
+
+                position = battleArena.position - (Vector3.up * 2);
+                position.x += 2;
+
+                for (int i = 0; i < enemyData.Length; i++)
+                {
+                    currentBattle.enemies[i] = InstantiateUnit(enemyData[i], position, false);
+                    currentBattle.allies[i].IsAlly = false;
+                    position.x++;
+                }
             }
         }
 
@@ -83,13 +95,14 @@ namespace TUFG.Battle
         /// </summary>
         /// <param name="unitData"></param>
         /// <param name="position"></param>
-        private static Unit InstantiateUnit(UnitData unitData, Vector2 position)
+        private static Unit InstantiateUnit(UnitData unitData, Vector2 position, bool isAlly)
         {
             GameObject unitObject = new GameObject(unitData.name);
 
             unitObject.transform.position = position;
 
             SpriteRenderer sr = unitObject.AddComponent<SpriteRenderer>();
+            sr.flipX = !isAlly;
 
             Animator animator = unitObject.AddComponent<Animator>();
             animator.runtimeAnimatorController = unitData.animator;
