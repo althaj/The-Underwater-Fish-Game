@@ -61,13 +61,13 @@ namespace TUFG.Battle
             if (battleArena != null)
             {
                 WorldCamera camera = FindObjectOfType<WorldCamera>();
-                camera.SetPosition(battleArena.position + (Vector3.up * 2));
+                camera.SetPosition(battleArena.position + (Vector3.up * 1));
                 camera.SetTarget(battleArena);
 
                 currentBattle.allies = new Unit[alliesData.Length];
                 currentBattle.enemies = new Unit[enemyData.Length];
 
-                Vector2 position = battleArena.position - (Vector3.up * 2);
+                Vector2 position = battleArena.position - (Vector3.up * 1);
                 position.x -= 2;
 
                 for (int i = 0; i < alliesData.Length; i++)
@@ -78,7 +78,7 @@ namespace TUFG.Battle
                     position.x--;
                 }
 
-                position = battleArena.position - (Vector3.up * 2);
+                position = battleArena.position - (Vector3.up * 1);
                 position.x += 2;
 
                 for (int i = 0; i < enemyData.Length; i++)
