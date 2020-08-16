@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitID: DummyUnit
   name: Dummy
+  animator: {fileID: 9100000, guid: a98a3a80e4ba9c94ab7c3eca34a3fad7, type: 2}
   maxHealth: 10
   health: 10
   armor: 1

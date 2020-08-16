@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TUFG.Battle.Abilities;
+using TUFG.Battle.AI;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace TUFG.Battle
@@ -10,6 +12,9 @@ namespace TUFG.Battle
     {
         public string unitID = "";
         public new string name = "";
+
+        public AnimatorController animator = null;
+        public UnitAIType aiType;
 
         public int maxHealth;
         public int health;

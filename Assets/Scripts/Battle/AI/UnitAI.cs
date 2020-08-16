@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TUFG.Battle.Abilities;
@@ -7,42 +6,67 @@ using UnityEditor;
 
 namespace TUFG.Battle.AI
 {
-    public abstract class UnitAI : MonoBehaviour
+    public enum UnitAIType
     {
-        public abstract void GetChosenAbility(Battle battle, Unit unit, out Ability ability, out Unit target);
+        Random
     }
 
-    [AttributeUsage(AttributeTargets.Class)]
-    public class ClassTooltip : PropertyAttribute
+    public static class UnitAI
     {
-        public readonly string description;
-
-        public ClassTooltip(string description)
+        public static void GetChosenAbility(UnitAIType aiType, Battle battle, Unit unit, out Ability ability, out Unit target)
         {
-            this.description = description;
-        }
-    }
+            ability = null;
+            target = null;
 
-    [CustomEditor(typeof(UnitAI), editorForChildClasses: true)]
-    public class MyTooltipDrawer : Editor
-    {
-        string tooltip;
-
-        private void OnEnable()
-        {
-            var attributes = target.GetType().GetCustomAttributes(inherit: false);
-            foreach (var attr in attributes)
+            switch (aiType)
             {
-                if (attr is ClassTooltip tooltip)
-                {
-                    this.tooltip = tooltip.description;
-                }
+                case UnitAIType.Random:
+                    GetRandomAbility(battle, unit, out ability, out target);
+                    break;
             }
         }
-        public override void OnInspectorGUI()
+
+        internal static void GetRandomAbility(Battle battle, Unit unit, out Ability ability, out Unit target)
         {
-            EditorGUILayout.HelpBox(tooltip, MessageType.Info);
-            base.OnInspectorGUI();
+            ability = null;
+            target = null;
+
+            if (battle == null)
+            {
+                Debug.LogErrorFormat("GetChosenAbility: Battle is null!");
+                return;
+            }
+
+            if (unit == null)
+            {
+                Debug.LogErrorFormat("GetChosenAbility: Unit is null!");
+                return;
+            }
+
+            if (unit.Abilities == null || unit.Abilities.Length == 0)
+            {
+                Debug.LogErrorFormat("GetChosenAbility: Unit {0} has no abilities!", unit.name);
+                return;
+            }
+
+            ability = unit.Abilities[Random.Range(0, unit.Abilities.Length)];
+
+            switch (ability.targetting)
+            {
+                case (AbilityTargetting.Self):
+                    target = unit;
+                    break;
+                case (AbilityTargetting.Single):
+                case (AbilityTargetting.Adjescent):
+                case (AbilityTargetting.All):
+                    target = battle.enemies[Random.Range(0, battle.enemies.Length)];
+                    break;
+                case (AbilityTargetting.Ally):
+                case (AbilityTargetting.AllAllies):
+                    target = battle.allies[Random.Range(0, battle.allies.Length)];
+                    break;
+            }
+
         }
     }
 }

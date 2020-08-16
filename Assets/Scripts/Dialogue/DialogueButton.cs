@@ -25,8 +25,8 @@ namespace TUFG.Dialogue
 
         public string jumpToNodeId;
 
-        public Unit[] allies;
-        public Unit[] enemies;
+        public UnitData[] allies;
+        public UnitData[] enemies;
 
         public void ExecuteButtonFunction()
         {

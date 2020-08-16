@@ -44,10 +44,10 @@ MonoBehaviour:
       function: 5
       jumpToNodeId: 
       allies:
-      - {fileID: 1767323786502011922, guid: 948706a11b9353a478fdc91e2e96f684, type: 3}
-      - {fileID: 1767323786502011922, guid: 948706a11b9353a478fdc91e2e96f684, type: 3}
+      - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
+      - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
       enemies:
-      - {fileID: 1767323786502011922, guid: 948706a11b9353a478fdc91e2e96f684, type: 3}
+      - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
     - text: End conversation
       function: 4
       jumpToNodeId: 
