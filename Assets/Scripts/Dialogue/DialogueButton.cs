@@ -27,5 +27,28 @@ namespace TUFG.Dialogue
 
         public Unit[] allies;
         public Unit[] enemies;
+
+        public void ExecuteButtonFunction()
+        {
+            switch (function)
+            {
+                case DialogueButtonFunction.GoToNextNode:
+                    DialogueManager.Instance.GoToNextNode();
+                    break;
+                case DialogueButtonFunction.EndConversation:
+                    DialogueManager.Instance.EndConversation();
+                    break;
+                case DialogueButtonFunction.JumpToNode:
+                    DialogueManager.Instance.JumpToNode(jumpToNodeId);
+                    break;
+                case DialogueButtonFunction.SetDialogueValue:
+                    throw new NotImplementedException();
+                case DialogueButtonFunction.SetGameValue:
+                    throw new NotImplementedException();
+                case DialogueButtonFunction.StartBattle:
+                    BattleManager.InitBattle(allies, enemies);
+                    break;
+            }
+        }
     }
 }
