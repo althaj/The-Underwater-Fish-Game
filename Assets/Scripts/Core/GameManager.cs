@@ -55,20 +55,44 @@ namespace TUFG.Core
             playerUnitData.health = 100;
             playerUnitData.armor = 1;
             playerUnitData.speed = 3;
-            playerUnitData.abilities = new Ability[2];
-
-            playerUnitData.abilities[0] = new Ability
+            playerUnitData.abilities = new Ability[]
             {
-                abilityID = "PlayerPunch",
-                name = "Punch",
-                targetting = AbilityTargetting.Single
-            };
-
-            playerUnitData.abilities[1] = new Ability
-            {
-                abilityID = "PlayerSlash",
-                name = "Slash",
-                targetting = AbilityTargetting.Adjescent
+                new Ability
+                {
+                    abilityID = "PlayerPunch",
+                    name = "Punch",
+                    targetting = AbilityTargetting.Single,
+                    primaryEffects = new AbilityEffect[]
+                    {
+                        new AbilityEffect
+                        {
+                            effectType = AbilityEffectType.Damage,
+                            effectValue = 10
+                        }
+                    }
+                },
+                new Ability
+                {
+                    abilityID = "PlayerSlash",
+                    name = "Slash",
+                    targetting = AbilityTargetting.Adjescent,
+                    primaryEffects = new AbilityEffect[]
+                    {
+                        new AbilityEffect
+                        {
+                            effectType = AbilityEffectType.Damage,
+                            effectValue = 5
+                        }
+                    },
+                    secondaryEffects = new AbilityEffect[]
+                    {
+                        new AbilityEffect
+                        {
+                            effectType = AbilityEffectType.Damage,
+                            effectValue = 4
+                        }
+                    }
+                }
             };
 
             return playerUnitData;

@@ -35,5 +35,8 @@ namespace TUFG.Battle.Abilities
         public AbilityTargetting targetting;
         public AbilityPriority priority;
         public int priorityStrenght;
+
+        public AbilityEffect[] primaryEffects;
+        public AbilityEffect[] secondaryEffects;
     }
 }
