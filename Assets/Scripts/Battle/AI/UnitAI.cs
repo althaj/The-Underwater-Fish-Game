@@ -8,7 +8,8 @@ namespace TUFG.Battle.AI
 {
     public enum UnitAIType
     {
-        Random
+        Random,
+        Player
     }
 
     public static class UnitAI

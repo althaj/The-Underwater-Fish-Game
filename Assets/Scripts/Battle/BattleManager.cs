@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using TUFG.World;
 using TUFG.Camera;
+using TUFG.Core;
 
 namespace TUFG.Battle
 {
@@ -41,21 +42,23 @@ namespace TUFG.Battle
         /// </summary>
         /// <param name="allies"></param>
         /// <param name="enemies"></param>
-        public static void InitBattle(UnitData[] allies, UnitData[] enemies)
+        public static void InitBattle( UnitData[] enemies)
         {
             currentBattle = new Battle();
 
-            InstantiateBattle(allies, enemies);
+            InstantiateBattle( enemies);
             BuildTurnOrder();
         }
 
         /// <summary>
         /// Instantiates all units.
         /// </summary>
-        private static void InstantiateBattle(UnitData[] alliesData, UnitData[] enemyData)
+        private static void InstantiateBattle(UnitData[] enemyData)
         {
             if (currentBattle == null)
                 return;
+
+            UnitData[] alliesData = GameManager.GetPlayerParty();
 
             Transform battleArena = FindObjectOfType<WorldInfo>().GetRandomArena();
             if (battleArena != null)

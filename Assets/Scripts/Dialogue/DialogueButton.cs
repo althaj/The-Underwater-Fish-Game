@@ -25,7 +25,6 @@ namespace TUFG.Dialogue
 
         public string jumpToNodeId;
 
-        public UnitData[] allies;
         public UnitData[] enemies;
 
         public void ExecuteButtonFunction()
@@ -46,7 +45,7 @@ namespace TUFG.Dialogue
                 case DialogueButtonFunction.SetGameValue:
                     throw new NotImplementedException();
                 case DialogueButtonFunction.StartBattle:
-                    BattleManager.InitBattle(allies, enemies);
+                    BattleManager.InitBattle(enemies);
                     DialogueManager.Instance.EndConversation();
                     break;
             }
