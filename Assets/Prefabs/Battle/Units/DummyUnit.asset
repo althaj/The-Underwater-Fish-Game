@@ -26,8 +26,18 @@ MonoBehaviour:
     targetting: 0
     priority: 6
     priorityStrenght: 3
+    primaryEffects:
+    - effectType: 0
+      effectValue: 5
+    secondaryEffects: []
   - name: Kick
     abilityID: DummyKick
     targetting: 1
     priority: 0
     priorityStrenght: 1
+    primaryEffects:
+    - effectType: 0
+      effectValue: 3
+    secondaryEffects:
+    - effectType: 0
+      effectValue: 2

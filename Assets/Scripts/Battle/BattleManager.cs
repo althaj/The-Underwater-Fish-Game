@@ -6,6 +6,8 @@ using System;
 using TUFG.World;
 using TUFG.Camera;
 using TUFG.Core;
+using TUFG.Battle.Abilities;
+using TUFG.Battle.AI;
 
 namespace TUFG.Battle
 {
@@ -46,8 +48,9 @@ namespace TUFG.Battle
         {
             currentBattle = new Battle();
 
-            InstantiateBattle( enemies);
+            InstantiateBattle(enemies);
             BuildTurnOrder();
+            Instance.StartCoroutine(ProcessBattle());
         }
 
         /// <summary>
@@ -77,6 +80,8 @@ namespace TUFG.Battle
                 {
                     currentBattle.allies[i] = InstantiateUnit(alliesData[i], position, true);
                     currentBattle.allies[i].IsAlly = true;
+                    if(alliesData[i].aiType == AI.UnitAIType.Player)
+                        currentBattle.allies[i].IsPlayer = true;
 
                     position.x--;
                 }
@@ -87,7 +92,7 @@ namespace TUFG.Battle
                 for (int i = 0; i < enemyData.Length; i++)
                 {
                     currentBattle.enemies[i] = InstantiateUnit(enemyData[i], position, false);
-                    currentBattle.allies[i].IsAlly = false;
+                    currentBattle.enemies[i].IsAlly = false;
                     position.x++;
                 }
             }
@@ -130,8 +135,6 @@ namespace TUFG.Battle
 
             IOrderedEnumerable<Unit> orderedUnits = currentBattle.allies.Concat(currentBattle.enemies).OrderBy(x => ResolveDiceRoll(x.Speed));
             turnOrder = orderedUnits.ToList();
-
-            DebugBattle();
         }
 
         internal static void DebugBattle()
@@ -158,6 +161,52 @@ namespace TUFG.Battle
                 result += UnityEngine.Random.Range(1, 7);
             }
             return result;
+        }
+
+        internal static IEnumerator ProcessBattle()
+        {
+            while(turnOrder.Count != 0)
+            {
+                Unit unit = turnOrder[0];
+                if (unit.IsPlayer)
+                {
+                    Debug.Log("Player turn");
+                    yield return new WaitForSeconds(2);
+                } else
+                {
+                    Ability ability = null;
+                    Unit target = null;
+
+                    UnitAI.GetChosenAbility(currentBattle, unit, out ability, out target);
+
+                    if(ability != null && target != null)
+                    {
+                        string abilityString = $"{unit.name} used {ability.name} on {target.name}";
+                        switch (ability.targetting)
+                        {
+                            case AbilityTargetting.Single:
+                            case AbilityTargetting.Self:
+                            case AbilityTargetting.Ally:
+                                abilityString += $", dealing {ability.primaryEffects[0].effectValue} damage.";
+                                break;
+                            case AbilityTargetting.All:
+                            case AbilityTargetting.AllAllies:
+                            case AbilityTargetting.Adjescent:
+                                abilityString += $", dealing {ability.primaryEffects[0].effectValue} damage and hitting other units for {ability.secondaryEffects[0].effectValue}.";
+                                break;
+                        }
+
+                        Debug.Log(abilityString);
+                        yield return new WaitForSeconds(2);
+                    }
+                    else
+                    {
+                        Debug.LogError($"ProcessBattle: No ability or target from {unit.name}!");
+                    }
+                }
+
+                turnOrder.Remove(unit);
+            }
         }
     }
 }

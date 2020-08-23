@@ -14,12 +14,12 @@ namespace TUFG.Battle.AI
 
     public static class UnitAI
     {
-        public static void GetChosenAbility(UnitAIType aiType, Battle battle, Unit unit, out Ability ability, out Unit target)
+        public static void GetChosenAbility(Battle battle, Unit unit, out Ability ability, out Unit target)
         {
             ability = null;
             target = null;
 
-            switch (aiType)
+            switch (unit.UnitData.aiType)
             {
                 case UnitAIType.Random:
                     GetRandomAbility(battle, unit, out ability, out target);
@@ -52,6 +52,15 @@ namespace TUFG.Battle.AI
 
             ability = unit.Abilities[Random.Range(0, unit.Abilities.Length)];
 
+            Unit[] allies = battle.allies;
+            Unit[] enemies = battle.enemies;
+
+            if (!unit.IsAlly)
+            {
+                allies = battle.enemies;
+                enemies = battle.allies;
+            }
+
             switch (ability.targetting)
             {
                 case (AbilityTargetting.Self):
@@ -60,11 +69,11 @@ namespace TUFG.Battle.AI
                 case (AbilityTargetting.Single):
                 case (AbilityTargetting.Adjescent):
                 case (AbilityTargetting.All):
-                    target = battle.enemies[Random.Range(0, battle.enemies.Length)];
+                    target = enemies[Random.Range(0, battle.enemies.Length)];
                     break;
                 case (AbilityTargetting.Ally):
                 case (AbilityTargetting.AllAllies):
-                    target = battle.allies[Random.Range(0, battle.allies.Length)];
+                    target = allies[Random.Range(0, battle.allies.Length)];
                     break;
             }
 
