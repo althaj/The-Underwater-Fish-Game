@@ -68,6 +68,8 @@ namespace TUFG.Dialogue
             currentConversation = conversation.dialogueNodes;
             currentNodeID = 0;
             DisplayCurrentDialogueNode();
+
+            FindObjectOfType<PlayerMovement>().DisableInput();
         }
 
         public void GoToNextNode()
@@ -88,6 +90,8 @@ namespace TUFG.Dialogue
             currentNodeID = -1;
             currentConversation = null;
             DisplayCurrentDialogueNode();
+
+            FindObjectOfType<PlayerMovement>().EnableInput();
         }
 
         public bool HasNextNode

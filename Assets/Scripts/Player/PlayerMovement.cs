@@ -37,6 +37,9 @@ namespace TUFG
         {
             controlsInput = new ControlsInput();
             controlsInput.World.Move.performed += OnMoveInput;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         private void Start()
@@ -188,6 +191,17 @@ namespace TUFG
             }
 
             return false;
+        }
+
+        public void DisableInput()
+        {
+            controlsInput.World.Move.Disable();
+            moveVector = Vector2.zero;
+        }
+
+        public void EnableInput()
+        {
+            controlsInput.World.Move.Enable();
         }
         #endregion
 

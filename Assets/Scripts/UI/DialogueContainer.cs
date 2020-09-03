@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using TUFG.Dialogue;
+using UnityEngine.EventSystems;
 
 namespace TUFG.UI
 {
@@ -58,6 +59,7 @@ namespace TUFG.UI
                 buttonInstance.transform.SetParent(buttonPanel.transform);
                 buttonInstance.GetComponent<DialogueButtonUI>().InitButton(continueButton);
 
+                EventSystem.current.SetSelectedGameObject(buttonInstance);
             } else
             {
                 for(int i = 0; i < buttons.Length; i++)
@@ -65,8 +67,13 @@ namespace TUFG.UI
                     GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
                     buttonInstance.transform.SetParent(buttonPanel.transform);
                     buttonInstance.GetComponent<DialogueButtonUI>().InitButton(buttons[i]);
+
+                    if(i == 0)
+                        EventSystem.current.SetSelectedGameObject(buttonInstance);
                 }
+
             }
+            
 
             isOpen = true;
         }
