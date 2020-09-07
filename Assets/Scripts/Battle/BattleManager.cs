@@ -8,6 +8,8 @@ using TUFG.Camera;
 using TUFG.Core;
 using TUFG.Battle.Abilities;
 using TUFG.Battle.AI;
+using TUFG.UI;
+using TUFG.Dialogue;
 
 namespace TUFG.Battle
 {
@@ -44,7 +46,7 @@ namespace TUFG.Battle
         /// </summary>
         /// <param name="allies"></param>
         /// <param name="enemies"></param>
-        public static void InitBattle( UnitData[] enemies)
+        public static void InitBattle(UnitData[] enemies)
         {
             currentBattle = new Battle();
 
@@ -80,7 +82,7 @@ namespace TUFG.Battle
                 {
                     currentBattle.allies[i] = InstantiateUnit(alliesData[i], position, true);
                     currentBattle.allies[i].IsAlly = true;
-                    if(alliesData[i].aiType == AI.UnitAIType.Player)
+                    if (alliesData[i].aiType == AI.UnitAIType.Player)
                         currentBattle.allies[i].IsPlayer = true;
 
                     position.x--;
@@ -127,7 +129,7 @@ namespace TUFG.Battle
         /// </summary>
         public static void BuildTurnOrder()
         {
-            if(currentBattle == null)
+            if (currentBattle == null)
             {
                 turnOrder = null;
                 return;
@@ -140,7 +142,7 @@ namespace TUFG.Battle
         internal static void DebugBattle()
         {
             string message = "Current turn order: ";
-            foreach(Unit unit in turnOrder)
+            foreach (Unit unit in turnOrder)
             {
                 string ally = unit.IsAlly ? "ally" : "enemy";
                 message += $"{unit.name} ({ally}), ";
@@ -165,21 +167,34 @@ namespace TUFG.Battle
 
         internal static IEnumerator ProcessBattle()
         {
-            while(turnOrder.Count != 0)
+            while (turnOrder.Count != 0)
             {
                 Unit unit = turnOrder[0];
                 if (unit.IsPlayer)
                 {
                     Debug.Log("Player turn");
-                    yield return new WaitForSeconds(2);
-                } else
+
+                    DialogueButton[] buttons = new DialogueButton[unit.Abilities.Length];
+
+                    for (int i = 0; i < buttons.Length; i++)
+                    {
+                        buttons[i] = new DialogueButton
+                        {
+                            text = unit.Abilities[i].name
+                        };
+                    }
+                    UIManager.Instance.ShowBattleActions(buttons);
+
+                    yield return new WaitForSeconds(1);
+                }
+                else
                 {
                     Ability ability = null;
                     Unit target = null;
 
                     UnitAI.GetChosenAbility(currentBattle, unit, out ability, out target);
 
-                    if(ability != null && target != null)
+                    if (ability != null && target != null)
                     {
                         string abilityString = $"{unit.name} used {ability.name} on {target.name}";
                         switch (ability.targetting)
@@ -203,9 +218,8 @@ namespace TUFG.Battle
                     {
                         Debug.LogError($"ProcessBattle: No ability or target from {unit.name}!");
                     }
+                    turnOrder.Remove(unit);
                 }
-
-                turnOrder.Remove(unit);
             }
         }
     }
