@@ -30,7 +30,7 @@ namespace TUFG.UI
         }
         #endregion
 
-        public void ShowBattleActions(DialogueButton[] buttons)
+        public void ShowBattleActions(Button[] buttons)
         {
             if (!this.isOpen)
             {

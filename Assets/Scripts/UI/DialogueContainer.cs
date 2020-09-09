@@ -33,7 +33,7 @@ namespace TUFG.UI
         }
         #endregion
 
-        public void ShowMessage(string authorName, string message, Sprite authorAvatar, DialogueButton[] buttons, DialogueAvatarPosition avatarPosition)
+        public void ShowMessage(string authorName, string message, Sprite authorAvatar, Button[] buttons, DialogueAvatarPosition avatarPosition)
         {
             if (!this.isOpen)
             {

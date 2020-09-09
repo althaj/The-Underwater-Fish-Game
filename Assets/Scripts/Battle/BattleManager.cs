@@ -40,13 +40,17 @@ namespace TUFG.Battle
         private static Battle currentBattle = null;
         // Array of units with bool representing wheter the unit is ally or not
         private static List<Unit> turnOrder = null;
+        // Current player selected ability
+        private static Ability currentAbility = null;
+
+        private static bool isPlayerTurn = false;
 
         /// <summary>
         /// Initialize a battle with array of allies and enemies
         /// </summary>
         /// <param name="allies"></param>
         /// <param name="enemies"></param>
-        public static void InitBattle(UnitData[] enemies)
+        public void InitBattle(UnitData[] enemies)
         {
             currentBattle = new Battle();
 
@@ -165,6 +169,10 @@ namespace TUFG.Battle
             return result;
         }
 
+        /// <summary>
+        /// Processes the AI turns of the battle and the player turn.
+        /// </summary>
+        /// <returns></returns>
         internal static IEnumerator ProcessBattle()
         {
             while (turnOrder.Count != 0)
@@ -172,19 +180,25 @@ namespace TUFG.Battle
                 Unit unit = turnOrder[0];
                 if (unit.IsPlayer)
                 {
-                    Debug.Log("Player turn");
-
-                    DialogueButton[] buttons = new DialogueButton[unit.Abilities.Length];
-
-                    for (int i = 0; i < buttons.Length; i++)
+                    if (!isPlayerTurn)
                     {
-                        buttons[i] = new DialogueButton
-                        {
-                            text = unit.Abilities[i].name
-                        };
-                    }
-                    UIManager.Instance.ShowBattleActions(buttons);
+                        Debug.Log("Player turn");
 
+                        Button[] buttons = new Button[unit.Abilities.Length];
+
+                        for (int i = 0; i < buttons.Length; i++)
+                        {
+                            buttons[i] = new Button
+                            {
+                                text = unit.Abilities[i].name,
+                                buttonType = ButtonType.Ability,
+                                ability = unit.Abilities[i]
+                            };
+                        }
+                        UIManager.Instance.ShowBattleActions(buttons);
+
+                        isPlayerTurn = true;
+                    }
                     yield return new WaitForSeconds(1);
                 }
                 else
@@ -221,6 +235,18 @@ namespace TUFG.Battle
                     turnOrder.Remove(unit);
                 }
             }
+        }
+
+        /// <summary>
+        /// Select current ability for player, followed buy the process of selecting the target.
+        /// </summary>
+        /// <param name="ability">Selected ability</param>
+        public void SelectAbility(Ability ability)
+        {
+            currentAbility = ability;
+
+            // TODO target selection
+            Debug.Log($"Player selected ability {currentAbility.name}.");
         }
     }
 }

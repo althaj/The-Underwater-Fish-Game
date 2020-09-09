@@ -69,7 +69,7 @@ namespace TUFG.UI
         }
         #endregion
 
-        public void ShowMessage(string authorName, string message, Sprite authorAvatar, DialogueButton[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
+        public void ShowMessage(string authorName, string message, Sprite authorAvatar, Button[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
         {
             DialogueContainer.ShowMessage(authorName, message, authorAvatar, buttons, avatarPosition);
         }
@@ -79,23 +79,23 @@ namespace TUFG.UI
             DialogueContainer.HideMessage();
         }
 
-        public void ShowBattleActions(DialogueButton[] buttons)
+        public void ShowBattleActions(Button[] buttons)
         {
             BattleContainer.ShowBattleActions(buttons);
         }
 
-        public void BuildButtons(DialogueButton[] buttons, GameObject buttonPanel, string noButtonText)
+        public void BuildButtons(Button[] buttons, GameObject buttonPanel, string noButtonText)
         {
             if (buttons == null || buttons.Length == 0)
             {
                 // Create "Next" button
-                DialogueButton continueButton = new DialogueButton();
+                Button continueButton = new Button();
                 continueButton.text = noButtonText;
-                continueButton.function = DialogueButtonFunction.GoToNextNode;
+                continueButton.dialogueFunction = DialogueButtonFunction.GoToNextNode;
 
                 GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
                 buttonInstance.transform.SetParent(buttonPanel.transform);
-                buttonInstance.GetComponent<DialogueButtonUI>().InitButton(continueButton);
+                buttonInstance.GetComponent<ButtonUI>().InitButton(continueButton);
 
                 EventSystem.current.SetSelectedGameObject(buttonInstance);
             }
@@ -105,7 +105,7 @@ namespace TUFG.UI
                 {
                     GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
                     buttonInstance.transform.SetParent(buttonPanel.transform);
-                    buttonInstance.GetComponent<DialogueButtonUI>().InitButton(buttons[i]);
+                    buttonInstance.GetComponent<ButtonUI>().InitButton(buttons[i]);
 
                     if (i == 0)
                         EventSystem.current.SetSelectedGameObject(buttonInstance);
