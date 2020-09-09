@@ -139,7 +139,7 @@ namespace TUFG.Battle
                 return;
             }
 
-            IOrderedEnumerable<Unit> orderedUnits = currentBattle.allies.Concat(currentBattle.enemies).OrderBy(x => ResolveDiceRoll(x.Speed));
+            IOrderedEnumerable<Unit> orderedUnits = currentBattle.allies.Concat(currentBattle.enemies).OrderByDescending(x => ResolveDiceRoll(x.Speed));
             turnOrder = orderedUnits.ToList();
         }
 
