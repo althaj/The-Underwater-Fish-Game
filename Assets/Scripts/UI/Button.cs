@@ -22,7 +22,8 @@ namespace TUFG.UI
     public enum ButtonType
     {
         Dialogue,
-        Ability
+        Ability,
+        Target
     }
 
     [Serializable]
@@ -32,6 +33,7 @@ namespace TUFG.UI
         public ButtonType buttonType;
         public DialogueButtonFunction dialogueFunction;
         public Ability ability;
+        public Unit target;
 
         public string jumpToNodeId;
 
@@ -58,13 +60,16 @@ namespace TUFG.UI
                         case DialogueButtonFunction.SetGameValue:
                             throw new NotImplementedException();
                         case DialogueButtonFunction.StartBattle:
-                            BattleManager.Instance.InitBattle(enemies);
                             DialogueManager.Instance.EndConversation();
+                            BattleManager.Instance.InitBattle(enemies);
                             break;
                     }
                     break;
                 case ButtonType.Ability:
                     BattleManager.Instance.SelectAbility(ability);
+                    break;
+                case ButtonType.Target:
+                    BattleManager.Instance.SelectTarget(target);
                     break;
             }
         }

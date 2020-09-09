@@ -35,7 +35,7 @@ namespace TUFG.UI
         public GameObject ButtonPrefab { get => buttonPrefab; set => buttonPrefab = value; }
 
         internal static DialogueContainer dialogueContainer;
-        public static DialogueContainer DialogueContainer
+        internal static DialogueContainer DialogueContainer
         {
             get
             {
@@ -49,7 +49,7 @@ namespace TUFG.UI
         }
 
         internal static BattleContainer battleContainer;
-        public static BattleContainer BattleContainer
+        internal static BattleContainer BattleContainer
         {
             get
             {
@@ -79,9 +79,14 @@ namespace TUFG.UI
             DialogueContainer.HideMessage();
         }
 
-        public void ShowBattleActions(Button[] buttons)
+        public void ShowBattleActions(Button[] buttons, string text)
         {
-            BattleContainer.ShowBattleActions(buttons);
+            BattleContainer.ShowBattleActions(buttons, text);
+        }
+
+        public void HideActions()
+        {
+            BattleContainer.HideActions();
         }
 
         public void BuildButtons(Button[] buttons, GameObject buttonPanel, string noButtonText)

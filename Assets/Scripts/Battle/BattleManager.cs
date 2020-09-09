@@ -43,7 +43,8 @@ namespace TUFG.Battle
         // Current player selected ability
         private static Ability currentAbility = null;
 
-        private static bool isPlayerTurn = false;
+        private static bool isSelectingAbility = false;
+        private static bool isSelectingTarget = false;
 
         /// <summary>
         /// Initialize a battle with array of allies and enemies
@@ -53,6 +54,8 @@ namespace TUFG.Battle
         public void InitBattle(UnitData[] enemies)
         {
             currentBattle = new Battle();
+
+            FindObjectOfType<PlayerMovement>().DisableInput();
 
             InstantiateBattle(enemies);
             BuildTurnOrder();
@@ -180,7 +183,7 @@ namespace TUFG.Battle
                 Unit unit = turnOrder[0];
                 if (unit.IsPlayer)
                 {
-                    if (!isPlayerTurn)
+                    if (!isSelectingAbility && !isSelectingTarget)
                     {
                         Debug.Log("Player turn");
 
@@ -195,9 +198,9 @@ namespace TUFG.Battle
                                 ability = unit.Abilities[i]
                             };
                         }
-                        UIManager.Instance.ShowBattleActions(buttons);
+                        UIManager.Instance.ShowBattleActions(buttons, "Choose your action");
 
-                        isPlayerTurn = true;
+                        isSelectingAbility = true;
                     }
                     yield return new WaitForSeconds(1);
                 }
@@ -245,8 +248,57 @@ namespace TUFG.Battle
         {
             currentAbility = ability;
 
-            // TODO target selection
-            Debug.Log($"Player selected ability {currentAbility.name}.");
+            isSelectingTarget = true;
+            isSelectingAbility = false;
+
+            Unit[] targets = new Unit[0];
+
+            switch (ability.targetting)
+            {
+                case (AbilityTargetting.Self):
+                    targets = currentBattle.allies.Where(x => x.IsPlayer).ToArray();
+                    break;
+                case (AbilityTargetting.Single):
+                case (AbilityTargetting.Adjescent):
+                case (AbilityTargetting.All):
+                    targets = currentBattle.enemies;
+                    break;
+                case (AbilityTargetting.Ally):
+                case (AbilityTargetting.AllAllies):
+                    targets = currentBattle.allies;
+                    break;
+            }
+
+            Button[] buttons = new Button[targets.Length];
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                buttons[i] = new Button
+                {
+                    text = targets[i].name,
+                    buttonType = ButtonType.Target,
+                    target = targets[i]
+                };
+            }
+            UIManager.Instance.ShowBattleActions(buttons, "Select target");
+        }
+
+        /// <summary>
+        /// Select target for the current ability.
+        /// </summary>
+        /// <param name="target">Selected unit</param>
+        public void SelectTarget(Unit target)
+        {
+            isSelectingTarget = false;
+            isSelectingAbility = false;
+
+            // TODO implement targetting
+
+            Debug.Log($"Player used ability {currentAbility.name} on {target.name}.");
+
+            UIManager.Instance.HideActions();
+
+            turnOrder.Remove(turnOrder[0]);
         }
     }
 }

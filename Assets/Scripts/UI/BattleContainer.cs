@@ -30,7 +30,12 @@ namespace TUFG.UI
         }
         #endregion
 
-        public void ShowBattleActions(Button[] buttons)
+        /// <summary>
+        /// Shows actions available to the player.
+        /// </summary>
+        /// <param name="buttons">Buttons with actions</param>
+        /// <param name="text">Title text</param>
+        public void ShowBattleActions(Button[] buttons, string text)
         {
             if (!this.isOpen)
             {
@@ -40,10 +45,20 @@ namespace TUFG.UI
                 isOpen = true;
             }
 
-            titleText.text = "Choose your action";
+            titleText.text = text;
 
             UIManager.Instance.ClearChildren(buttonPanel);
             UIManager.Instance.BuildButtons(buttons, buttonPanel, "Wait");
+        }
+
+        /// <summary>
+        /// Hide player actions panel.
+        /// </summary>
+        public void HideActions()
+        {
+            isOpen = false;
+            battlePanel.SetActive(false);
+            buttonPanel.SetActive(false);
         }
     }
 }

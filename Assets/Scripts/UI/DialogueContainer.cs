@@ -33,6 +33,14 @@ namespace TUFG.UI
         }
         #endregion
 
+        /// <summary>
+        /// Show dialogue message.
+        /// </summary>
+        /// <param name="authorName">Author name to be displayed</param>
+        /// <param name="message">Message to be displayed</param>
+        /// <param name="authorAvatar">Avatar of the speaker</param>
+        /// <param name="buttons">Action buttons</param>
+        /// <param name="avatarPosition">Position on left or right</param>
         public void ShowMessage(string authorName, string message, Sprite authorAvatar, Button[] buttons, DialogueAvatarPosition avatarPosition)
         {
             if (!this.isOpen)
@@ -53,6 +61,9 @@ namespace TUFG.UI
             UIManager.Instance.BuildButtons(buttons, buttonPanel, "Continue");
         }
 
+        /// <summary>
+        /// Hide dialogue message.
+        /// </summary>
         public void HideMessage()
         {
             isOpen = false;
