@@ -178,65 +178,76 @@ namespace TUFG.Battle
         /// <returns></returns>
         internal static IEnumerator ProcessBattle()
         {
-            while (turnOrder.Count != 0)
-            {
-                Unit unit = turnOrder[0];
-                if (unit.IsPlayer)
+            int roundNumber = 0;
+            bool hasAllies = true;
+            bool hasEnemies = true;
+
+            // Main battle loop
+            while(hasAllies && hasEnemies) {
+                roundNumber++;
+                Debug.Log($"====NEW ROUND====\nRound number {roundNumber}");
+
+                // Main round loop
+                while (turnOrder.Count != 0)
                 {
-                    if (!isSelectingAbility && !isSelectingTarget)
+                    Unit unit = turnOrder[0];
+                    if (unit.IsPlayer)
                     {
-                        Debug.Log("Player turn");
-
-                        Button[] buttons = new Button[unit.Abilities.Length];
-
-                        for (int i = 0; i < buttons.Length; i++)
+                        if (!isSelectingAbility && !isSelectingTarget)
                         {
-                            buttons[i] = new Button
+                            Button[] buttons = new Button[unit.Abilities.Length];
+
+                            for (int i = 0; i < buttons.Length; i++)
                             {
-                                text = unit.Abilities[i].name,
-                                buttonType = ButtonType.Ability,
-                                ability = unit.Abilities[i]
-                            };
+                                buttons[i] = new Button
+                                {
+                                    text = unit.Abilities[i].name,
+                                    buttonType = ButtonType.Ability,
+                                    ability = unit.Abilities[i]
+                                };
+                            }
+                            UIManager.Instance.ShowBattleActions(buttons, "Choose your action");
+
+                            isSelectingAbility = true;
                         }
-                        UIManager.Instance.ShowBattleActions(buttons, "Choose your action");
-
-                        isSelectingAbility = true;
-                    }
-                    yield return new WaitForSeconds(1);
-                }
-                else
-                {
-                    Ability ability = null;
-                    Unit target = null;
-
-                    UnitAI.GetChosenAbility(currentBattle, unit, out ability, out target);
-
-                    if (ability != null && target != null)
-                    {
-                        string abilityString = $"{unit.name} used {ability.name} on {target.name}";
-                        switch (ability.targetting)
-                        {
-                            case AbilityTargetting.Single:
-                            case AbilityTargetting.Self:
-                            case AbilityTargetting.Ally:
-                                abilityString += $", dealing {ability.primaryEffects[0].effectValue} damage.";
-                                break;
-                            case AbilityTargetting.All:
-                            case AbilityTargetting.AllAllies:
-                            case AbilityTargetting.Adjescent:
-                                abilityString += $", dealing {ability.primaryEffects[0].effectValue} damage and hitting other units for {ability.secondaryEffects[0].effectValue}.";
-                                break;
-                        }
-
-                        Debug.Log(abilityString);
-                        yield return new WaitForSeconds(2);
+                        yield return new WaitForSeconds(1);
                     }
                     else
                     {
-                        Debug.LogError($"ProcessBattle: No ability or target from {unit.name}!");
+                        Ability ability = null;
+                        Unit target = null;
+
+                        UnitAI.GetChosenAbility(currentBattle, unit, out ability, out target);
+
+                        if (ability != null && target != null)
+                        {
+                            string abilityString = $"{unit.name} used {ability.name} on {target.name}";
+                            switch (ability.targetting)
+                            {
+                                case AbilityTargetting.Single:
+                                case AbilityTargetting.Self:
+                                case AbilityTargetting.Ally:
+                                    abilityString += $", dealing {ability.primaryEffects[0].effectValue} damage.";
+                                    break;
+                                case AbilityTargetting.All:
+                                case AbilityTargetting.AllAllies:
+                                case AbilityTargetting.Adjescent:
+                                    abilityString += $", dealing {ability.primaryEffects[0].effectValue} damage and hitting other units for {ability.secondaryEffects[0].effectValue}.";
+                                    break;
+                            }
+
+                            Debug.Log(abilityString);
+                            yield return new WaitForSeconds(2);
+                        }
+                        else
+                        {
+                            Debug.LogError($"ProcessBattle: No ability or target from {unit.name}!");
+                        }
+                        turnOrder.Remove(unit);
                     }
-                    turnOrder.Remove(unit);
                 }
+
+                BuildTurnOrder();
             }
         }
 
