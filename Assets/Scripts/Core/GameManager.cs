@@ -92,6 +92,34 @@ namespace TUFG.Core
                             effectValue = 4
                         }
                     }
+                },
+                new Ability
+                {
+                    abilityID = "PlayerHeal",
+                    name = "Heal",
+                    targetting = AbilityTargetting.Self,
+                    primaryEffects = new AbilityEffect[]
+                    {
+                        new AbilityEffect
+                        {
+                            effectType = AbilityEffectType.Heal,
+                            effectValue = 10
+                        }
+                    }
+                },
+                new Ability
+                {
+                    abilityID = "PlayerPartyHeal",
+                    name = "Heal party",
+                    targetting = AbilityTargetting.Ally,
+                    primaryEffects = new AbilityEffect[]
+                    {
+                        new AbilityEffect
+                        {
+                            effectType = AbilityEffectType.Heal,
+                            effectValue = 5
+                        }
+                    }
                 }
             };
 
