@@ -65,7 +65,7 @@ namespace TUFG.Battle
         /// <summary>
         /// Instantiates all units.
         /// </summary>
-        private static void InstantiateBattle(UnitData[] enemyData)
+        private void InstantiateBattle(UnitData[] enemyData)
         {
             if (currentBattle == null)
                 return;
@@ -112,7 +112,7 @@ namespace TUFG.Battle
         /// </summary>
         /// <param name="unitData"></param>
         /// <param name="position"></param>
-        private static Unit InstantiateUnit(UnitData unitData, Vector2 position, bool isAlly)
+        private Unit InstantiateUnit(UnitData unitData, Vector2 position, bool isAlly)
         {
             GameObject unitObject = new GameObject(unitData.name);
 
@@ -125,7 +125,6 @@ namespace TUFG.Battle
             animator.runtimeAnimatorController = unitData.animator;
 
             Unit unit = unitObject.AddComponent<Unit>();
-            unit.name = unitData.name;
             unit.UnitData = unitData;
 
             return unit;
@@ -134,7 +133,7 @@ namespace TUFG.Battle
         /// <summary>
         /// Builds turn order based on speed attribute of units in the current battle.
         /// </summary>
-        public static void BuildTurnOrder()
+        public void BuildTurnOrder()
         {
             if (currentBattle == null)
             {
@@ -170,6 +169,27 @@ namespace TUFG.Battle
                 result += UnityEngine.Random.Range(1, 7);
             }
             return result;
+        }
+
+        private static void UseAbility(Unit author, Ability ability, Unit target)
+        {
+            string abilityString = $"{author.Name} used ability {ability.name} on {target.Name}, ";
+
+            switch (ability.targetting)
+            {
+                case AbilityTargetting.Single:
+                case AbilityTargetting.Self:
+                case AbilityTargetting.Ally:
+                    abilityString += $" dealing {ability.primaryEffects[0].effectValue} damage.";
+                    break;
+                case AbilityTargetting.All:
+                case AbilityTargetting.AllAllies:
+                case AbilityTargetting.Adjescent:
+                    abilityString += $" dealing {ability.primaryEffects[0].effectValue} damage and hitting other units for {ability.secondaryEffects[0].effectValue}.";
+                    break;
+            }
+
+            Debug.Log(abilityString);
         }
 
         /// <summary>
@@ -221,22 +241,8 @@ namespace TUFG.Battle
 
                         if (ability != null && target != null)
                         {
-                            string abilityString = $"{unit.name} used {ability.name} on {target.name}";
-                            switch (ability.targetting)
-                            {
-                                case AbilityTargetting.Single:
-                                case AbilityTargetting.Self:
-                                case AbilityTargetting.Ally:
-                                    abilityString += $", dealing {ability.primaryEffects[0].effectValue} damage.";
-                                    break;
-                                case AbilityTargetting.All:
-                                case AbilityTargetting.AllAllies:
-                                case AbilityTargetting.Adjescent:
-                                    abilityString += $", dealing {ability.primaryEffects[0].effectValue} damage and hitting other units for {ability.secondaryEffects[0].effectValue}.";
-                                    break;
-                            }
+                            UseAbility(unit, ability, target);
 
-                            Debug.Log(abilityString);
                             yield return new WaitForSeconds(2);
                         }
                         else
@@ -247,7 +253,7 @@ namespace TUFG.Battle
                     }
                 }
 
-                BuildTurnOrder();
+                Instance.BuildTurnOrder();
             }
         }
 
@@ -305,7 +311,7 @@ namespace TUFG.Battle
 
             // TODO implement targetting
 
-            Debug.Log($"Player used ability {currentAbility.name} on {target.name}.");
+            UseAbility(turnOrder[0], currentAbility, target);
 
             UIManager.Instance.HideActions();
 
