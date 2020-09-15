@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5674944907888190423}
   - component: {fileID: 7416500207646149914}
   m_Layer: 0
-  m_Name: Dummy
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +95,7 @@ Animator:
   m_GameObject: {fileID: 6236263382384366309}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 368012b57923c884b968c62a26ef6f01, type: 2}
+  m_Controller: {fileID: 9100000, guid: 480743572049e5743a04c7fbb3943e75, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -116,5 +116,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc57defc6e1029a48bf0557952b62997, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
   unitData: {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
+  health: 0

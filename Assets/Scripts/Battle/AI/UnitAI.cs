@@ -52,8 +52,8 @@ namespace TUFG.Battle.AI
 
             ability = unit.Abilities[Random.Range(0, unit.Abilities.Length)];
 
-            Unit[] allies = battle.allies;
-            Unit[] enemies = battle.enemies;
+            List<Unit> allies = battle.allies;
+            List<Unit> enemies = battle.enemies;
 
             if (!unit.IsAlly)
             {
@@ -61,6 +61,7 @@ namespace TUFG.Battle.AI
                 enemies = battle.allies;
             }
 
+            int index;
             switch (ability.targetting)
             {
                 case (AbilityTargetting.Self):
@@ -69,14 +70,15 @@ namespace TUFG.Battle.AI
                 case (AbilityTargetting.Single):
                 case (AbilityTargetting.Adjescent):
                 case (AbilityTargetting.All):
-                    target = enemies[Random.Range(0, battle.enemies.Length)];
+                    index = Random.Range(0, enemies.Count);
+                    target = enemies[index];
                     break;
                 case (AbilityTargetting.Ally):
                 case (AbilityTargetting.AllAllies):
-                    target = allies[Random.Range(0, battle.allies.Length)];
+                    index = Random.Range(0, allies.Count);
+                    target = allies[index];
                     break;
             }
-
         }
     }
 }

@@ -67,7 +67,7 @@ namespace TUFG.Core
                         new AbilityEffect
                         {
                             effectType = AbilityEffectType.Damage,
-                            effectValue = 10
+                            effectValue = 7
                         }
                     }
                 },
@@ -89,7 +89,7 @@ namespace TUFG.Core
                         new AbilityEffect
                         {
                             effectType = AbilityEffectType.Damage,
-                            effectValue = 4
+                            effectValue = 3
                         }
                     }
                 },

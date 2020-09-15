@@ -6,8 +6,8 @@ namespace TUFG.Battle
 {
     public class Battle
     {
-        public Unit[] allies;
-        public Unit[] enemies;
+        public List<Unit> allies;
+        public List<Unit> enemies;
         public bool playerTurn;
         public int currentUnitTurn;
     }

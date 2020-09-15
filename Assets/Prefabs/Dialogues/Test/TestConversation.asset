@@ -46,6 +46,7 @@ MonoBehaviour:
         priorityStrenght: 0
         primaryEffects: []
         secondaryEffects: []
+      target: {fileID: 0}
       jumpToNodeId: TestNode1
       enemies: []
     - text: Let's fight!!
@@ -59,8 +60,11 @@ MonoBehaviour:
         priorityStrenght: 0
         primaryEffects: []
         secondaryEffects: []
+      target: {fileID: 0}
       jumpToNodeId: 
       enemies:
+      - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
+      - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
       - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
       - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
     - text: End conversation
@@ -74,5 +78,6 @@ MonoBehaviour:
         priorityStrenght: 0
         primaryEffects: []
         secondaryEffects: []
+      target: {fileID: 0}
       jumpToNodeId: 
       enemies: []

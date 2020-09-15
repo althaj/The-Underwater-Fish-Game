@@ -16,8 +16,8 @@ MonoBehaviour:
   name: Dummy
   animator: {fileID: 9100000, guid: 368012b57923c884b968c62a26ef6f01, type: 2}
   aiType: 0
-  maxHealth: 10
-  health: 10
+  maxHealth: 15
+  health: 15
   armor: 1
   speed: 3
   abilities:
