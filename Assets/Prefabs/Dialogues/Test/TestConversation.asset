@@ -36,8 +36,48 @@ MonoBehaviour:
     font: {fileID: 0}
     dialogueButtons:
     - text: Keep talking
-      function: 1
+      buttonType: 0
+      dialogueFunction: 1
+      ability:
+        name: 
+        abilityID: 
+        targetting: 0
+        priority: 0
+        priorityStrenght: 0
+        primaryEffects: []
+        secondaryEffects: []
+      target: {fileID: 0}
       jumpToNodeId: TestNode1
-    - text: End conversation
-      function: 4
+      enemies: []
+    - text: Let's fight!!
+      buttonType: 0
+      dialogueFunction: 5
+      ability:
+        name: 
+        abilityID: 
+        targetting: 0
+        priority: 0
+        priorityStrenght: 0
+        primaryEffects: []
+        secondaryEffects: []
+      target: {fileID: 0}
       jumpToNodeId: 
+      enemies:
+      - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
+      - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
+      - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
+      - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
+    - text: End conversation
+      buttonType: 0
+      dialogueFunction: 4
+      ability:
+        name: 
+        abilityID: 
+        targetting: 0
+        priority: 0
+        priorityStrenght: 0
+        primaryEffects: []
+        secondaryEffects: []
+      target: {fileID: 0}
+      jumpToNodeId: 
+      enemies: []

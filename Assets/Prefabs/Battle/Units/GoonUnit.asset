@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67208d1cb1e18de4e9a69b51f7a1ea11, type: 3}
+  m_Name: GoonUnit
+  m_EditorClassIdentifier: 
+  unitID: GoonUnit
+  name: Goon
+  animator: {fileID: 9100000, guid: 10806f3097a02d041a4e99a228b36fc5, type: 2}
+  aiType: 0
+  maxHealth: 25
+  health: 25
+  armor: 1
+  speed: 1
+  abilities:
+  - name: Punch
+    abilityID: GoonPunch
+    targetting: 0
+    priority: 6
+    priorityStrenght: 3
+    primaryEffects:
+    - effectType: 0
+      effectValue: 10
+    secondaryEffects: []
+  - name: Kick
+    abilityID: GoonKick
+    targetting: 1
+    priority: 0
+    priorityStrenght: 1
+    primaryEffects:
+    - effectType: 0
+      effectValue: 5
+    secondaryEffects:
+    - effectType: 0
+      effectValue: 3

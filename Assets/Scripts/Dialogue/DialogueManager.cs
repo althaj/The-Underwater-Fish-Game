@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TUFG.UI;
 using UnityEngine;
 
 namespace TUFG.Dialogue
@@ -54,12 +55,12 @@ namespace TUFG.Dialogue
             DialogueNode currentNode = CurrentDialogueNode;
             if (currentNode == null)
             {
-                FindObjectOfType<TUFG.UI.DialogueContainer>().HideMessage();
+                UIManager.Instance.HideMessage();
             }
             else
             {
                 NodeContent content = currentNode.GetNodeContent();
-                FindObjectOfType<TUFG.UI.DialogueContainer>().ShowMessage(content.characterName, content.dialogueText, content.avatar, content.dialogueButtons, content.avatarPosition);
+                UIManager.Instance.ShowMessage(content.characterName, content.dialogueText, content.avatar, content.dialogueButtons, content.avatarPosition);
             }
         }
 
@@ -68,6 +69,8 @@ namespace TUFG.Dialogue
             currentConversation = conversation.dialogueNodes;
             currentNodeID = 0;
             DisplayCurrentDialogueNode();
+
+            FindObjectOfType<PlayerMovement>().DisableInput();
         }
 
         public void GoToNextNode()
@@ -88,6 +91,8 @@ namespace TUFG.Dialogue
             currentNodeID = -1;
             currentConversation = null;
             DisplayCurrentDialogueNode();
+
+            FindObjectOfType<PlayerMovement>().EnableInput();
         }
 
         public bool HasNextNode

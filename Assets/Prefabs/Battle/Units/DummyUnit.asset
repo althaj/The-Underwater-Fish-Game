@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67208d1cb1e18de4e9a69b51f7a1ea11, type: 3}
+  m_Name: DummyUnit
+  m_EditorClassIdentifier: 
+  unitID: DummyUnit
+  name: Dummy
+  animator: {fileID: 9100000, guid: 368012b57923c884b968c62a26ef6f01, type: 2}
+  aiType: 0
+  maxHealth: 15
+  health: 15
+  armor: 1
+  speed: 3
+  abilities:
+  - name: Punch
+    abilityID: DummyPunch
+    targetting: 0
+    priority: 6
+    priorityStrenght: 3
+    primaryEffects:
+    - effectType: 0
+      effectValue: 5
+    secondaryEffects: []
+  - name: Kick
+    abilityID: DummyKick
+    targetting: 1
+    priority: 0
+    priorityStrenght: 1
+    primaryEffects:
+    - effectType: 0
+      effectValue: 3
+    secondaryEffects:
+    - effectType: 0
+      effectValue: 2

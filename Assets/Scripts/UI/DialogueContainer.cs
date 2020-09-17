@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using TUFG.Dialogue;
+using UnityEngine.EventSystems;
 
 namespace TUFG.UI
 {
@@ -15,8 +16,8 @@ namespace TUFG.UI
         [SerializeField] private HorizontalLayoutGroup middlePanelLayoutGroup = null;
 
         [SerializeField] private GameObject buttonPanel = null;
-        [SerializeField] private GameObject buttonPrefab = null;
-
+                
+        private GameObject buttonPrefab;
         private GameObject dialoguePanel;
         private bool isOpen = false;
 
@@ -27,16 +28,27 @@ namespace TUFG.UI
             dialoguePanel = transform.GetChild(0).gameObject;
             dialoguePanel.SetActive(false);
             buttonPanel.SetActive(false);
+
+            buttonPrefab = GetComponentInParent<UIManager>().ButtonPrefab;
         }
         #endregion
 
-        public void ShowMessage(string authorName, string message, Sprite authorAvatar, DialogueButton[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
+        /// <summary>
+        /// Show dialogue message.
+        /// </summary>
+        /// <param name="authorName">Author name to be displayed</param>
+        /// <param name="message">Message to be displayed</param>
+        /// <param name="authorAvatar">Avatar of the speaker</param>
+        /// <param name="buttons">Action buttons</param>
+        /// <param name="avatarPosition">Position on left or right</param>
+        public void ShowMessage(string authorName, string message, Sprite authorAvatar, Button[] buttons, DialogueAvatarPosition avatarPosition)
         {
             if (!this.isOpen)
             {
                 // TODO PLAY ANIMATION
                 dialoguePanel.SetActive(true);
                 buttonPanel.SetActive(true);
+                isOpen = true;
             }
 
             authorNameText.text = authorName;
@@ -45,43 +57,18 @@ namespace TUFG.UI
 
             middlePanelLayoutGroup.reverseArrangement = avatarPosition == DialogueAvatarPosition.Right;
 
-            ClearButtons();
-            
-            if(buttons == null || buttons.Length == 0)
-            {
-                // Create "Next" button
-                DialogueButton continueButton = new DialogueButton();
-                continueButton.text = "Continue";
-                continueButton.function = DialogueButtonFunction.GoToNextNode;
-
-                GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
-                buttonInstance.transform.SetParent(buttonPanel.transform);
-                buttonInstance.GetComponent<DialogueButtonUI>().InitButton(continueButton);
-
-            } else
-            {
-                for(int i = 0; i < buttons.Length; i++)
-                {
-                    GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
-                    buttonInstance.transform.SetParent(buttonPanel.transform);
-                    buttonInstance.GetComponent<DialogueButtonUI>().InitButton(buttons[i]);
-                }
-            }
-
-            isOpen = true;
+            UIManager.Instance.ClearChildren(buttonPanel);
+            UIManager.Instance.BuildButtons(buttons, buttonPanel, "Continue");
         }
 
+        /// <summary>
+        /// Hide dialogue message.
+        /// </summary>
         public void HideMessage()
         {
             isOpen = false;
             dialoguePanel.SetActive(false);
             buttonPanel.SetActive(false);
-        }
-
-        private void ClearButtons()
-        {
-            for (int i = 0; i < buttonPanel.transform.childCount; i++)
-                Destroy(buttonPanel.transform.GetChild(i).gameObject);
         }
     }
 }

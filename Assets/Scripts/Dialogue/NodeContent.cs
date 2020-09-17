@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TUFG.UI;
 using UnityEngine;
 
 namespace TUFG.Dialogue
@@ -18,6 +19,6 @@ namespace TUFG.Dialogue
         public float textSpeed;
         public AudioClip textSound;
         public Font font;
-        public DialogueButton[] dialogueButtons;
+        public Button[] dialogueButtons;
     }
 }

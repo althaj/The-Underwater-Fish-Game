@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TUFG.UI;
 using UnityEngine;
 
 namespace TUFG.Dialogue
@@ -18,7 +19,7 @@ namespace TUFG.Dialogue
         public AudioClip textSound;
         public Font font;
 
-        public DialogueButton[] dialogueButtons;
+        public Button[] dialogueButtons;
 
         public virtual NodeContent GetNodeContent() {
             NodeContent nodeContent = ScriptableObject.CreateInstance<NodeContent>();
