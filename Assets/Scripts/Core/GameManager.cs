@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using TUFG.Battle.Abilities;
+using TUFG.Inventory;
 
 namespace TUFG.Core
 {
@@ -123,7 +124,17 @@ namespace TUFG.Core
                 }
             };
 
+            LoadPlayerItems();
+
             return playerUnitData;
+        }
+
+        public static void LoadPlayerItems()
+        {
+            Item sword = AssetDatabase.LoadAssetAtPath<Item>("Assets/Prefabs/Inventory/Items/Sword of destiny.asset");
+
+            InventoryManager.Instance.GetItem(sword);
+            InventoryManager.Instance.EquipItem(sword);
         }
     }
 }

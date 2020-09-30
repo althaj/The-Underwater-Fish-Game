@@ -14,22 +14,22 @@ namespace TUFG.Inventory
         Ring
     }
 
-    public class Inventory : MonoBehaviour
+    public class InventoryManager : MonoBehaviour
     {
         #region Singleton pattern
-        private static Inventory _instance;
-        public static Inventory Instance
+        private static InventoryManager _instance;
+        public static InventoryManager Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = GameObject.FindObjectOfType<Inventory>();
+                    _instance = GameObject.FindObjectOfType<InventoryManager>();
 
                     if (_instance == null)
                     {
                         GameObject container = new GameObject("Inventory");
-                        _instance = container.AddComponent<Inventory>();
+                        _instance = container.AddComponent<InventoryManager>();
 
                         inventoryItems = new List<Item>();
                         equippedItems = new List<Item>();
@@ -49,7 +49,7 @@ namespace TUFG.Inventory
         /// Equip an item that is in the player's inventory.
         /// </summary>
         /// <param name="item">Item to be equipped.</param>
-        public static void EquipItem(Item item)
+        public void EquipItem(Item item)
         {
             if (!inventoryItems.Contains(item))
             {
@@ -68,7 +68,7 @@ namespace TUFG.Inventory
         /// Unequip an item that is in the player's inventory.
         /// </summary>
         /// <param name="item">Item to be unequipped.</param>
-        public static void UnequipItem(Item item)
+        public void UnequipItem(Item item)
         {
             if (!inventoryItems.Contains(item))
             {
@@ -80,11 +80,35 @@ namespace TUFG.Inventory
         }
 
         /// <summary>
+        /// Get an item into the inventory.
+        /// </summary>
+        /// <param name="item">Item to put into the inventory.</param>
+        public void GetItem(Item item)
+        {
+            inventoryItems.Add(item);
+        }
+
+        /// <summary>
+        /// Drop an item that is currently in the inventory.
+        /// </summary>
+        /// <param name="item">Item to drop.</param>
+        public void DropItem(Item item)
+        {
+            if (!inventoryItems.Contains(item))
+            {
+                Debug.LogError($"Cannot drop item {item.name}, because it's not in the inventory!");
+                return;
+            }
+
+            inventoryItems.Remove(item);
+        }
+
+        /// <summary>
         /// Get an equipped item on a slot.
         /// </summary>
         /// <param name="slot">Inventory slot of the item.</param>
         /// <returns>Item at the slot. Returns null if the slot is empty.</returns>
-        public static Item GetItemAtSlot(ItemSlot slot)
+        public Item GetItemAtSlot(ItemSlot slot)
         {
             return equippedItems.Where(x => x.slot == slot).FirstOrDefault();
         }
@@ -94,7 +118,7 @@ namespace TUFG.Inventory
         /// </summary>
         /// <param name="type">Type of the bonus stats.</param>
         /// <returns>Bonus stats of the type.</returns>
-        public static int GetStatBonuses(ItemStatType type)
+        public int GetStatBonuses(ItemStatType type)
         {
             int result = 0;
 
