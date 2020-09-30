@@ -10,8 +10,8 @@ namespace TUFG.Inventory
         Health,
         Armor,
         Speed,
-        Damage,
-        MagicPower
+        Strenght,
+        Power
     }
 
     [Serializable]

@@ -14,5 +14,6 @@ namespace TUFG.Inventory
         public Ability[] abilities;
         public ItemStat[] buffs;
         public ItemStat[] pentalties;
+        public ItemSlot slot;
     } 
 }
