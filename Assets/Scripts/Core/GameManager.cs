@@ -56,6 +56,8 @@ namespace TUFG.Core
             playerUnitData.health = 100;
             playerUnitData.armor = 1;
             playerUnitData.speed = 3;
+            playerUnitData.power = 12;
+            playerUnitData.strength = 4;
             playerUnitData.abilities = new Ability[]
             {
                 new Ability
@@ -68,7 +70,9 @@ namespace TUFG.Core
                         new AbilityEffect
                         {
                             effectType = AbilityEffectType.Damage,
-                            effectValue = 7
+                            effectValue = 3,
+                            powerMultiplier = 0,
+                            strenghtMultiplier = 1
                         }
                     }
                 },
@@ -82,7 +86,9 @@ namespace TUFG.Core
                         new AbilityEffect
                         {
                             effectType = AbilityEffectType.Damage,
-                            effectValue = 5
+                            effectValue = 5,
+                            powerMultiplier = 0,
+                            strenghtMultiplier = 0.5f
                         }
                     },
                     secondaryEffects = new AbilityEffect[]
@@ -90,7 +96,9 @@ namespace TUFG.Core
                         new AbilityEffect
                         {
                             effectType = AbilityEffectType.Damage,
-                            effectValue = 3
+                            effectValue = 3,
+                            powerMultiplier = 0,
+                            strenghtMultiplier = 0.5f
                         }
                     }
                 },
@@ -104,7 +112,9 @@ namespace TUFG.Core
                         new AbilityEffect
                         {
                             effectType = AbilityEffectType.Heal,
-                            effectValue = 10
+                            effectValue = 10,
+                            powerMultiplier = 1,
+                            strenghtMultiplier = 0
                         }
                     }
                 },
@@ -118,7 +128,9 @@ namespace TUFG.Core
                         new AbilityEffect
                         {
                             effectType = AbilityEffectType.Heal,
-                            effectValue = 5
+                            effectValue = 5,
+                            powerMultiplier = 1,
+                            strenghtMultiplier = 0
                         }
                     }
                 }

@@ -23,9 +23,13 @@ MonoBehaviour:
     primaryEffects:
     - effectType: 0
       effectValue: 10
+      strenghtMultiplier: 0
+      powerMultiplier: 0
     secondaryEffects:
     - effectType: 0
       effectValue: 3
+      strenghtMultiplier: 0
+      powerMultiplier: 0
   - name: Stab
     abilityID: sword_of_destiny_stab
     targetting: 0
@@ -34,9 +38,11 @@ MonoBehaviour:
     primaryEffects:
     - effectType: 0
       effectValue: 13
+      strenghtMultiplier: 0
+      powerMultiplier: 0
     secondaryEffects: []
   buffs:
-  - name: Extra damage
+  - name: Extra strength
     statType: 3
     value: 5
   - name: Extra health
@@ -46,3 +52,4 @@ MonoBehaviour:
   - name: Magic power loss
     statType: 4
     value: 10
+  slot: 0

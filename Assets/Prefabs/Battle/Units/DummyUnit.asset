@@ -20,6 +20,8 @@ MonoBehaviour:
   health: 15
   armor: 1
   speed: 3
+  strength: 1
+  power: 0
   abilities:
   - name: Punch
     abilityID: DummyPunch
@@ -29,6 +31,8 @@ MonoBehaviour:
     primaryEffects:
     - effectType: 0
       effectValue: 5
+      strenghtMultiplier: 0
+      powerMultiplier: 0
     secondaryEffects: []
   - name: Kick
     abilityID: DummyKick
@@ -38,6 +42,10 @@ MonoBehaviour:
     primaryEffects:
     - effectType: 0
       effectValue: 3
+      strenghtMultiplier: 1
+      powerMultiplier: 0
     secondaryEffects:
     - effectType: 0
       effectValue: 2
+      strenghtMultiplier: 1
+      powerMultiplier: 0

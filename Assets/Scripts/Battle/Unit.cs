@@ -6,6 +6,7 @@ using TUFG.Battle.AI;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using TUFG.Inventory;
 
 namespace TUFG.Battle
 {
@@ -19,8 +20,29 @@ namespace TUFG.Battle
         public int Speed { get => UnitData.speed; private set => UnitData.speed = value; }
         public Ability[] Abilities { get => UnitData.abilities; set => UnitData.abilities = value; }
         public UnitData UnitData { get => unitData; set => unitData = value; }
-
         public int health;
+        public int Power
+        {
+            get
+            {
+                return IsPlayer ? unitData.power + InventoryManager.Instance.GetStatBonuses(ItemStatType.Power) : unitData.power;
+            }
+            set
+            {
+                unitData.power = value;
+            }
+        }
+        public int Strength
+        {
+            get
+            {
+                return IsPlayer ? unitData.strength + InventoryManager.Instance.GetStatBonuses(ItemStatType.Strenght) : unitData.strength;
+            }
+            set
+            {
+                unitData.power = value;
+            }
+        }
 
         /// <summary>
         /// Deal damage to a unit.

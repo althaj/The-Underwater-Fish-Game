@@ -219,12 +219,12 @@ namespace TUFG.Battle
                     switch (effect.effectType)
                     {
                         case AbilityEffectType.Damage:
-                            target.DealDamage(effect.effectValue);
+                            target.DealDamage((int)(effect.effectValue + effect.strenghtMultiplier * author.Strength + effect.powerMultiplier * author.Power));
                             if (target.health <= 0)
                                 KillUnit(target);
                             break;
                         case AbilityEffectType.Heal:
-                            target.Heal(effect.effectValue);
+                            target.Heal((int)(effect.effectValue + effect.strenghtMultiplier * author.Strength + effect.powerMultiplier * author.Power));
                             break;
                     }
                 }
