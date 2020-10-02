@@ -99,8 +99,6 @@ namespace TUFG.Battle
                 for (int i = 0; i < alliesData.Length; i++)
                 {
                     currentBattle.allies.Add(InstantiateUnit(alliesData[i], position, true));
-                    if (alliesData[i].aiType == AI.UnitAIType.Player)
-                        currentBattle.allies.Last().IsPlayer = true;
 
                     position.x--;
                 }
@@ -137,7 +135,8 @@ namespace TUFG.Battle
             Unit unit = unitObject.GetComponent<Unit>();
             unit.UnitData = unitData;
             unit.IsAlly = isAlly;
-            unit.health = unitData.maxHealth;
+            unit.IsPlayer = unitData.aiType == UnitAIType.Player;
+            unit.Health = unit.MaxHealth;
             unit.UpdateHealthUI();
 
             return unit;
@@ -220,7 +219,7 @@ namespace TUFG.Battle
                     {
                         case AbilityEffectType.Damage:
                             target.DealDamage((int)(effect.effectValue + effect.strenghtMultiplier * author.Strength + effect.powerMultiplier * author.Power));
-                            if (target.health <= 0)
+                            if (target.Health <= 0)
                                 KillUnit(target);
                             break;
                         case AbilityEffectType.Heal:
@@ -260,7 +259,6 @@ namespace TUFG.Battle
             while(currentBattle != null) {
                 BuildTurnOrder();
                 roundNumber++;
-                Debug.Log($"====NEW ROUND====\nRound number {roundNumber}");
 
                 // Main round loop
                 while (turnOrder.Count != 0 && currentBattle != null)
@@ -360,8 +358,6 @@ namespace TUFG.Battle
         {
             isSelectingTarget = false;
             isSelectingAbility = false;
-
-            // TODO implement targetting
 
             UseAbility(turnOrder[0], currentAbility, target);
 
