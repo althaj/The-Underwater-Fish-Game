@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TUFG.Battle.Abilities;
 using UnityEngine;
 
 namespace TUFG.Inventory
@@ -138,6 +139,15 @@ namespace TUFG.Inventory
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Returns all abilities from equipped items.
+        /// </summary>
+        /// <returns>Array of abilities.</returns>
+        public Ability[] GetEquippedAbilities()
+        {
+            return equippedItems.SelectMany(x => x.abilities).ToArray();
         }
         #endregion
 

@@ -6,6 +6,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 using TUFG.Battle.Abilities;
 using TUFG.Inventory;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace TUFG.Core
 {
@@ -58,85 +59,10 @@ namespace TUFG.Core
             playerUnitData.speed = 3;
             playerUnitData.power = 12;
             playerUnitData.strength = 4;
-            playerUnitData.abilities = new Ability[]
-            {
-                new Ability
-                {
-                    abilityID = "PlayerPunch",
-                    name = "Punch",
-                    targetting = AbilityTargetting.Single,
-                    primaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Damage,
-                            effectValue = 3,
-                            powerMultiplier = 0,
-                            strenghtMultiplier = 1
-                        }
-                    }
-                },
-                new Ability
-                {
-                    abilityID = "PlayerSlash",
-                    name = "Slash",
-                    targetting = AbilityTargetting.Adjescent,
-                    primaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Damage,
-                            effectValue = 5,
-                            powerMultiplier = 0,
-                            strenghtMultiplier = 0.5f
-                        }
-                    },
-                    secondaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Damage,
-                            effectValue = 3,
-                            powerMultiplier = 0,
-                            strenghtMultiplier = 0.5f
-                        }
-                    }
-                },
-                new Ability
-                {
-                    abilityID = "PlayerHeal",
-                    name = "Heal",
-                    targetting = AbilityTargetting.Self,
-                    primaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Heal,
-                            effectValue = 10,
-                            powerMultiplier = 1,
-                            strenghtMultiplier = 0
-                        }
-                    }
-                },
-                new Ability
-                {
-                    abilityID = "PlayerPartyHeal",
-                    name = "Heal party",
-                    targetting = AbilityTargetting.Ally,
-                    primaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Heal,
-                            effectValue = 5,
-                            powerMultiplier = 1,
-                            strenghtMultiplier = 0
-                        }
-                    }
-                }
-            };
 
             LoadPlayerItems();
+
+            playerUnitData.abilities = LoadPlayerAbilities();
 
             return playerUnitData;
         }
@@ -147,6 +73,38 @@ namespace TUFG.Core
 
             InventoryManager.Instance.GetItem(sword);
             InventoryManager.Instance.EquipItem(sword);
+        }
+
+        /// <summary>
+        /// Load abilities from equipped items. If no abilities are found, add a default punch ability.
+        /// </summary>
+        /// <returns>Array of current player abilities.</returns>
+        public static Ability[] LoadPlayerAbilities()
+        {
+            Ability[] result = InventoryManager.Instance.GetEquippedAbilities();
+            if (result.Length == 0)
+            {
+                result = new Ability[]
+                {
+                    new Ability
+                    {
+                        abilityID = "PlayerPunch",
+                        name = "Punch",
+                        targetting = AbilityTargetting.Single,
+                        primaryEffects = new AbilityEffect[]
+                        {
+                            new AbilityEffect
+                            {
+                                effectType = AbilityEffectType.Damage,
+                                effectValue = 3,
+                                powerMultiplier = 0,
+                                strenghtMultiplier = 1
+                            }
+                        }
+                    }
+                };
+            }
+            return result;
         }
     }
 }
