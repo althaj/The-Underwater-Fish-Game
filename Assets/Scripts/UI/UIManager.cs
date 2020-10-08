@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TUFG.Controls;
+using TUFG.Core;
 using TUFG.Dialogue;
+using TUFG.Inventory;
 using TUFG.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace TUFG.UI
 {
@@ -31,9 +35,26 @@ namespace TUFG.UI
         }
         #endregion
 
+        #region Fields and properties
         [SerializeField] private GameObject buttonPrefab = null;
+        [SerializeField] private GameObject inventoryButtonPrefab = null;
+        [SerializeField] private Sprite handsSlotIcon = null;
+        [SerializeField] private Sprite bodySlotIcon = null;
+        [SerializeField] private Sprite legsSlotIcon = null;
+        [SerializeField] private Sprite amuletSlotIcon = null;
+        [SerializeField] private Sprite ringSlotIcon = null;
         public GameObject ButtonPrefab { get => buttonPrefab; set => buttonPrefab = value; }
+        public GameObject InventoryButtonPrefab { get => inventoryButtonPrefab; set => inventoryButtonPrefab = value; }
+        public Sprite HandsSlotIcon { get => handsSlotIcon; set => handsSlotIcon = value; }
+        public Sprite BodySlotIcon { get => bodySlotIcon; set => bodySlotIcon = value; }
+        public Sprite LegsSlotIcon { get => legsSlotIcon; set => legsSlotIcon = value; }
+        public Sprite AmuletSlotIcon { get => amuletSlotIcon; set => amuletSlotIcon = value; }
+        public Sprite RingSlotIcon { get => ringSlotIcon; set => ringSlotIcon = value; }
 
+        private ControlsInput controlsInput;
+        #endregion
+
+        #region Containers
         internal static DialogueContainer dialogueContainer;
         internal static DialogueContainer DialogueContainer
         {
@@ -62,10 +83,37 @@ namespace TUFG.UI
             }
         }
 
+        internal static InventoryContainer inventoryContainer;
+        internal static InventoryContainer InventoryContainer
+        {
+            get
+            {
+                if (inventoryContainer == null)
+                    inventoryContainer = Instance.GetComponentInChildren<InventoryContainer>();
+
+                if (inventoryContainer == null)
+                    Debug.LogError("Cannot find the inventory container!!");
+                return inventoryContainer;
+            }
+        }
+        #endregion
+
         #region Unity functions
-        void Start()
+        void Awake()
         {
             DontDestroyOnLoad(gameObject);
+
+            Instance.controlsInput = new ControlsInput();
+            Instance.controlsInput.UI.OpenInventory.performed += _instance.InventoryButtonPressed;
+        }
+        private void OnEnable()
+        {
+            Instance.controlsInput.UI.Enable();
+        }
+
+        private void OnDisable()
+        {
+            Instance.controlsInput.UI.Disable();
         }
         #endregion
 
@@ -87,6 +135,22 @@ namespace TUFG.UI
         public void HideActions()
         {
             BattleContainer.HideActions();
+        }
+
+        public void ShowInventory()
+        {
+            InventoryContainer.ShowInventory(InventoryManager.Instance.EquippedItems, InventoryManager.Instance.InventoryItems);
+        }
+
+        public void InventoryButtonPressed(CallbackContext ctx)
+        {
+            GameManager.LoadPlayerItems();
+            InventoryContainer.ToggleInventory(InventoryManager.Instance.EquippedItems, InventoryManager.Instance.InventoryItems);
+        }
+
+        public void HideInventory()
+        {
+            InventoryContainer.HideInventory();
         }
 
         public void BuildButtons(Button[] buttons, GameObject buttonPanel, string noButtonText)

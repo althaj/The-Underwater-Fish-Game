@@ -32,8 +32,8 @@ namespace TUFG.Inventory
                         GameObject container = new GameObject("Inventory");
                         _instance = container.AddComponent<InventoryManager>();
 
-                        inventoryItems = new List<Item>();
-                        equippedItems = new List<Item>();
+                        _instance.inventoryItems = new List<Item>();
+                        _instance.equippedItems = new List<Item>();
                     }
                 }
 
@@ -42,8 +42,8 @@ namespace TUFG.Inventory
         }
         #endregion
 
-        private static List<Item> inventoryItems;
-        private static List<Item> equippedItems;
+        private List<Item> inventoryItems;
+        private List<Item> equippedItems;
 
         #region Public methods
         /// <summary>
@@ -60,9 +60,13 @@ namespace TUFG.Inventory
 
             Item previousItem = GetItemAtSlot(item.slot);
             if (previousItem != null)
+            {
                 equippedItems.Remove(previousItem);
+                inventoryItems.Add(previousItem);
+            }
 
             equippedItems.Add(item);
+            inventoryItems.Remove(item);
         }
 
         /// <summary>
@@ -78,6 +82,7 @@ namespace TUFG.Inventory
             }
 
             equippedItems.Remove(item);
+            inventoryItems.Add(item);
         }
 
         /// <summary>
@@ -152,8 +157,8 @@ namespace TUFG.Inventory
         #endregion
 
         #region Properties
-        public static List<Item> InventoryItems { get => inventoryItems; }
-        public static List<Item> EquippedItems { get => equippedItems; }
+        public List<Item> InventoryItems { get => inventoryItems; }
+        public List<Item> EquippedItems { get => equippedItems; }
         #endregion
     }
 }

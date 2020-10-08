@@ -73,6 +73,10 @@ namespace TUFG.Core
 
             InventoryManager.Instance.GetItem(sword);
             InventoryManager.Instance.EquipItem(sword);
+            for (int i = 0; i < 20; i++)
+            {
+                InventoryManager.Instance.GetItem(sword);
+            }
         }
 
         /// <summary>
