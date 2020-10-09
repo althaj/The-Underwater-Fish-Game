@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9105177d3d82910419b49253792be465, type: 3}
+  m_Name: Beggar's clothes
+  m_EditorClassIdentifier: 
+  name: Beggar's clothes
+  description: 'Clothes stolen from a beggar. This poor ill fella had a tough life,
+    his wife left him with a handsome musketeer, his son stole all his precious belongings
+    and sold them for cheap drugs and his dog burned his small shack because he didn''t
+    get his food.
+
+    And here you are, stealing the miserable man''s last property
+    - his clothes.'
+  id: beggars_clothes
+  abilities:
+  - name: Feel ashamed
+    abilityID: beggars_clothes_shame
+    targetting: 4
+    priority: 0
+    priorityStrenght: 0
+    primaryEffects:
+    - effectType: 0
+      effectValue: 1
+      strenghtMultiplier: 0
+      powerMultiplier: 0
+    secondaryEffects: []
+  buffs:
+  - name: Beggars clothes armor
+    statType: 1
+    value: 1
+  pentalties: []
+  slot: 1

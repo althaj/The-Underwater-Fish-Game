@@ -10,12 +10,14 @@ namespace TUFG.UI
     public class ItemButtonUI : MonoBehaviour, UnityEngine.EventSystems.ISelectHandler
     {
         private Item item;
+        private bool isEquipped;
         private InventoryContainer container;
 
         public void InitButton(Item item, bool isEquipped, InventoryContainer container)
         {
             this.item = item;
             this.container = container;
+            this.isEquipped = isEquipped;
 
             if (!isEquipped)
                 transform.GetChild(0).gameObject.SetActive(false);
@@ -44,8 +46,8 @@ namespace TUFG.UI
         }
         public void OnSelect(UnityEngine.EventSystems.BaseEventData eventData)
         {
-            // TODO Display item details
             container.ScrollToObject(transform);
+            container.SelectItem(item, isEquipped);
         }
     }
 }

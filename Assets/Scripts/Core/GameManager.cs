@@ -70,13 +70,12 @@ namespace TUFG.Core
         public static void LoadPlayerItems()
         {
             Item sword = AssetDatabase.LoadAssetAtPath<Item>("Assets/Prefabs/Inventory/Items/Sword of destiny.asset");
+            Item clothes = AssetDatabase.LoadAssetAtPath<Item>("Assets/Prefabs/Inventory/Items/Beggar's clothes.asset");
 
             InventoryManager.Instance.GetItem(sword);
             InventoryManager.Instance.EquipItem(sword);
-            for (int i = 0; i < 20; i++)
-            {
-                InventoryManager.Instance.GetItem(sword);
-            }
+            InventoryManager.Instance.GetItem(clothes);
+            InventoryManager.Instance.EquipItem(clothes);
         }
 
         /// <summary>

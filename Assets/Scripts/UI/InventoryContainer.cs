@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using TUFG.Inventory;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,8 +15,8 @@ namespace TUFG.UI
     {
         private GameObject inventoryPanel;
 
-        private Transform itemListContainer;
-        private Transform itemDetailsContainer;
+        [SerializeField]private Transform itemListContainer = null;
+        [SerializeField]private Transform itemDetailsContainer = null;
 
         private GameObject buttonPrefab;
         private bool isOpen = false;
@@ -27,9 +28,6 @@ namespace TUFG.UI
             buttonPrefab = UIManager.Instance.InventoryButtonPrefab;
 
             inventoryPanel = transform.GetChild(0).gameObject;
-
-            itemListContainer = inventoryPanel.transform.GetChild(1).GetChild(0).GetChild(1).GetChild(0).GetChild(0);
-            itemDetailsContainer = inventoryPanel.transform.GetChild(1).GetChild(1).GetChild(1).GetChild(0).GetChild(0);
 
             inventoryPanel.SetActive(false);
         }
@@ -102,6 +100,20 @@ namespace TUFG.UI
                 HideInventory();
             else
                 ShowInventory(equippedItems, inventoryItems);
+        }
+
+        /// <summary>
+        /// Select an item in the inventory and display its details and buttons.
+        /// </summary>
+        /// <param name="item">Item to select.</param>
+        public void SelectItem(Item item, bool isEquipped)
+        {
+            itemDetailsContainer.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.name;
+            itemDetailsContainer.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.SlotText;
+            itemDetailsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = item.description;
+
+            TextMeshProUGUI buttonText = itemDetailsContainer.GetChild(4).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
+            buttonText.text = isEquipped ? "Unequip" : "Equip";
         }
 
         /// <summary>
