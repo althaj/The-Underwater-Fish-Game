@@ -268,11 +268,11 @@ namespace TUFG.Battle
                     {
                         if (!isSelectingAbility && !isSelectingTarget)
                         {
-                            Button[] buttons = new Button[unit.Abilities.Length];
+                            GenericButton[] buttons = new GenericButton[unit.Abilities.Length];
 
                             for (int i = 0; i < buttons.Length; i++)
                             {
-                                buttons[i] = new Button
+                                buttons[i] = new GenericButton
                                 {
                                     text = unit.Abilities[i].name,
                                     buttonType = ButtonType.Ability,
@@ -336,11 +336,11 @@ namespace TUFG.Battle
                     break;
             }
 
-            List<Button> buttons = new List<Button>();
+            List<GenericButton> buttons = new List<GenericButton>();
 
             foreach(Unit target in targets)
             {
-                buttons.Add(new Button
+                buttons.Add(new GenericButton
                 {
                     text = target.Name,
                     buttonType = ButtonType.Target,

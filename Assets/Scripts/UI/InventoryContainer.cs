@@ -7,7 +7,6 @@ using TUFG.Inventory;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 namespace TUFG.UI
 {
@@ -46,7 +45,7 @@ namespace TUFG.UI
             List<Item> equippedItems = InventoryManager.Instance.EquippedItems;
             List<Item> inventoryItems = InventoryManager.Instance.InventoryItems;
 
-            List<UnityEngine.UI.Button> itemButtons = new List<UnityEngine.UI.Button>();
+            List<Button> itemButtons = new List<Button>();
 
             GameObject selectedObject = null;
 
@@ -63,7 +62,7 @@ namespace TUFG.UI
             {
                 GameObject button = CreateButton(equippedItems[i], true);
 
-                itemButtons.Add(button.GetComponent<UnityEngine.UI.Button>());
+                itemButtons.Add(button.GetComponent<Button>());
 
                 if (i == 0)
                     selectedObject = button;
@@ -73,7 +72,7 @@ namespace TUFG.UI
             {
                 GameObject button = CreateButton(inventoryItems[i], false);
 
-                itemButtons.Add(button.GetComponent<UnityEngine.UI.Button>());
+                itemButtons.Add(button.GetComponent<Button>());
 
                 if (selectedObject == null && i == 0)
                     selectedObject = button;
@@ -90,7 +89,7 @@ namespace TUFG.UI
             // Build button navigation
             for (int i = 0; i < itemButtons.Count; i++)
             {
-                UnityEngine.UI.Button button = itemButtons[i];
+                Button button = itemButtons[i];
 
                 Navigation nav = button.navigation;
 
@@ -100,7 +99,7 @@ namespace TUFG.UI
                 if(i < itemButtons.Count - 1)
                     nav.selectOnDown = itemButtons[i + 1];
 
-                nav.selectOnRight = itemDetailsContainer.GetComponentInChildren<UnityEngine.UI.Button>();
+                nav.selectOnRight = itemDetailsContainer.GetComponentInChildren<Button>();
 
                 button.navigation = nav;
             }

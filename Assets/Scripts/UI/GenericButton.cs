@@ -27,7 +27,7 @@ namespace TUFG.UI
     }
 
     [Serializable]
-    public class Button
+    public class GenericButton
     {
         public string text;
         public ButtonType buttonType;

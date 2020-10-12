@@ -117,7 +117,7 @@ namespace TUFG.UI
         }
         #endregion
 
-        public void ShowMessage(string authorName, string message, Sprite authorAvatar, Button[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
+        public void ShowMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
         {
             DialogueContainer.ShowMessage(authorName, message, authorAvatar, buttons, avatarPosition);
         }
@@ -127,7 +127,7 @@ namespace TUFG.UI
             DialogueContainer.HideMessage();
         }
 
-        public void ShowBattleActions(Button[] buttons, string text)
+        public void ShowBattleActions(GenericButton[] buttons, string text)
         {
             BattleContainer.ShowBattleActions(buttons, text);
         }
@@ -152,12 +152,12 @@ namespace TUFG.UI
             InventoryContainer.HideInventory();
         }
 
-        public void BuildButtons(Button[] buttons, GameObject buttonPanel, string noButtonText)
+        public void BuildButtons(GenericButton[] buttons, GameObject buttonPanel, string noButtonText)
         {
             if (buttons == null || buttons.Length == 0)
             {
                 // Create "Next" button
-                Button continueButton = new Button();
+                GenericButton continueButton = new GenericButton();
                 continueButton.text = noButtonText;
                 continueButton.dialogueFunction = DialogueButtonFunction.GoToNextNode;
 

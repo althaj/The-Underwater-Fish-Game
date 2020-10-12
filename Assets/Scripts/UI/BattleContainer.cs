@@ -37,7 +37,7 @@ namespace TUFG.UI
         /// </summary>
         /// <param name="buttons">Buttons with actions</param>
         /// <param name="text">Title text</param>
-        public void ShowBattleActions(Button[] buttons, string text)
+        public void ShowBattleActions(GenericButton[] buttons, string text)
         {
             if (!this.IsOpen)
             {

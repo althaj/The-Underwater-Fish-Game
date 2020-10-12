@@ -19,6 +19,6 @@ namespace TUFG.Dialogue
         public float textSpeed;
         public AudioClip textSound;
         public Font font;
-        public Button[] dialogueButtons;
+        public GenericButton[] dialogueButtons;
     }
 }
