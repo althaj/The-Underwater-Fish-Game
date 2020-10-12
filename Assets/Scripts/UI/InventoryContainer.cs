@@ -46,6 +46,8 @@ namespace TUFG.UI
             List<Item> equippedItems = InventoryManager.Instance.EquippedItems;
             List<Item> inventoryItems = InventoryManager.Instance.InventoryItems;
 
+            List<UnityEngine.UI.Button> itemButtons = new List<UnityEngine.UI.Button>();
+
             GameObject selectedObject = null;
 
             if (!IsOpen)
@@ -59,19 +61,22 @@ namespace TUFG.UI
 
             for (int i = 0; i < equippedItems.Count; i++)
             {
-
                 GameObject button = CreateButton(equippedItems[i], true);
+
+                itemButtons.Add(button.GetComponent<UnityEngine.UI.Button>());
+
                 if (i == 0)
                     selectedObject = button;
             }
 
             for (int i = 0; i < inventoryItems.Count; i++)
             {
-
                 GameObject button = CreateButton(inventoryItems[i], false);
+
+                itemButtons.Add(button.GetComponent<UnityEngine.UI.Button>());
+
                 if (selectedObject == null && i == 0)
                     selectedObject = button;
-                EventSystem.current.SetSelectedGameObject(button);
             }
 
             Vector2 sizeDelta = itemListContainer.GetComponent<RectTransform>().sizeDelta;
@@ -81,6 +86,24 @@ namespace TUFG.UI
 
             if (selectedObject != null)
                 EventSystem.current.SetSelectedGameObject(selectedObject);
+
+            // Build button navigation
+            for (int i = 0; i < itemButtons.Count; i++)
+            {
+                UnityEngine.UI.Button button = itemButtons[i];
+
+                Navigation nav = button.navigation;
+
+                if (i > 0)
+                    nav.selectOnUp = itemButtons[i - 1];
+
+                if(i < itemButtons.Count - 1)
+                    nav.selectOnDown = itemButtons[i + 1];
+
+                nav.selectOnRight = itemDetailsContainer.GetComponentInChildren<UnityEngine.UI.Button>();
+
+                button.navigation = nav;
+            }
         }
 
         /// <summary>
