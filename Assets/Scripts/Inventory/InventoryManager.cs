@@ -105,11 +105,16 @@ namespace TUFG.Inventory
         {
             if (!inventoryItems.Contains(item))
             {
-                Debug.LogError($"Cannot drop item {item.name}, because it's not in the inventory!");
-                return;
+                if (!equippedItems.Contains(item))
+                {
+                    Debug.LogError($"Cannot drop item {item.name}, because it's not in the inventory!");
+                    return;
+                }
+                equippedItems.Remove(item);
+            } else
+            {
+                inventoryItems.Remove(item);
             }
-
-            inventoryItems.Remove(item);
         }
 
         /// <summary>
