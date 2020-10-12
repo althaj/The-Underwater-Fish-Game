@@ -14,6 +14,8 @@ namespace TUFG.UI
     public class InventoryContainer : MonoBehaviour
     {
         private GameObject inventoryPanel;
+        private Item currentItem;
+        private bool currentItemIsEquipped;
 
         [SerializeField]private Transform itemListContainer = null;
         [SerializeField]private Transform itemDetailsContainer = null;
@@ -33,13 +35,19 @@ namespace TUFG.UI
         }
         #endregion
 
+        #region Public methods
         /// <summary>
         /// Display inventory.
         /// </summary>
-        /// <param name="equippedItems">Equipped items.</param>
-        /// <param name="inventoryItems">All player items.</param>
-        public void ShowInventory(List<Item> equippedItems, List<Item> inventoryItems)
+        public void ShowInventory()
         {
+            FindObjectOfType<PlayerMovement>().DisableInput();
+
+            List<Item> equippedItems = InventoryManager.Instance.EquippedItems;
+            List<Item> inventoryItems = InventoryManager.Instance.InventoryItems;
+
+            GameObject selectedObject = null;
+
             if (!IsOpen)
             {
                 // TODO PLAY ANIMATION
@@ -49,14 +57,21 @@ namespace TUFG.UI
 
             UIManager.Instance.ClearChildren(itemListContainer.gameObject);
 
-            foreach (Item item in equippedItems.OrderBy(x => x.slot))
+            for (int i = 0; i < equippedItems.Count; i++)
             {
-                CreateButton(item, true);
+
+                GameObject button = CreateButton(equippedItems[i], true);
+                if (i == 0)
+                    selectedObject = button;
             }
 
-            foreach (Item item in inventoryItems.OrderBy(x => x.name))
+            for (int i = 0; i < inventoryItems.Count; i++)
             {
-                CreateButton(item, false);
+
+                GameObject button = CreateButton(inventoryItems[i], false);
+                if (selectedObject == null && i == 0)
+                    selectedObject = button;
+                EventSystem.current.SetSelectedGameObject(button);
             }
 
             Vector2 sizeDelta = itemListContainer.GetComponent<RectTransform>().sizeDelta;
@@ -64,20 +79,8 @@ namespace TUFG.UI
             sizeDelta.y = (equippedItems.Count + inventoryItems.Count) * buttonPrefab.GetComponent<RectTransform>().sizeDelta.y + (equippedItems.Count + inventoryItems.Count - 1) * layout.spacing + layout.padding.top + layout.padding.bottom;
             itemListContainer.GetComponent<RectTransform>().sizeDelta = sizeDelta;
 
-            if (itemListContainer.childCount != 0)
-                EventSystem.current.SetSelectedGameObject(itemListContainer.GetChild(0).gameObject);
-        }
-
-        /// <summary>
-        /// Create an item button in the items scroll view.
-        /// </summary>
-        /// <param name="item">Item to create button for.</param>
-        /// <param name="isEquipped">Is the item equipped?</param>
-        private void CreateButton(Item item, bool isEquipped)
-        {
-            GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
-            buttonInstance.transform.SetParent(itemListContainer);
-            buttonInstance.GetComponent<ItemButtonUI>().InitButton(item, isEquipped, this);
+            if (selectedObject != null)
+                EventSystem.current.SetSelectedGameObject(selectedObject);
         }
 
         /// <summary>
@@ -85,6 +88,8 @@ namespace TUFG.UI
         /// </summary>
         public void HideInventory()
         {
+            FindObjectOfType<PlayerMovement>().EnableInput();
+
             IsOpen = false;
             inventoryPanel.SetActive(false);
         }
@@ -92,14 +97,12 @@ namespace TUFG.UI
         /// <summary>
         /// Toggle inventory visibility on or off.
         /// </summary>
-        /// <param name="equippedItems">Equipped items.</param>
-        /// <param name="inventoryItems">All player items.</param>
-        public void ToggleInventory(List<Item> equippedItems, List<Item> inventoryItems)
+        public void ToggleInventory()
         {
             if (IsOpen)
                 HideInventory();
             else
-                ShowInventory(equippedItems, inventoryItems);
+                ShowInventory();
         }
 
         /// <summary>
@@ -114,6 +117,9 @@ namespace TUFG.UI
 
             TextMeshProUGUI buttonText = itemDetailsContainer.GetChild(4).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
             buttonText.text = isEquipped ? "Unequip" : "Equip";
+
+            currentItem = item;
+            currentItemIsEquipped = isEquipped;
         }
 
         /// <summary>
@@ -131,5 +137,43 @@ namespace TUFG.UI
 
             itemListContainer.GetComponent<RectTransform>().anchoredPosition = anchored;
         }
+
+        /// <summary>
+        /// Equip / unequip currently selected item.
+        /// </summary>
+        public void ToggleCurrentItem()
+        {
+            if (currentItemIsEquipped)
+                InventoryManager.Instance.UnequipItem(currentItem);
+            else
+                InventoryManager.Instance.EquipItem(currentItem);
+            ShowInventory();
+        }
+
+        /// <summary>
+        /// Drop currently selected item.
+        /// </summary>
+        public void DropCurrentItem()
+        {
+            InventoryManager.Instance.DropItem(currentItem);
+            ShowInventory();
+        }
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Create an item button in the items scroll view.
+        /// </summary>
+        /// <param name="item">Item to create button for.</param>
+        /// <param name="isEquipped">Is the item equipped?</param>
+        private GameObject CreateButton(Item item, bool isEquipped)
+        {
+            GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
+            buttonInstance.transform.SetParent(itemListContainer);
+            buttonInstance.GetComponent<ItemButtonUI>().InitButton(item, isEquipped, this);
+
+            return buttonInstance;
+        }
+        #endregion
     }
 }

@@ -139,13 +139,12 @@ namespace TUFG.UI
 
         public void ShowInventory()
         {
-            InventoryContainer.ShowInventory(InventoryManager.Instance.EquippedItems, InventoryManager.Instance.InventoryItems);
+            InventoryContainer.ShowInventory();
         }
 
         public void InventoryButtonPressed(CallbackContext ctx)
         {
-            GameManager.LoadPlayerItems();
-            InventoryContainer.ToggleInventory(InventoryManager.Instance.EquippedItems, InventoryManager.Instance.InventoryItems);
+            InventoryContainer.ToggleInventory();
         }
 
         public void HideInventory()

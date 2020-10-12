@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TUFG.Battle.Abilities;
+using TUFG.Core;
 using UnityEngine;
 
 namespace TUFG.Inventory
@@ -35,6 +36,8 @@ namespace TUFG.Inventory
                         _instance.inventoryItems = new List<Item>();
                         _instance.equippedItems = new List<Item>();
                     }
+
+                    GameManager.LoadPlayerItems();
                 }
 
                 return _instance;
@@ -75,9 +78,9 @@ namespace TUFG.Inventory
         /// <param name="item">Item to be unequipped.</param>
         public void UnequipItem(Item item)
         {
-            if (!inventoryItems.Contains(item))
+            if (!equippedItems.Contains(item))
             {
-                Debug.LogError($"Cannot unequip item {item.name}, because it's not in the inventory!");
+                Debug.LogError($"Cannot unequip item {item.name}, because it's not equipped!");
                 return;
             }
 
