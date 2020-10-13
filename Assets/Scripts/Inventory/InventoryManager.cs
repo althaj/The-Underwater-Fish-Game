@@ -48,6 +48,18 @@ namespace TUFG.Inventory
         private List<Item> inventoryItems;
         private List<Item> equippedItems;
 
+        private static UnityEngine.Object droppedItemPrefab = null;
+        private static UnityEngine.Object DroppedItemPrefab
+        {
+            get
+            {
+                if (droppedItemPrefab == null)
+                    droppedItemPrefab = Resources.Load("Inventory/DroppedItem");
+
+                return droppedItemPrefab;
+            }
+        }
+
         #region Public methods
         /// <summary>
         /// Equip an item that is in the player's inventory.
@@ -92,7 +104,7 @@ namespace TUFG.Inventory
         /// Get an item into the inventory.
         /// </summary>
         /// <param name="item">Item to put into the inventory.</param>
-        public void GetItem(Item item)
+        public void PickUpItem(Item item)
         {
             inventoryItems.Add(item);
         }
@@ -115,6 +127,10 @@ namespace TUFG.Inventory
             {
                 inventoryItems.Remove(item);
             }
+
+            GameObject droppedObject = (GameObject)Instantiate(DroppedItemPrefab);
+            droppedObject.GetComponent<DroppedItem>().Init(item);
+            droppedObject.transform.position = FindObjectOfType<PlayerMovement>().transform.position;
         }
 
         /// <summary>

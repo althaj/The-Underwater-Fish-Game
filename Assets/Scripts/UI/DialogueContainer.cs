@@ -20,6 +20,7 @@ namespace TUFG.UI
         private GameObject buttonPrefab;
         private GameObject dialoguePanel;
         private bool isOpen = false;
+        public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity functions
 

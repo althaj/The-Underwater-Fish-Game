@@ -187,5 +187,14 @@ namespace TUFG.UI
             for (int i = 0; i < panel.transform.childCount; i++)
                 Destroy(panel.transform.GetChild(i).gameObject);
         }
+
+        /// <summary>
+        /// Is any window opened? Only windows that disrupt the game flow (for example inventory window) count.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAnyWindowOpen()
+        {
+            return InventoryContainer.IsOpen || BattleContainer.IsOpen || DialogueContainer.IsOpen;
+        }
     }
 }
