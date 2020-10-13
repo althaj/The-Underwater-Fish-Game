@@ -7,6 +7,8 @@ using UnityEngine;
 using TUFG.Battle.Abilities;
 using TUFG.Inventory;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace TUFG.Core
 {
@@ -33,6 +35,8 @@ namespace TUFG.Core
             }
         }
         #endregion
+
+        private string currentSlot = "Demo";
 
         public static UnitData[] GetPlayerParty()
         {
@@ -109,5 +113,91 @@ namespace TUFG.Core
             }
             return result;
         }
+
+        #region Save game
+        /// <summary>
+        /// Save game to the current slot.
+        /// </summary>
+        public void SaveGame()
+        {
+            SaveGame(currentSlot);
+        }
+
+        /// <summary>
+        /// Save game to a slot.
+        /// </summary>
+        /// <param name="slot"></param>
+        public void SaveGame(string slot)
+        {
+            if (!Directory.Exists(GetSaveDirectory()))
+                Directory.CreateDirectory(GetSaveDirectory());
+
+            SaveGame save = new SaveGame();
+
+            // Inventory
+            save.equippedItemPaths = InventoryManager.Instance.GetEquippedItemPaths();
+            save.inventoryItemPaths = InventoryManager.Instance.GetInventoryItemPaths();
+            save.gold = InventoryManager.Instance.Gold;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(GetSavePath(slot));
+            bf.Serialize(file, save);
+            file.Close();
+
+            Debug.Log($"Game saved to slot {slot}.");
+        }
+
+        /// <summary>
+        /// Load game from the current slot.
+        /// </summary>
+        public void LoadGame()
+        {
+            LoadGame(currentSlot);
+        }
+
+        /// <summary>
+        /// Load game at a slot.
+        /// </summary>
+        /// <param name="slot"></param>
+        public void LoadGame(string slot)
+        {
+            string savePath = GetSavePath(slot);
+            if (File.Exists(savePath))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Open(savePath, FileMode.Open);
+                SaveGame save = (SaveGame)bf.Deserialize(file);
+                file.Close();
+
+                InventoryManager.Instance.LoadItemsFromPaths(save.equippedItemPaths, save.inventoryItemPaths);
+                InventoryManager.Instance.Gold = save.gold;
+
+                Debug.Log($"Game loaded from slot {slot}.");
+            }
+            else
+            {
+                Debug.LogError($"Save file on path {savePath} not found!");
+            }
+        }
+
+        /// <summary>
+        /// Returns a path to the save file on a save slot.
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public string GetSavePath(string slot)
+        {
+            return $"{GetSaveDirectory()}/{slot}.tufg";
+        }
+
+        /// <summary>
+        /// Return a path to the save directory.
+        /// </summary>
+        /// <returns></returns>
+        public string GetSaveDirectory()
+        {
+            return $"{Application.persistentDataPath}/save";
+        }
+        #endregion
     }
 }

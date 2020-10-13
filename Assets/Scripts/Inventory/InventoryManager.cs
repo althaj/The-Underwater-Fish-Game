@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TUFG.Battle.Abilities;
 using TUFG.Core;
+using UnityEditor;
 using UnityEngine;
 
 namespace TUFG.Inventory
@@ -47,6 +48,7 @@ namespace TUFG.Inventory
 
         private List<Item> inventoryItems;
         private List<Item> equippedItems;
+        private int gold;
 
         private static UnityEngine.Object droppedItemPrefab = null;
         private static UnityEngine.Object DroppedItemPrefab
@@ -178,11 +180,65 @@ namespace TUFG.Inventory
         {
             return equippedItems.SelectMany(x => x.abilities).ToArray();
         }
+
+        /// <summary>
+        /// Returns paths to the equipped items.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetEquippedItemPaths()
+        {
+            List<string> paths = new List<string>();
+            foreach (Item item in EquippedItems)
+            {
+                paths.Add(AssetDatabase.GetAssetPath(item));
+            }
+            return paths;
+        }
+
+        /// <summary>
+        /// Returns paths to the inventory items.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetInventoryItemPaths()
+        {
+            List<string> paths = new List<string>();
+            foreach (Item item in InventoryItems)
+            {
+                paths.Add(AssetDatabase.GetAssetPath(item));
+            }
+            return paths;
+        }
+
+        /// <summary>
+        /// Load items from their paths.
+        /// </summary>
+        /// <param name="equippedPaths"></param>
+        /// <param name="inventoryPaths"></param>
+        public void LoadItemsFromPaths(List<string> equippedPaths, List<string> inventoryPaths)
+        {
+            EquippedItems = new List<Item>();
+            InventoryItems = new List<Item>();
+
+            foreach (string path in equippedPaths)
+            {
+                Item item = AssetDatabase.LoadAssetAtPath<Item>(path);
+                if(item != null && !string.IsNullOrEmpty(item.id))
+                    EquippedItems.Add(item);
+            }
+
+            foreach (string path in inventoryPaths)
+            {
+                Item item = AssetDatabase.LoadAssetAtPath<Item>(path);
+                if (item != null && !string.IsNullOrEmpty(item.id))
+                    InventoryItems.Add(item);
+            }
+        }
         #endregion
 
         #region Properties
-        public List<Item> InventoryItems { get => inventoryItems; }
-        public List<Item> EquippedItems { get => equippedItems; }
+        public List<Item> InventoryItems { get => inventoryItems; set => inventoryItems = value; }
+        public List<Item> EquippedItems { get => equippedItems; set => equippedItems = value; }
+        public int Gold { get => gold; set => gold = value; }
         #endregion
     }
 }

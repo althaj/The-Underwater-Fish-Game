@@ -105,6 +105,8 @@ namespace TUFG.UI
 
             Instance.controlsInput = new ControlsInput();
             Instance.controlsInput.UI.OpenInventory.performed += _instance.InventoryButtonPressed;
+
+            GameManager.Instance.LoadGame();
         }
         private void OnEnable()
         {
@@ -114,6 +116,11 @@ namespace TUFG.UI
         private void OnDisable()
         {
             Instance.controlsInput.UI.Disable();
+        }
+
+        private void OnApplicationQuit()
+        {
+            GameManager.Instance.SaveGame();
         }
         #endregion
 
