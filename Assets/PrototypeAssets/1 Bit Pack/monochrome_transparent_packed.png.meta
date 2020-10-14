@@ -700,7 +700,7 @@ TextureImporter:
     second: monochrome_transparent_packed_231
   - first:
       213: -2740495914449344977
-    second: monochrome_transparent_packed_232
+    second: Coins
   - first:
       213: -3582565090966599422
     second: monochrome_transparent_packed_233
@@ -8152,7 +8152,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_transparent_packed_232
+      name: Coins
       rect:
         serializedVersion: 2
         x: 656

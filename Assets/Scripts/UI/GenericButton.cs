@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TUFG.Battle;
 using TUFG.Battle.Abilities;
 using TUFG.Dialogue;
+using TUFG.Inventory;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,7 +17,8 @@ namespace TUFG.UI
         SetGameValue,
         SetDialogueValue,
         EndConversation,
-        StartBattle
+        StartBattle,
+        OpenShop
     }
 
     public enum ButtonType
@@ -32,6 +34,7 @@ namespace TUFG.UI
         public string text;
         public ButtonType buttonType;
         public DialogueButtonFunction dialogueFunction;
+        public string shopId;
         public Ability ability;
         public Unit target;
 
@@ -62,6 +65,9 @@ namespace TUFG.UI
                         case DialogueButtonFunction.StartBattle:
                             DialogueManager.Instance.EndConversation();
                             BattleManager.Instance.InitBattle(enemies);
+                            break;
+                        case DialogueButtonFunction.OpenShop:
+                            UIManager.Instance.ShowShop(ShopManager.Instance.GetShop(shopId));
                             break;
                     }
                     break;

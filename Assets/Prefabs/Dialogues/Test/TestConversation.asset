@@ -37,7 +37,8 @@ MonoBehaviour:
     dialogueButtons:
     - text: Keep talking
       buttonType: 0
-      dialogueFunction: 1
+      dialogueFunction: 0
+      shopId: 
       ability:
         name: 
         abilityID: 
@@ -52,6 +53,7 @@ MonoBehaviour:
     - text: Let's fight!!
       buttonType: 0
       dialogueFunction: 5
+      shopId: 
       ability:
         name: 
         abilityID: 
@@ -70,6 +72,7 @@ MonoBehaviour:
     - text: End conversation
       buttonType: 0
       dialogueFunction: 4
+      shopId: 
       ability:
         name: 
         abilityID: 
@@ -80,4 +83,43 @@ MonoBehaviour:
         secondaryEffects: []
       target: {fileID: 0}
       jumpToNodeId: 
+      enemies: []
+  - nodeID: TestNode3
+    characterName: Althaj
+    avatar: {fileID: 21300000, guid: 8a698063c580aa74498ba40ac412b042, type: 3}
+    avatarPosition: 0
+    text: Do you want to buy anything?
+    textSpeed: 2
+    textSound: {fileID: 0}
+    font: {fileID: 0}
+    dialogueButtons:
+    - text: Yes
+      buttonType: 0
+      dialogueFunction: 6
+      shopId: tutorial_shop
+      ability:
+        name: 
+        abilityID: 
+        targetting: 0
+        priority: 0
+        priorityStrenght: 0
+        primaryEffects: []
+        secondaryEffects: []
+      target: {fileID: 0}
+      jumpToNodeId: 
+      enemies: []
+    - text: No
+      buttonType: 0
+      dialogueFunction: 1
+      shopId: 
+      ability:
+        name: 
+        abilityID: 
+        targetting: 0
+        priority: 0
+        priorityStrenght: 0
+        primaryEffects: []
+        secondaryEffects: []
+      target: {fileID: 0}
+      jumpToNodeId: TestNode1
       enemies: []

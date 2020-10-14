@@ -38,6 +38,7 @@ namespace TUFG.UI
         #region Fields and properties
         [SerializeField] private GameObject buttonPrefab = null;
         [SerializeField] private GameObject inventoryButtonPrefab = null;
+        [SerializeField] private GameObject shopButtonPrefab = null;
         [SerializeField] private Sprite handsSlotIcon = null;
         [SerializeField] private Sprite bodySlotIcon = null;
         [SerializeField] private Sprite legsSlotIcon = null;
@@ -45,6 +46,7 @@ namespace TUFG.UI
         [SerializeField] private Sprite ringSlotIcon = null;
         public GameObject ButtonPrefab { get => buttonPrefab; set => buttonPrefab = value; }
         public GameObject InventoryButtonPrefab { get => inventoryButtonPrefab; set => inventoryButtonPrefab = value; }
+        public GameObject ShopButtonPrefab { get => shopButtonPrefab; set => shopButtonPrefab = value; }
         public Sprite HandsSlotIcon { get => handsSlotIcon; set => handsSlotIcon = value; }
         public Sprite BodySlotIcon { get => bodySlotIcon; set => bodySlotIcon = value; }
         public Sprite LegsSlotIcon { get => legsSlotIcon; set => legsSlotIcon = value; }
@@ -96,6 +98,20 @@ namespace TUFG.UI
                 return inventoryContainer;
             }
         }
+
+        internal static ShopContainer shopContainer;
+        internal static ShopContainer ShopContainer
+        {
+            get
+            {
+                if (shopContainer == null)
+                    shopContainer = Instance.GetComponentInChildren<ShopContainer>();
+
+                if (shopContainer == null)
+                    Debug.LogError("Cannot find the shop container!!");
+                return shopContainer;
+            }
+        }
         #endregion
 
         #region Unity functions
@@ -124,6 +140,7 @@ namespace TUFG.UI
         }
         #endregion
 
+        #region Show / Hide methods
         public void ShowMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
         {
             DialogueContainer.ShowMessage(authorName, message, authorAvatar, buttons, avatarPosition);
@@ -151,13 +168,26 @@ namespace TUFG.UI
 
         public void InventoryButtonPressed(CallbackContext ctx)
         {
-            InventoryContainer.ToggleInventory();
+            if(!IsAnyWindowOpen() || InventoryContainer.IsOpen)
+                InventoryContainer.ToggleInventory();
         }
 
         public void HideInventory()
         {
             InventoryContainer.HideInventory();
         }
+
+        public void ShowShop(Shop shop)
+        {
+            DialogueManager.Instance.EndConversation();
+            ShopContainer.ShowShop(shop);
+        }
+
+        public void HideShop()
+        {
+            ShopContainer.HideShop();
+        }
+        #endregion
 
         public void BuildButtons(GenericButton[] buttons, GameObject buttonPanel, string noButtonText)
         {
@@ -201,7 +231,7 @@ namespace TUFG.UI
         /// <returns></returns>
         public bool IsAnyWindowOpen()
         {
-            return InventoryContainer.IsOpen || BattleContainer.IsOpen || DialogueContainer.IsOpen;
+            return InventoryContainer.IsOpen || BattleContainer.IsOpen || DialogueContainer.IsOpen || ShopContainer.IsOpen;
         }
     }
 }

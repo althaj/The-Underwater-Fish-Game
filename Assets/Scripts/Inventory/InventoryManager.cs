@@ -115,24 +115,44 @@ namespace TUFG.Inventory
         /// Drop an item that is currently in the inventory.
         /// </summary>
         /// <param name="item">Item to drop.</param>
-        public void DropItem(Item item)
+        /// <returns>True if success, false if error.</returns>
+        public bool DropItem(Item item)
+        {
+            if (RemoveItem(item))
+            {
+                GameObject droppedObject = (GameObject)Instantiate(DroppedItemPrefab);
+                droppedObject.GetComponent<DroppedItem>().Init(item);
+                droppedObject.transform.position = FindObjectOfType<PlayerMovement>().transform.position;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Removes an item that is currently in the inventory. Does not create a dropped item.
+        /// </summary>
+        /// <param name="item">Item to remove.</param>
+        /// <returns>True if success, false if error.</returns>
+        public bool RemoveItem(Item item)
         {
             if (!inventoryItems.Contains(item))
             {
                 if (!equippedItems.Contains(item))
                 {
-                    Debug.LogError($"Cannot drop item {item.name}, because it's not in the inventory!");
-                    return;
+                    Debug.LogError($"Cannot remove item {item.name}, because it's not in the inventory!");
+                    return false;
                 }
                 equippedItems.Remove(item);
-            } else
+            }
+            else
             {
                 inventoryItems.Remove(item);
             }
 
-            GameObject droppedObject = (GameObject)Instantiate(DroppedItemPrefab);
-            droppedObject.GetComponent<DroppedItem>().Init(item);
-            droppedObject.transform.position = FindObjectOfType<PlayerMovement>().transform.position;
+            return true;
         }
 
         /// <summary>
@@ -156,7 +176,7 @@ namespace TUFG.Inventory
 
             foreach (Item item in equippedItems)
             {
-                foreach(ItemStat stat in item.buffs)
+                foreach (ItemStat stat in item.buffs)
                 {
                     if (stat.statType == type)
                         result += stat.value;
@@ -222,7 +242,7 @@ namespace TUFG.Inventory
             foreach (string path in equippedPaths)
             {
                 Item item = AssetDatabase.LoadAssetAtPath<Item>(path);
-                if(item != null && !string.IsNullOrEmpty(item.id))
+                if (item != null && !string.IsNullOrEmpty(item.id))
                     EquippedItems.Add(item);
             }
 
