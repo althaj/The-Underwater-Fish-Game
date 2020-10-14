@@ -6,9 +6,9 @@ using UnityEditor.Animations;
 using UnityEngine;
 using TUFG.Battle.Abilities;
 using TUFG.Inventory;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Linq;
 
 namespace TUFG.Core
 {
@@ -138,6 +138,7 @@ namespace TUFG.Core
             save.equippedItemPaths = InventoryManager.Instance.GetEquippedItemPaths();
             save.inventoryItemPaths = InventoryManager.Instance.GetInventoryItemPaths();
             save.gold = InventoryManager.Instance.Gold;
+            save.shops = ShopManager.Instance.Shops.Select(x => x.ToShopSave()).ToList();
 
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Create(GetSavePath(slot));
@@ -171,6 +172,8 @@ namespace TUFG.Core
 
                 InventoryManager.Instance.LoadItemsFromPaths(save.equippedItemPaths, save.inventoryItemPaths);
                 InventoryManager.Instance.Gold = save.gold;
+                if(save.shops != null)
+                    ShopManager.Instance.LoadShops(save.shops);
 
                 Debug.Log($"Game loaded from slot {slot}.");
             }

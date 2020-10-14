@@ -10,6 +10,7 @@ namespace TUFG.Inventory
     public class Item : ScriptableObject
     {
         public new string name;
+        public int price;
         [TextArea(4, 10)]
         public string description;
         public string id;

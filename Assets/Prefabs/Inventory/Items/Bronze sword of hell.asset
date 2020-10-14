@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Bronze sword of hell
   m_EditorClassIdentifier: 
   name: Bronze sword of hell
+  price: 25
   description: This sword is weak as hell.
   id: bronze_sword_of_hell
   abilities:

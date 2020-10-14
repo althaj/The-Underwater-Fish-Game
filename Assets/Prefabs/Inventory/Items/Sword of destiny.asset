@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Sword of destiny
   m_EditorClassIdentifier: 
   name: Sword of destiny
+  price: 127
   description: A strong sword forget in the depths of Rashass volcano by the dwarf
     smith Smallhammer and his companion Shortanvil. It holds much power, but provides
     this power only to a warior that is destined to wield it. For others it's just
