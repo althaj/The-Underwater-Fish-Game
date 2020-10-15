@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9105177d3d82910419b49253792be465, type: 3}
+  m_Name: Sword of destiny
+  m_EditorClassIdentifier: 
+  name: Sword of destiny
+  price: 127
+  description: A strong sword forget in the depths of Rashass volcano by the dwarf
+    smith Smallhammer and his companion Shortanvil. It holds much power, but provides
+    this power only to a warior that is destined to wield it. For others it's just
+    a regular crappy sword.
+  id: sword_of_destiny
+  abilities:
+  - name: Slash
+    abilityID: sword_of_destiny_slash
+    targetting: 1
+    priority: 6
+    priorityStrenght: 1
+    primaryEffects:
+    - effectType: 0
+      effectValue: 10
+      strenghtMultiplier: 0
+      powerMultiplier: 0
+    secondaryEffects:
+    - effectType: 0
+      effectValue: 3
+      strenghtMultiplier: 0
+      powerMultiplier: 0
+  - name: Stab
+    abilityID: sword_of_destiny_stab
+    targetting: 0
+    priority: 0
+    priorityStrenght: 1
+    primaryEffects:
+    - effectType: 0
+      effectValue: 13
+      strenghtMultiplier: 0
+      powerMultiplier: 0
+    secondaryEffects: []
+  buffs:
+  - name: Extra strength
+    statType: 3
+    value: 5
+  - name: Extra health
+    statType: 0
+    value: 10
+  pentalties:
+  - name: Magic power loss
+    statType: 4
+    value: 10
+  slot: 0

@@ -223,7 +223,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 2
 --- !u!1 &4345187485037942099
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,7 +768,6 @@ MonoBehaviour:
   avatarImage: {fileID: 7448455260439101674}
   middlePanelLayoutGroup: {fileID: 7578258371681196235}
   buttonPanel: {fileID: 0}
-  buttonPrefab: {fileID: 0}
 --- !u!1 &6710168411768054535
 GameObject:
   m_ObjectHideFlags: 0
@@ -844,7 +843,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 2
 --- !u!114 &962075591066073213
 MonoBehaviour:
   m_ObjectHideFlags: 0

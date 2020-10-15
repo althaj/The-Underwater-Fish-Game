@@ -5,6 +5,10 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using TUFG.Battle.Abilities;
+using TUFG.Inventory;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Linq;
 
 namespace TUFG.Core
 {
@@ -32,6 +36,8 @@ namespace TUFG.Core
         }
         #endregion
 
+        private string currentSlot = "Demo";
+
         public static UnitData[] GetPlayerParty()
         {
             UnitData[] playerParty = new UnitData[3];
@@ -55,75 +61,146 @@ namespace TUFG.Core
             playerUnitData.health = 100;
             playerUnitData.armor = 1;
             playerUnitData.speed = 3;
-            playerUnitData.abilities = new Ability[]
-            {
-                new Ability
-                {
-                    abilityID = "PlayerPunch",
-                    name = "Punch",
-                    targetting = AbilityTargetting.Single,
-                    primaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Damage,
-                            effectValue = 7
-                        }
-                    }
-                },
-                new Ability
-                {
-                    abilityID = "PlayerSlash",
-                    name = "Slash",
-                    targetting = AbilityTargetting.Adjescent,
-                    primaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Damage,
-                            effectValue = 5
-                        }
-                    },
-                    secondaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Damage,
-                            effectValue = 3
-                        }
-                    }
-                },
-                new Ability
-                {
-                    abilityID = "PlayerHeal",
-                    name = "Heal",
-                    targetting = AbilityTargetting.Self,
-                    primaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Heal,
-                            effectValue = 10
-                        }
-                    }
-                },
-                new Ability
-                {
-                    abilityID = "PlayerPartyHeal",
-                    name = "Heal party",
-                    targetting = AbilityTargetting.Ally,
-                    primaryEffects = new AbilityEffect[]
-                    {
-                        new AbilityEffect
-                        {
-                            effectType = AbilityEffectType.Heal,
-                            effectValue = 5
-                        }
-                    }
-                }
-            };
+            playerUnitData.power = 12;
+            playerUnitData.strength = 4;
+
+            LoadPlayerItems();
+
+            playerUnitData.abilities = LoadPlayerAbilities();
 
             return playerUnitData;
         }
+
+        public static void LoadPlayerItems()
+        {
+            Item sword = AssetDatabase.LoadAssetAtPath<Item>("Assets/Prefabs/Inventory/Items/Sword of destiny.asset");
+            Item clothes = AssetDatabase.LoadAssetAtPath<Item>("Assets/Prefabs/Inventory/Items/Beggar's clothes.asset");
+
+            InventoryManager.Instance.PickUpItem(sword);
+            InventoryManager.Instance.EquipItem(sword);
+            InventoryManager.Instance.PickUpItem(clothes);
+            InventoryManager.Instance.EquipItem(clothes);
+        }
+
+        /// <summary>
+        /// Load abilities from equipped items. If no abilities are found, add a default punch ability.
+        /// </summary>
+        /// <returns>Array of current player abilities.</returns>
+        public static Ability[] LoadPlayerAbilities()
+        {
+            Ability[] result = InventoryManager.Instance.GetEquippedAbilities();
+            if (result.Length == 0)
+            {
+                result = new Ability[]
+                {
+                    new Ability
+                    {
+                        abilityID = "PlayerPunch",
+                        name = "Punch",
+                        targetting = AbilityTargetting.Single,
+                        primaryEffects = new AbilityEffect[]
+                        {
+                            new AbilityEffect
+                            {
+                                effectType = AbilityEffectType.Damage,
+                                effectValue = 3,
+                                powerMultiplier = 0,
+                                strenghtMultiplier = 1
+                            }
+                        }
+                    }
+                };
+            }
+            return result;
+        }
+
+        #region Save game
+        /// <summary>
+        /// Save game to the current slot.
+        /// </summary>
+        public void SaveGame()
+        {
+            SaveGame(currentSlot);
+        }
+
+        /// <summary>
+        /// Save game to a slot.
+        /// </summary>
+        /// <param name="slot"></param>
+        public void SaveGame(string slot)
+        {
+            if (!Directory.Exists(GetSaveDirectory()))
+                Directory.CreateDirectory(GetSaveDirectory());
+
+            SaveGame save = new SaveGame();
+
+            // Inventory
+            save.equippedItemPaths = InventoryManager.Instance.GetEquippedItemPaths();
+            save.inventoryItemPaths = InventoryManager.Instance.GetInventoryItemPaths();
+            save.gold = InventoryManager.Instance.Gold;
+            save.shops = ShopManager.Instance.Shops.Select(x => x.ToShopSave()).ToList();
+
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(GetSavePath(slot));
+            bf.Serialize(file, save);
+            file.Close();
+
+            Debug.Log($"Game saved to slot {slot}.");
+        }
+
+        /// <summary>
+        /// Load game from the current slot.
+        /// </summary>
+        public void LoadGame()
+        {
+            LoadGame(currentSlot);
+        }
+
+        /// <summary>
+        /// Load game at a slot.
+        /// </summary>
+        /// <param name="slot"></param>
+        public void LoadGame(string slot)
+        {
+            string savePath = GetSavePath(slot);
+            if (File.Exists(savePath))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Open(savePath, FileMode.Open);
+                SaveGame save = (SaveGame)bf.Deserialize(file);
+                file.Close();
+
+                InventoryManager.Instance.LoadItemsFromPaths(save.equippedItemPaths, save.inventoryItemPaths);
+                InventoryManager.Instance.Gold = save.gold;
+                if(save.shops != null)
+                    ShopManager.Instance.LoadShops(save.shops);
+
+                Debug.Log($"Game loaded from slot {slot}.");
+            }
+            else
+            {
+                Debug.LogError($"Save file on path {savePath} not found!");
+            }
+        }
+
+        /// <summary>
+        /// Returns a path to the save file on a save slot.
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public string GetSavePath(string slot)
+        {
+            return $"{GetSaveDirectory()}/{slot}.tufg";
+        }
+
+        /// <summary>
+        /// Return a path to the save directory.
+        /// </summary>
+        /// <returns></returns>
+        public string GetSaveDirectory()
+        {
+            return $"{Application.persistentDataPath}/save";
+        }
+        #endregion
     }
 }

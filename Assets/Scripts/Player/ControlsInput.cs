@@ -27,6 +27,14 @@ namespace TUFG.Controls
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""PickUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""4477d874-5d95-4776-95f5-2cefabaf8bda"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -150,6 +158,66 @@ namespace TUFG.Controls
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7eda107e-7b4c-4fd3-b013-d3a9823c95fa"",
+                    ""path"": ""*/{Submit}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5dc1b3b-9f36-47f1-8960-7ed0e472d17a"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""PickUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""5078d073-783a-4919-8e95-bc0f52505c51"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""f48c5c08-f4f2-458f-90c1-858279d2a6ac"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""690b28b3-81d3-4048-839f-66c7babaa9b1"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34865e19-1309-44b9-8be6-6aa4c8cf79b0"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -182,6 +250,10 @@ namespace TUFG.Controls
             // World
             m_World = asset.FindActionMap("World", throwIfNotFound: true);
             m_World_Move = m_World.FindAction("Move", throwIfNotFound: true);
+            m_World_PickUp = m_World.FindAction("PickUp", throwIfNotFound: true);
+            // UI
+            m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+            m_UI_OpenInventory = m_UI.FindAction("OpenInventory", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -232,11 +304,13 @@ namespace TUFG.Controls
         private readonly InputActionMap m_World;
         private IWorldActions m_WorldActionsCallbackInterface;
         private readonly InputAction m_World_Move;
+        private readonly InputAction m_World_PickUp;
         public struct WorldActions
         {
             private @ControlsInput m_Wrapper;
             public WorldActions(@ControlsInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_World_Move;
+            public InputAction @PickUp => m_Wrapper.m_World_PickUp;
             public InputActionMap Get() { return m_Wrapper.m_World; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -249,6 +323,9 @@ namespace TUFG.Controls
                     @Move.started -= m_Wrapper.m_WorldActionsCallbackInterface.OnMove;
                     @Move.performed -= m_Wrapper.m_WorldActionsCallbackInterface.OnMove;
                     @Move.canceled -= m_Wrapper.m_WorldActionsCallbackInterface.OnMove;
+                    @PickUp.started -= m_Wrapper.m_WorldActionsCallbackInterface.OnPickUp;
+                    @PickUp.performed -= m_Wrapper.m_WorldActionsCallbackInterface.OnPickUp;
+                    @PickUp.canceled -= m_Wrapper.m_WorldActionsCallbackInterface.OnPickUp;
                 }
                 m_Wrapper.m_WorldActionsCallbackInterface = instance;
                 if (instance != null)
@@ -256,10 +333,46 @@ namespace TUFG.Controls
                     @Move.started += instance.OnMove;
                     @Move.performed += instance.OnMove;
                     @Move.canceled += instance.OnMove;
+                    @PickUp.started += instance.OnPickUp;
+                    @PickUp.performed += instance.OnPickUp;
+                    @PickUp.canceled += instance.OnPickUp;
                 }
             }
         }
         public WorldActions @World => new WorldActions(this);
+
+        // UI
+        private readonly InputActionMap m_UI;
+        private IUIActions m_UIActionsCallbackInterface;
+        private readonly InputAction m_UI_OpenInventory;
+        public struct UIActions
+        {
+            private @ControlsInput m_Wrapper;
+            public UIActions(@ControlsInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @OpenInventory => m_Wrapper.m_UI_OpenInventory;
+            public InputActionMap Get() { return m_Wrapper.m_UI; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+            public void SetCallbacks(IUIActions instance)
+            {
+                if (m_Wrapper.m_UIActionsCallbackInterface != null)
+                {
+                    @OpenInventory.started -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenInventory;
+                    @OpenInventory.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenInventory;
+                    @OpenInventory.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenInventory;
+                }
+                m_Wrapper.m_UIActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @OpenInventory.started += instance.OnOpenInventory;
+                    @OpenInventory.performed += instance.OnOpenInventory;
+                    @OpenInventory.canceled += instance.OnOpenInventory;
+                }
+            }
+        }
+        public UIActions @UI => new UIActions(this);
         private int m_KeyboardSchemeIndex = -1;
         public InputControlScheme KeyboardScheme
         {
@@ -281,6 +394,11 @@ namespace TUFG.Controls
         public interface IWorldActions
         {
             void OnMove(InputAction.CallbackContext context);
+            void OnPickUp(InputAction.CallbackContext context);
+        }
+        public interface IUIActions
+        {
+            void OnOpenInventory(InputAction.CallbackContext context);
         }
     }
 }

@@ -20,6 +20,8 @@ namespace TUFG.Battle
         public int health;
         public int armor;
         public int speed;
+        public int strength;
+        public int power;
 
         public Ability[] abilities;
     }

@@ -6,21 +6,26 @@ using TUFG.Battle.AI;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using TUFG.Inventory;
 
 namespace TUFG.Battle
 {
     public class Unit : MonoBehaviour
     {
         [SerializeField] private UnitData unitData;
+        [SerializeField] private int health;
 
         public bool IsAlly { get; set; }
         public string Name { get => UnitData.name; private set => UnitData.name = value; }
         public bool IsPlayer { get; set; } = false;
-        public int Speed { get => UnitData.speed; private set => UnitData.speed = value; }
         public Ability[] Abilities { get => UnitData.abilities; set => UnitData.abilities = value; }
         public UnitData UnitData { get => unitData; set => unitData = value; }
-
-        public int health;
+        public int Speed { get => IsPlayer ? UnitData.speed + InventoryManager.Instance.GetStatBonuses(ItemStatType.Speed) : UnitData.speed; }
+        public int Power { get => IsPlayer ? unitData.power + InventoryManager.Instance.GetStatBonuses(ItemStatType.Power) : unitData.power; }
+        public int Strength { get =>IsPlayer ? unitData.strength + InventoryManager.Instance.GetStatBonuses(ItemStatType.Strenght) : unitData.strength; }
+        public int Health { get => health; set => health = value; }
+        public int Armor { get => IsPlayer ? unitData.armor + InventoryManager.Instance.GetStatBonuses(ItemStatType.Armor) : unitData.armor; }
+        public int MaxHealth { get => IsPlayer ? unitData.maxHealth + InventoryManager.Instance.GetStatBonuses(ItemStatType.Health) : unitData.maxHealth; }
 
         /// <summary>
         /// Deal damage to a unit.
@@ -45,7 +50,7 @@ namespace TUFG.Battle
         public int Heal(int heal)
         {
             heal = Mathf.Max(heal, 0);
-            heal = Mathf.Min(heal, UnitData.maxHealth - health);
+            heal = Mathf.Min(heal, MaxHealth - Health);
             health += heal;
 
             UpdateHealthUI();
@@ -59,9 +64,9 @@ namespace TUFG.Battle
             TextMeshProUGUI healthText = textMeshes.Where(x => x.gameObject.name == "HealthNumber").First();
             textMeshes.Where(x => x.gameObject.name == "Name").First().text = Name;
 
-            healthBar.maxValue = UnitData.maxHealth;
+            healthBar.maxValue = MaxHealth;
             healthBar.minValue = 0;
-            healthBar.value = health;
+            healthBar.value = Health;
 
             healthText.text = health.ToString();
         }

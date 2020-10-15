@@ -19,7 +19,7 @@ namespace TUFG.Dialogue
         public AudioClip textSound;
         public Font font;
 
-        public Button[] dialogueButtons;
+        public GenericButton[] dialogueButtons;
 
         public virtual NodeContent GetNodeContent() {
             NodeContent nodeContent = ScriptableObject.CreateInstance<NodeContent>();

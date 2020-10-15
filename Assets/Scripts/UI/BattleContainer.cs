@@ -16,7 +16,9 @@ namespace TUFG.UI
 
         private GameObject buttonPrefab;
         private GameObject battlePanel;
+
         private bool isOpen = false;
+        public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity functions
 
@@ -35,14 +37,14 @@ namespace TUFG.UI
         /// </summary>
         /// <param name="buttons">Buttons with actions</param>
         /// <param name="text">Title text</param>
-        public void ShowBattleActions(Button[] buttons, string text)
+        public void ShowBattleActions(GenericButton[] buttons, string text)
         {
-            if (!this.isOpen)
+            if (!this.IsOpen)
             {
                 // TODO PLAY ANIMATION
                 battlePanel.SetActive(true);
                 buttonPanel.SetActive(true);
-                isOpen = true;
+                IsOpen = true;
             }
 
             titleText.text = text;
@@ -56,7 +58,7 @@ namespace TUFG.UI
         /// </summary>
         public void HideActions()
         {
-            isOpen = false;
+            IsOpen = false;
             battlePanel.SetActive(false);
             buttonPanel.SetActive(false);
         }

@@ -20,6 +20,8 @@ MonoBehaviour:
   health: 25
   armor: 1
   speed: 1
+  strength: 2
+  power: 0
   abilities:
   - name: Punch
     abilityID: GoonPunch
@@ -29,6 +31,8 @@ MonoBehaviour:
     primaryEffects:
     - effectType: 0
       effectValue: 10
+      strenghtMultiplier: 0.5
+      powerMultiplier: 0
     secondaryEffects: []
   - name: Kick
     abilityID: GoonKick
@@ -38,6 +42,10 @@ MonoBehaviour:
     primaryEffects:
     - effectType: 0
       effectValue: 5
+      strenghtMultiplier: 1
+      powerMultiplier: 0
     secondaryEffects:
     - effectType: 0
       effectValue: 3
+      strenghtMultiplier: 0.5
+      powerMultiplier: 0

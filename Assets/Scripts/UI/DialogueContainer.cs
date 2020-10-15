@@ -20,6 +20,7 @@ namespace TUFG.UI
         private GameObject buttonPrefab;
         private GameObject dialoguePanel;
         private bool isOpen = false;
+        public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity functions
 
@@ -41,7 +42,7 @@ namespace TUFG.UI
         /// <param name="authorAvatar">Avatar of the speaker</param>
         /// <param name="buttons">Action buttons</param>
         /// <param name="avatarPosition">Position on left or right</param>
-        public void ShowMessage(string authorName, string message, Sprite authorAvatar, Button[] buttons, DialogueAvatarPosition avatarPosition)
+        public void ShowMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition)
         {
             if (!this.isOpen)
             {

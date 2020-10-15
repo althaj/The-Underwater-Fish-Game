@@ -9,9 +9,9 @@ namespace TUFG.UI
 {
     public class ButtonUI : MonoBehaviour
     {
-        private Button button;
+        private GenericButton button;
 
-        public void InitButton(Button button)
+        public void InitButton(GenericButton button)
         {
             this.button = button;
 

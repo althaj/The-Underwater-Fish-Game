@@ -99,8 +99,6 @@ namespace TUFG.Battle
                 for (int i = 0; i < alliesData.Length; i++)
                 {
                     currentBattle.allies.Add(InstantiateUnit(alliesData[i], position, true));
-                    if (alliesData[i].aiType == AI.UnitAIType.Player)
-                        currentBattle.allies.Last().IsPlayer = true;
 
                     position.x--;
                 }
@@ -137,7 +135,8 @@ namespace TUFG.Battle
             Unit unit = unitObject.GetComponent<Unit>();
             unit.UnitData = unitData;
             unit.IsAlly = isAlly;
-            unit.health = unitData.maxHealth;
+            unit.IsPlayer = unitData.aiType == UnitAIType.Player;
+            unit.Health = unit.MaxHealth;
             unit.UpdateHealthUI();
 
             return unit;
@@ -219,12 +218,12 @@ namespace TUFG.Battle
                     switch (effect.effectType)
                     {
                         case AbilityEffectType.Damage:
-                            target.DealDamage(effect.effectValue);
-                            if (target.health <= 0)
+                            target.DealDamage((int)(effect.effectValue + effect.strenghtMultiplier * author.Strength + effect.powerMultiplier * author.Power));
+                            if (target.Health <= 0)
                                 KillUnit(target);
                             break;
                         case AbilityEffectType.Heal:
-                            target.Heal(effect.effectValue);
+                            target.Heal((int)(effect.effectValue + effect.strenghtMultiplier * author.Strength + effect.powerMultiplier * author.Power));
                             break;
                     }
                 }
@@ -260,7 +259,6 @@ namespace TUFG.Battle
             while(currentBattle != null) {
                 BuildTurnOrder();
                 roundNumber++;
-                Debug.Log($"====NEW ROUND====\nRound number {roundNumber}");
 
                 // Main round loop
                 while (turnOrder.Count != 0 && currentBattle != null)
@@ -270,11 +268,11 @@ namespace TUFG.Battle
                     {
                         if (!isSelectingAbility && !isSelectingTarget)
                         {
-                            Button[] buttons = new Button[unit.Abilities.Length];
+                            GenericButton[] buttons = new GenericButton[unit.Abilities.Length];
 
                             for (int i = 0; i < buttons.Length; i++)
                             {
-                                buttons[i] = new Button
+                                buttons[i] = new GenericButton
                                 {
                                     text = unit.Abilities[i].name,
                                     buttonType = ButtonType.Ability,
@@ -338,11 +336,11 @@ namespace TUFG.Battle
                     break;
             }
 
-            List<Button> buttons = new List<Button>();
+            List<GenericButton> buttons = new List<GenericButton>();
 
             foreach(Unit target in targets)
             {
-                buttons.Add(new Button
+                buttons.Add(new GenericButton
                 {
                     text = target.Name,
                     buttonType = ButtonType.Target,
@@ -360,8 +358,6 @@ namespace TUFG.Battle
         {
             isSelectingTarget = false;
             isSelectingAbility = false;
-
-            // TODO implement targetting
 
             UseAbility(turnOrder[0], currentAbility, target);
 
