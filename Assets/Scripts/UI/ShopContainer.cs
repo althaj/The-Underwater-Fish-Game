@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using TUFG.Inventory;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.Editor;
 using UnityEngine.UI;
 
 namespace TUFG.UI
@@ -13,7 +15,7 @@ namespace TUFG.UI
         private GameObject shopPanel;
         private Item currentItem;
         private bool currentItemIsSelling;
-        private string shopId;
+        private Shop shop;
 
         [SerializeField] private Transform buyItemsContainer = null;
         [SerializeField] private Transform sellItemsContainer = null;
@@ -41,14 +43,12 @@ namespace TUFG.UI
         /// </summary>
         public void ShowShop(Shop shop)
         {
-            shopId = shop.ShopId;
+            this.shop = shop;
 
             FindObjectOfType<PlayerMovement>().DisableInput();
 
             List<Item> buyItems = shop.Items;
             List<Item> sellItems = InventoryManager.Instance.InventoryItems;
-
-            List<Button> itemButtons = new List<Button>();
 
             if (!IsOpen)
             {
@@ -57,59 +57,12 @@ namespace TUFG.UI
                 IsOpen = true;
             }
 
-            UIManager.Instance.ClearChildren(buyItemsContainer.gameObject);
-
-            for (int i = 0; i < buyItems.Count; i++)
-            {
-                GameObject button = CreateButton(buyItems[i], Mathf.RoundToInt((float)buyItems[i].price * shop.Margin), false);
-
-                itemButtons.Add(button.GetComponent<Button>());
-
-                if (i == 0)
-                    EventSystem.current.SetSelectedGameObject(button);
-            }
-
-            UIManager.Instance.ClearChildren(sellItemsContainer.gameObject);
-
             goldText.text = InventoryManager.Instance.Gold.ToString();
 
-            for (int i = 0; i < sellItems.Count; i++)
-            {
-                GameObject button = CreateButton(sellItems[i], Mathf.RoundToInt((float)sellItems[i].price * shop.Margin), true);
-
-                itemButtons.Add(button.GetComponent<Button>());
-
-                if (i == 0 && buyItems.Count == 0)
-                    EventSystem.current.SetSelectedGameObject(button);
-            }
-
-            Vector2 sizeDelta = buyItemsContainer.GetComponent<RectTransform>().sizeDelta;
-            VerticalLayoutGroup layout = buyItemsContainer.GetComponent<VerticalLayoutGroup>();
-            sizeDelta.y = buyItems.Count * buttonPrefab.GetComponent<RectTransform>().sizeDelta.y + (buyItems.Count - 1) * layout.spacing + layout.padding.top + layout.padding.bottom;
-            buyItemsContainer.GetComponent<RectTransform>().sizeDelta = sizeDelta;
-
-            sizeDelta = sellItemsContainer.GetComponent<RectTransform>().sizeDelta;
-            layout = sellItemsContainer.GetComponent<VerticalLayoutGroup>();
-            sizeDelta.y = sellItems.Count * buttonPrefab.GetComponent<RectTransform>().sizeDelta.y + (sellItems.Count - 1) * layout.spacing + layout.padding.top + layout.padding.bottom;
-            sellItemsContainer.GetComponent<RectTransform>().sizeDelta = sizeDelta;
-
-            // Build button navigation
-            for (int i = 0; i < itemButtons.Count; i++)
-            {
-                Button button = itemButtons[i];
-
-                Navigation nav = button.navigation;
-
-                if (i > 0)
-                    nav.selectOnUp = itemButtons[i - 1];
-
-                if (i < itemButtons.Count - 1)
-                    nav.selectOnDown = itemButtons[i + 1];
-
-                nav.selectOnRight = itemDetailsContainer.GetComponentInChildren<Button>();
-
-                button.navigation = nav;
-            }
+            Button[] buyButtons = BuildButtons(buyItems, false);
+            Button[] sellButtons = BuildButtons(sellItems, true);
+            Button[] buttons = buyButtons.Concat(sellButtons).ToArray();
+            UIManager.BuildListButtonNavigation(buttons, itemDetailsContainer.GetComponentInChildren<Button>());
         }
 
         /// <summary>
@@ -140,14 +93,15 @@ namespace TUFG.UI
         /// <param name="obj">Item transform to scroll to.</param>
         public void ScrollToObject(Transform obj)
         {
+            Transform container = obj.parent;
             Canvas.ForceUpdateCanvases();
-            ScrollRect scroll = buyItemsContainer.parent.parent.GetComponent<ScrollRect>();
+            ScrollRect scroll = container.parent.parent.GetComponent<ScrollRect>();
 
-            Vector2 anchored = buyItemsContainer.GetComponent<RectTransform>().anchoredPosition;
+            Vector2 anchored = container.GetComponent<RectTransform>().anchoredPosition;
 
-            anchored.y = scroll.transform.InverseTransformPoint(buyItemsContainer.position).y - scroll.transform.InverseTransformPoint(obj.position).y;
+            anchored.y = scroll.transform.InverseTransformPoint(container.position).y - scroll.transform.InverseTransformPoint(obj.position).y - container.GetComponent<VerticalLayoutGroup>().padding.top;
 
-            buyItemsContainer.GetComponent<RectTransform>().anchoredPosition = anchored;
+            container.GetComponent<RectTransform>().anchoredPosition = anchored;
         }
 
         /// <summary>
@@ -160,11 +114,39 @@ namespace TUFG.UI
             itemDetailsContainer.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.SlotText;
             itemDetailsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = item.description;
 
-            TextMeshProUGUI buttonText = itemDetailsContainer.GetChild(4).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
-            buttonText.text = isSelling ? "Sell item" : "Buy item";
+            TextMeshProUGUI sellButton = itemDetailsContainer.GetChild(4).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
+            sellButton.text = isSelling ? "Sell item" : "Buy item";
+
+            if (!isSelling && !CanBuyItem(item))
+                sellButton.GetComponentInParent<Button>().enabled = false;
+            else
+                sellButton.GetComponentInParent<Button>().enabled = true;
 
             currentItem = item;
             currentItemIsSelling = isSelling;
+        }
+
+        /// <summary>
+        /// Buy / sell currently selected item.
+        /// </summary>
+        public void BuySellItem()
+        {
+            if (currentItemIsSelling)
+            {
+                if (ShopManager.Instance.SellItem(currentItem, shop.ShopId))
+                {
+                    InventoryManager.Instance.Gold += GetItemPrice(currentItem);
+                }
+            }
+            else
+            {
+                if(ShopManager.Instance.BuyItem(currentItem, shop.ShopId)){
+                    InventoryManager.Instance.Gold -= GetItemPrice(currentItem);
+                }
+            }
+            currentItem = null;
+
+            ShowShop(ShopManager.Instance.GetShop(shop.ShopId));
         }
         #endregion
 
@@ -186,16 +168,57 @@ namespace TUFG.UI
         }
 
         /// <summary>
-        /// Buy / sell currently selected item.
+        /// Build the buttons.
         /// </summary>
-        public void BuySellItem()
+        /// <param name="items"></param>
+        /// <param name="isSelling"></param>
+        private Button[] BuildButtons(List<Item> items, bool isSelling)
         {
-            if (currentItemIsSelling)
-                ShopManager.Instance.SellItem(currentItem, shopId);
-            else
-                ShopManager.Instance.BuyItem(currentItem, shopId);
+            Button[] result = new Button[items.Count];
 
-            ShowShop(ShopManager.Instance.GetShop(shopId));
+            Transform container;
+            if (isSelling)
+                container = sellItemsContainer;
+            else
+                container = buyItemsContainer;
+
+            UIManager.Instance.ClearChildren(container.gameObject);
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                GameObject button = CreateButton(items[i], GetItemPrice(items[i]), isSelling);
+                result[i] = button.GetComponent<Button>();
+            }
+
+            Vector2 sizeDelta = container.GetComponent<RectTransform>().sizeDelta;
+            VerticalLayoutGroup layout = container.GetComponent<VerticalLayoutGroup>();
+            sizeDelta.y = items.Count * buttonPrefab.GetComponent<RectTransform>().sizeDelta.y + (items.Count - 1) * layout.spacing + layout.padding.top + layout.padding.bottom;
+            container.GetComponent<RectTransform>().sizeDelta = sizeDelta;
+
+            if (result.Length > 0)
+                ScrollToObject(result[0].transform);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Does player have enough money to buy this item?
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private bool CanBuyItem(Item item)
+        {
+            return GetItemPrice(item) <= InventoryManager.Instance.Gold;
+        }
+
+        /// <summary>
+        /// Get item price with shop margin.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private int GetItemPrice(Item item)
+        {
+            return Mathf.RoundToInt((float)item.price * shop.Margin);
         }
         #endregion
     }

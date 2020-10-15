@@ -43,12 +43,11 @@ namespace TUFG.UI
         {
             FindObjectOfType<PlayerMovement>().DisableInput();
 
-            List<Item> equippedItems = InventoryManager.Instance.EquippedItems;
-            List<Item> inventoryItems = InventoryManager.Instance.InventoryItems;
+            List<Item> equippedItems = InventoryManager.Instance.EquippedItems.OrderBy(x => x.slot).ToList();
+            List<Item> inventoryItems = InventoryManager.Instance.InventoryItems.OrderBy(x => x.name).OrderBy(x => x.slot).ToList();
 
             List<Button> itemButtons = new List<Button>();
 
-            GameObject selectedObject = null;
 
             if (!IsOpen)
             {
@@ -66,9 +65,6 @@ namespace TUFG.UI
                 GameObject button = CreateButton(equippedItems[i], true);
 
                 itemButtons.Add(button.GetComponent<Button>());
-
-                if (i == 0)
-                    selectedObject = button;
             }
 
             for (int i = 0; i < inventoryItems.Count; i++)
@@ -76,36 +72,17 @@ namespace TUFG.UI
                 GameObject button = CreateButton(inventoryItems[i], false);
 
                 itemButtons.Add(button.GetComponent<Button>());
-
-                if (selectedObject == null && i == 0)
-                    selectedObject = button;
             }
 
             Vector2 sizeDelta = itemListContainer.GetComponent<RectTransform>().sizeDelta;
             VerticalLayoutGroup layout = itemListContainer.GetComponent<VerticalLayoutGroup>();
-            sizeDelta.y = (equippedItems.Count + inventoryItems.Count) * buttonPrefab.GetComponent<RectTransform>().sizeDelta.y + (equippedItems.Count + inventoryItems.Count - 1) * layout.spacing + layout.padding.top + layout.padding.bottom;
+            sizeDelta.y = itemButtons.Count * buttonPrefab.GetComponent<RectTransform>().sizeDelta.y + (itemButtons.Count - 1) * layout.spacing + layout.padding.top + layout.padding.bottom;
             itemListContainer.GetComponent<RectTransform>().sizeDelta = sizeDelta;
 
-            if (selectedObject != null)
-                EventSystem.current.SetSelectedGameObject(selectedObject);
+            if (itemButtons.Count > 0)
+                ScrollToObject(itemButtons[0].transform);
 
-            // Build button navigation
-            for (int i = 0; i < itemButtons.Count; i++)
-            {
-                Button button = itemButtons[i];
-
-                Navigation nav = button.navigation;
-
-                if (i > 0)
-                    nav.selectOnUp = itemButtons[i - 1];
-
-                if(i < itemButtons.Count - 1)
-                    nav.selectOnDown = itemButtons[i + 1];
-
-                nav.selectOnRight = itemDetailsContainer.GetComponentInChildren<Button>();
-
-                button.navigation = nav;
-            }
+            UIManager.BuildListButtonNavigation(itemButtons.ToArray(), itemDetailsContainer.GetComponentInChildren<Button>());
         }
 
         /// <summary>
@@ -158,7 +135,7 @@ namespace TUFG.UI
 
             Vector2 anchored = itemListContainer.GetComponent<RectTransform>().anchoredPosition;
 
-            anchored.y = scroll.transform.InverseTransformPoint(itemListContainer.position).y - scroll.transform.InverseTransformPoint(obj.position).y;
+            anchored.y = scroll.transform.InverseTransformPoint(itemListContainer.position).y - scroll.transform.InverseTransformPoint(obj.position).y - itemListContainer.GetComponent<VerticalLayoutGroup>().padding.top;
 
             itemListContainer.GetComponent<RectTransform>().anchoredPosition = anchored;
         }
@@ -172,6 +149,8 @@ namespace TUFG.UI
                 InventoryManager.Instance.UnequipItem(currentItem);
             else
                 InventoryManager.Instance.EquipItem(currentItem);
+
+            currentItem = null;
             ShowInventory();
         }
 

@@ -7,6 +7,7 @@ using TUFG.Inventory;
 using TUFG.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace TUFG.UI
@@ -216,6 +217,33 @@ namespace TUFG.UI
                         EventSystem.current.SetSelectedGameObject(buttonInstance);
                 }
 
+            }
+        }
+
+        /// <summary>
+        /// Build navigation of buttons in a panel and select the first button.
+        /// </summary>
+        /// <param name="parentContainer">Panel containing all the buttons in the list.</param>
+        /// <param name="rightButton">Button to select with a right arrow.</param>
+        public static void BuildListButtonNavigation(Button[] listButtons, Button rightButton)
+        {
+            // Build button navigation
+            for (int i = 0; i < listButtons.Length; i++)
+            {
+                Button button = listButtons[i];
+                Navigation nav = button.navigation;
+
+                if (i == 0)
+                    EventSystem.current.SetSelectedGameObject(button.gameObject);
+
+                if (i > 0)
+                    nav.selectOnUp = listButtons[i - 1];
+
+                if (i < listButtons.Length - 1)
+                    nav.selectOnDown = listButtons[i + 1];
+
+                nav.selectOnRight = rightButton;
+                button.navigation = nav;
             }
         }
 
