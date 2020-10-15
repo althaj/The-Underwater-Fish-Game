@@ -18,6 +18,7 @@ namespace TUFG.UI
 
         [SerializeField]private Transform itemListContainer = null;
         [SerializeField]private Transform itemDetailsContainer = null;
+        [SerializeField] private TextMeshProUGUI goldText = null;
 
         private GameObject buttonPrefab;
         private bool isOpen = false;
@@ -57,6 +58,8 @@ namespace TUFG.UI
             }
 
             UIManager.Instance.ClearChildren(itemListContainer.gameObject);
+
+            goldText.text = InventoryManager.Instance.Gold.ToString();
 
             for (int i = 0; i < equippedItems.Count; i++)
             {

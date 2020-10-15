@@ -18,6 +18,7 @@ namespace TUFG.UI
         [SerializeField] private Transform buyItemsContainer = null;
         [SerializeField] private Transform sellItemsContainer = null;
         [SerializeField] private Transform itemDetailsContainer = null;
+        [SerializeField] private TextMeshProUGUI goldText = null;
 
         private GameObject buttonPrefab;
         private bool isOpen = false;
@@ -69,6 +70,8 @@ namespace TUFG.UI
             }
 
             UIManager.Instance.ClearChildren(sellItemsContainer.gameObject);
+
+            goldText.text = InventoryManager.Instance.Gold.ToString();
 
             for (int i = 0; i < sellItems.Count; i++)
             {
