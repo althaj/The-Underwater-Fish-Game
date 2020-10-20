@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace TUFG.Inventory
 {
+    /// <summary>
+    /// Enumeration of item slots.
+    /// </summary>
     public enum ItemSlot
     {
         Hands,
@@ -17,10 +20,18 @@ namespace TUFG.Inventory
         Ring
     }
 
+    /// <summary>
+    /// Class managing the inventory of the player.
+    /// </summary>
+    /// <remarks>Uses a singleton pattern.</remarks>
     public class InventoryManager : MonoBehaviour
     {
         #region Singleton pattern
         private static InventoryManager _instance;
+
+        /// <summary>
+        /// Current instance of the inventory manager. Creates an Unity object.
+        /// </summary>
         public static InventoryManager Instance
         {
             get
@@ -256,8 +267,19 @@ namespace TUFG.Inventory
         #endregion
 
         #region Properties
+        /// <summary>
+        /// List of unequipped items in the inventory.
+        /// </summary>
         public List<Item> InventoryItems { get => inventoryItems; set => inventoryItems = value; }
+
+        /// <summary>
+        /// List of equipped items in the inventory.
+        /// </summary>
         public List<Item> EquippedItems { get => equippedItems; set => equippedItems = value; }
+
+        /// <summary>
+        /// Current gold of the player.
+        /// </summary>
         public int Gold { get => gold; set => gold = value; }
         #endregion
     }

@@ -6,14 +6,29 @@ using UnityEngine;
 
 namespace TUFG.Inventory
 {
+    /// <summary>
+    /// Class representing a shop.
+    /// </summary>
     [System.Serializable]
     public class Shop
     {
         [SerializeField] private string shopId;
         [SerializeField] private List<Item> items;
         [SerializeField] private float margin = 1f;
+
+        /// <summary>
+        /// ID of the shop in format shop_id.
+        /// </summary>
         public string ShopId { get => shopId; set => shopId = value; }
+
+        /// <summary>
+        /// List of items that are being sold in the shop.
+        /// </summary>
         public List<Item> Items { get => items; set => items = value; }
+
+        /// <summary>
+        /// Selling margin in the shop.
+        /// </summary>
         public float Margin { get => margin; set => margin = value; }
 
         /// <summary>
@@ -40,7 +55,7 @@ namespace TUFG.Inventory
         /// <summary>
         /// Get item paths from items.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of paths to the scriptable objects of the items in the shop.</returns>
         public List<string> GetItemPaths()
         {
             List<string> paths = new List<string>();
@@ -54,7 +69,7 @@ namespace TUFG.Inventory
         /// <summary>
         /// Create a ShopSave instance from this Shop.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>ShopSave instance representing the shop.</returns>
         public ShopSave ToShopSave()
         {
             ShopSave result = new ShopSave();

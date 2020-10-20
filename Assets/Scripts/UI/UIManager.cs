@@ -12,10 +12,18 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace TUFG.UI
 {
+    /// <summary>
+    /// Class managing the UI.
+    /// <remarks>Uses a singleton pattern.</remarks>
+    /// </summary>
     public class UIManager : MonoBehaviour
     {
         #region Singleton pattern
         private static UIManager _instance;
+
+        /// <summary>
+        /// Current instance of the UI manager. Creates an Unity object.
+        /// </summary>
         public static UIManager Instance
         {
             get
@@ -45,13 +53,45 @@ namespace TUFG.UI
         [SerializeField] private Sprite legsSlotIcon = null;
         [SerializeField] private Sprite amuletSlotIcon = null;
         [SerializeField] private Sprite ringSlotIcon = null;
+
+        /// <summary>
+        /// Prefab of a generic button.
+        /// </summary>
         public GameObject ButtonPrefab { get => buttonPrefab; set => buttonPrefab = value; }
+
+        /// <summary>
+        /// Prefab of an inventory button.
+        /// </summary>
         public GameObject InventoryButtonPrefab { get => inventoryButtonPrefab; set => inventoryButtonPrefab = value; }
+
+        /// <summary>
+        /// Prefab of a shop button.
+        /// </summary>
         public GameObject ShopButtonPrefab { get => shopButtonPrefab; set => shopButtonPrefab = value; }
+
+        /// <summary>
+        /// Icon of hand slot in shop and inventory.
+        /// </summary>
         public Sprite HandsSlotIcon { get => handsSlotIcon; set => handsSlotIcon = value; }
+
+        /// <summary>
+        /// Icon of body slot in shop and inventory.
+        /// </summary>
         public Sprite BodySlotIcon { get => bodySlotIcon; set => bodySlotIcon = value; }
+
+        /// <summary>
+        /// Icon of legs slot in shop and inventory.
+        /// </summary>
         public Sprite LegsSlotIcon { get => legsSlotIcon; set => legsSlotIcon = value; }
+
+        /// <summary>
+        /// Icon of amulet slot in shop and inventory.
+        /// </summary>
         public Sprite AmuletSlotIcon { get => amuletSlotIcon; set => amuletSlotIcon = value; }
+
+        /// <summary>
+        /// Icon of ring slot in shop and inventory.
+        /// </summary>
         public Sprite RingSlotIcon { get => ringSlotIcon; set => ringSlotIcon = value; }
 
         private ControlsInput controlsInput;
@@ -142,54 +182,96 @@ namespace TUFG.UI
         #endregion
 
         #region Show / Hide methods
+        /// <summary>
+        /// Show a dialogue message.
+        /// </summary>
+        /// <param name="authorName">Name of the author of the message.</param>
+        /// <param name="message">Text of the message.</param>
+        /// <param name="authorAvatar">Avatar of the author of the message.</param>
+        /// <param name="buttons">Interaction buttons of the message.</param>
+        /// <param name="avatarPosition">Position of the avatar in the dialogue panel.</param>
         public void ShowMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
         {
             DialogueContainer.ShowMessage(authorName, message, authorAvatar, buttons, avatarPosition);
         }
 
+        /// <summary>
+        /// Hide current dialogue message.
+        /// </summary>
         public void HideMessage()
         {
             DialogueContainer.HideMessage();
         }
 
+        /// <summary>
+        /// Display battle actions for player to choose from.
+        /// </summary>
+        /// <param name="buttons">Buttons to display.</param>
+        /// <param name="text">Title text of the panel.</param>
         public void ShowBattleActions(GenericButton[] buttons, string text)
         {
             BattleContainer.ShowBattleActions(buttons, text);
         }
 
+        /// <summary>
+        /// Hide battle actions panel.
+        /// </summary>
         public void HideActions()
         {
             BattleContainer.HideActions();
         }
 
+        /// <summary>
+        /// Display inventory window.
+        /// </summary>
         public void ShowInventory()
         {
             InventoryContainer.ShowInventory();
         }
 
+        /// <summary>
+        /// Callback for inventory button pressed, to toggle the inventory.
+        /// </summary>
+        /// <param name="ctx"></param>
         public void InventoryButtonPressed(CallbackContext ctx)
         {
             if(!IsAnyWindowOpen() || InventoryContainer.IsOpen)
                 InventoryContainer.ToggleInventory();
         }
 
+        /// <summary>
+        /// Hide inventory window.
+        /// </summary>
         public void HideInventory()
         {
             InventoryContainer.HideInventory();
         }
 
+        /// <summary>
+        /// Display a shop window.
+        /// </summary>
+        /// <param name="shop">Shop to display.</param>
         public void ShowShop(Shop shop)
         {
             DialogueManager.Instance.EndConversation();
             ShopContainer.ShowShop(shop);
         }
 
+        /// <summary>
+        /// Hide current shop.
+        /// </summary>
         public void HideShop()
         {
             ShopContainer.HideShop();
         }
         #endregion
 
+        /// <summary>
+        /// Build generic buttons.
+        /// </summary>
+        /// <param name="buttons">Buttons to add.</param>
+        /// <param name="buttonPanel">Panel to put buttons to.</param>
+        /// <param name="noButtonText">Text to display on a button when no buttons are present.</param>
         public void BuildButtons(GenericButton[] buttons, GameObject buttonPanel, string noButtonText)
         {
             if (buttons == null || buttons.Length == 0)
@@ -247,6 +329,10 @@ namespace TUFG.UI
             }
         }
 
+        /// <summary>
+        /// Destroy children of a panel.
+        /// </summary>
+        /// <param name="panel">Parent for destroying children elements.</param>
         public void ClearChildren(GameObject panel)
         {
             for (int i = 0; i < panel.transform.childCount; i++)

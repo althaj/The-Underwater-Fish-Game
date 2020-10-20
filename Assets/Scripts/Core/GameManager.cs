@@ -12,10 +12,18 @@ using System.Linq;
 
 namespace TUFG.Core
 {
+    /// <summary>
+    /// Class handling the core game mechanics, such as getting player information and saving / loading the game.
+    /// </summary>
+    /// <remarks>Uses a singleton pattern.</remarks>
     public class GameManager : MonoBehaviour
     {
         #region Singleton pattern
         private static GameManager _instance;
+
+        /// <summary>
+        /// Current instance of the game manager. Creates an Unity object.
+        /// </summary>
         public static GameManager Instance
         {
             get
@@ -38,6 +46,11 @@ namespace TUFG.Core
 
         private string currentSlot = "Demo";
 
+        /// <summary>
+        /// Returns the current player party data.
+        /// </summary>
+        /// <remarks>This is not properly implemented yet.</remarks>
+        /// <returns>Array of player party units, including the player.</returns>
         public static UnitData[] GetPlayerParty()
         {
             UnitData[] playerParty = new UnitData[3];
@@ -50,6 +63,11 @@ namespace TUFG.Core
             return playerParty;
         }
 
+        /// <summary>
+        /// Returns the current player unit data.
+        /// </summary>
+        /// <remarks>This is not properly implemented yet.</remarks>
+        /// <returns>Current player unit data.</returns>
         public static UnitData GetPlayerUnitData()
         {
             UnitData playerUnitData = ScriptableObject.CreateInstance<UnitData>();
@@ -71,6 +89,10 @@ namespace TUFG.Core
             return playerUnitData;
         }
 
+        /// <summary>
+        /// Load player items.
+        /// </summary>
+        /// <remarks>This is not properly implemented yet.</remarks>
         public static void LoadPlayerItems()
         {
             Item sword = AssetDatabase.LoadAssetAtPath<Item>("Assets/Prefabs/Inventory/Items/Sword of destiny.asset");
@@ -126,7 +148,7 @@ namespace TUFG.Core
         /// <summary>
         /// Save game to a slot.
         /// </summary>
-        /// <param name="slot"></param>
+        /// <param name="slot">Name of the slot and the save file.</param>
         public void SaveGame(string slot)
         {
             if (!Directory.Exists(GetSaveDirectory()))
@@ -159,7 +181,7 @@ namespace TUFG.Core
         /// <summary>
         /// Load game at a slot.
         /// </summary>
-        /// <param name="slot"></param>
+        /// <param name="slot">Name of the slot and the save file.</param>
         public void LoadGame(string slot)
         {
             string savePath = GetSavePath(slot);
@@ -186,7 +208,7 @@ namespace TUFG.Core
         /// <summary>
         /// Returns a path to the save file on a save slot.
         /// </summary>
-        /// <param name="slot"></param>
+        /// <param name="slot">Name of the slot and the save file.</param>
         /// <returns></returns>
         public string GetSavePath(string slot)
         {

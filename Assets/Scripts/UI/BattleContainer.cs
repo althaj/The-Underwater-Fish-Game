@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 namespace TUFG.UI
 {
+    /// <summary>
+    /// Container with battle UI.
+    /// </summary>
     public class BattleContainer : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI titleText = null;
@@ -18,6 +21,10 @@ namespace TUFG.UI
         private GameObject battlePanel;
 
         private bool isOpen = false;
+
+        /// <summary>
+        /// Is the battle container open?
+        /// </summary>
         public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity functions

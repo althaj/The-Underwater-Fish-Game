@@ -8,6 +8,9 @@ using UnityEngine.EventSystems;
 
 namespace TUFG.UI
 {
+    /// <summary>
+    /// Vontainer with the dialogue panels.
+    /// </summary>
     public class DialogueContainer : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI authorNameText = null;
@@ -20,6 +23,10 @@ namespace TUFG.UI
         private GameObject buttonPrefab;
         private GameObject dialoguePanel;
         private bool isOpen = false;
+
+        /// <summary>
+        /// Is the dialogue panel currently open?
+        /// </summary>
         public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity functions

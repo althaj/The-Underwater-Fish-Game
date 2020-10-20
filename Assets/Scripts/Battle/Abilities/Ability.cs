@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace TUFG.Battle.Abilities
 {
+    /// <summary>
+    /// Enumeration of ability targetting types.
+    /// </summary>
     public enum AbilityTargetting
     {
         Single,
@@ -16,6 +19,9 @@ namespace TUFG.Battle.Abilities
         AllAllies
     }
 
+    /// <summary>
+    /// Enumeration of targetting priorities.
+    /// </summary>
     public enum AbilityPriority
     {
         LowHP,
@@ -27,6 +33,9 @@ namespace TUFG.Battle.Abilities
         Random
     }
 
+    /// <summary>
+    /// The class containing information about a single ability.
+    /// </summary>
     [Serializable]
     public class Ability
     {

@@ -5,10 +5,18 @@ using UnityEngine;
 
 namespace TUFG.Inventory
 {
+    /// <summary>
+    /// Class managing all the shops in the game.
+    /// </summary>
+    /// /// <remarks>Uses a singleton pattern.</remarks>
     public class ShopManager : MonoBehaviour
     {
         #region Singleton pattern
         private static ShopManager _instance;
+
+        /// <summary>
+        /// Current instance of the shop manager. Creates an Unity object.
+        /// </summary>
         public static ShopManager Instance
         {
             get
@@ -35,7 +43,7 @@ namespace TUFG.Inventory
         /// <summary>
         /// Load shops from save, preserving existing shops.
         /// </summary>
-        /// <param name="shopSaves"></param>
+        /// <param name="shopSaves">List of shop save instances representing all the shops in the game.</param>
         public void LoadShops(List<ShopSave> shopSaves)
         {
             foreach (ShopSave save in shopSaves)
@@ -52,7 +60,7 @@ namespace TUFG.Inventory
         /// <summary>
         /// Returns shop by ID.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">ID of the shop.</param>
         /// <returns></returns>
         public Shop GetShop(string id)
         {
