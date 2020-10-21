@@ -7,6 +7,9 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace TUFG
 {
+    /// <summary>
+    /// Class to handle player movement.
+    /// </summary>
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField]
@@ -69,6 +72,9 @@ namespace TUFG
         #endregion
 
         #region Player Movement functions
+        /// <summary>
+        /// Handle movement of the player character.
+        /// </summary>
         private void Move()
         {
             Vector2 translation = Vector2.zero;
@@ -119,6 +125,9 @@ namespace TUFG
             playerAnimator.SetBool("IsGrounded", isGrounded);
         }
 
+        /// <summary>
+        /// Build data needed for ladders to work.
+        /// </summary>
         private void BuildLadderData()
         {
             World.Ladder[] ladders = FindObjectsOfType<World.Ladder>();
@@ -131,10 +140,15 @@ namespace TUFG
             {
                 ladderPosition = ladders[i].transform.position;
                 ladderBottoms[i] = ladderPosition;
-                ladderTops[i] = ladderPosition + Vector2.up * ladders[i].height;
+                ladderTops[i] = ladderPosition + Vector2.up * ladders[i].Height;
             }
         }
 
+        /// <summary>
+        /// Get index of a ladder that is close enough to the player to climb.
+        /// </summary>
+        /// <param name="ladderType">Type of the ledder to find.</param>
+        /// <returns></returns>
         private int GetCloseLadder(World.LadderType ladderType)
         {
             if (ladderType == World.LadderType.Top || ladderType == World.LadderType.Any)
@@ -158,6 +172,11 @@ namespace TUFG
             return -1;
         }
 
+        /// <summary>
+        /// Start climbing a ladder.
+        /// </summary>
+        /// <param name="ladderID">Index of ladder to climb.</param>
+        /// <param name="ladderType">Type of the ladder to climb.</param>
         private void StartClimbing(int ladderID, World.LadderType ladderType)
         {
             Vector2 ladderPosition = ladderType == World.LadderType.Top ? ladderTops[ladderID] : ladderBottoms[ladderID];
@@ -167,12 +186,19 @@ namespace TUFG
             currentLadderID = ladderID;
         }
 
+        /// <summary>
+        /// Stop climbing a ladder.
+        /// </summary>
         private void StopClimbing()
         {
             currentLadderID = -1;
             isClimbing = false;
         }
 
+        /// <summary>
+        /// Is player currently grounded?
+        /// </summary>
+        /// <returns>If the player is currently on the ground and not climbing a ladder.</returns>
         public bool IsGrounded()
         {
             if (isClimbing)
@@ -193,12 +219,18 @@ namespace TUFG
             return false;
         }
 
+        /// <summary>
+        /// Disable input of the player.
+        /// </summary>
         public void DisableInput()
         {
             controlsInput.World.Move.Disable();
             moveVector = Vector2.zero;
         }
 
+        /// <summary>
+        /// Enable input of the player.
+        /// </summary>
         public void EnableInput()
         {
             controlsInput.World.Move.Enable();

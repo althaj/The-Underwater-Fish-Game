@@ -13,10 +13,18 @@ using TUFG.Dialogue;
 
 namespace TUFG.Battle
 {
+    /// <summary>
+    /// Class responsible for controling battles.
+    /// </summary>
+    /// <remarks>Uses a singleton pattern.</remarks>
     public class BattleManager : MonoBehaviour
     {
         #region Singleton pattern
         private static BattleManager _instance;
+
+        /// <summary>
+        /// Current instance of the battle manager. Creates an Unity object.
+        /// </summary>
         public static BattleManager Instance
         {
             get
@@ -166,6 +174,13 @@ namespace TUFG.Battle
             return result;
         }
 
+        /// <summary>
+        /// Use an ability by a unit on a target.
+        /// </summary>
+        /// <remarks>Gets all the valid targets of the ability and applies all primary and secondary effects on the targets.</remarks>
+        /// <param name="author">Unit that uses the ability.</param>
+        /// <param name="ability">Ability to be used.</param>
+        /// <param name="target">Target of the ability.</param>
         private void UseAbility(Unit author, Ability ability, Unit target)
         {
             ApplyAbilityEffect(author, ability, target, ability.primaryEffects);
@@ -199,12 +214,26 @@ namespace TUFG.Battle
             }
         }
 
+        /// <summary>
+        /// Apply an ability effect on a unit.
+        /// </summary>
+        /// <param name="author">Unit that used the ability.</param>
+        /// <param name="ability">The ability used.</param>
+        /// <param name="target">Target of the effect (not target of the ability).</param>
+        /// <param name="effects">Array of ability effects to use on the target.</param>
         private void ApplyAbilityEffect(Unit author, Ability ability, Unit target, AbilityEffect[] effects)
         {
             List<Unit> targets = new List<Unit> { target };
             ApplyAbilityEffect(author, ability, targets, effects);
         }
 
+        /// <summary>
+        /// Apply an ability effect on multiple units.
+        /// </summary>
+        /// <param name="author">Unit that used the ability.</param>
+        /// <param name="ability">The ability used.</param>
+        /// <param name="targets">Array of units that are targets of the effect (not target of the ability).</param>
+        /// <param name="effects">Array of ability effects to use on the targets.</param>
         private void ApplyAbilityEffect(Unit author, Ability ability, List<Unit> targets, AbilityEffect[] effects)
         {
             Animator animator = author.GetComponent<Animator>();
@@ -230,6 +259,10 @@ namespace TUFG.Battle
             }
         }
 
+        /// <summary>
+        /// Kill a unit in the battle.
+        /// </summary>
+        /// <param name="target">Unit to be killed.</param>
         private void KillUnit(Unit target)
         {
             if (target.IsAlly)
@@ -366,6 +399,9 @@ namespace TUFG.Battle
             turnOrder.Remove(turnOrder[0]);
         }
 
+        /// <summary>
+        /// End the current battle.
+        /// </summary>
         public void EndBattle()
         {
             currentBattle = null;

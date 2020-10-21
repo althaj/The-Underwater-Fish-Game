@@ -10,6 +10,9 @@ using UnityEngine.UI;
 
 namespace TUFG.UI
 {
+    /// <summary>
+    /// Container with the inventory window.
+    /// </summary>
     public class InventoryContainer : MonoBehaviour
     {
         private GameObject inventoryPanel;
@@ -22,6 +25,10 @@ namespace TUFG.UI
 
         private GameObject buttonPrefab;
         private bool isOpen = false;
+
+        /// <summary>
+        /// Is the inventory window currently open?
+        /// </summary>
         public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity methods
@@ -37,7 +44,7 @@ namespace TUFG.UI
 
         #region Public methods
         /// <summary>
-        /// Display inventory.
+        /// Display the inventory.
         /// </summary>
         public void ShowInventory()
         {
@@ -111,6 +118,7 @@ namespace TUFG.UI
         /// Select an item in the inventory and display its details and buttons.
         /// </summary>
         /// <param name="item">Item to select.</param>
+        /// <param name="isEquipped">Is the item currently eqipped?</param>
         public void SelectItem(Item item, bool isEquipped)
         {
             itemDetailsContainer.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.name;

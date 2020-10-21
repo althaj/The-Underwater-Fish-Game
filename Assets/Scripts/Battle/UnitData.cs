@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace TUFG.Battle
 {
+    /// <summary>
+    /// A class containing information about an unit.
+    /// </summary>
     [CreateAssetMenu(fileName = "New Unit Data", menuName = "Battle/Unit Data")]
     public class UnitData : ScriptableObject
     {

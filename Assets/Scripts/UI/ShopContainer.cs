@@ -10,6 +10,9 @@ using UnityEngine.UI;
 
 namespace TUFG.UI
 {
+    /// <summary>
+    /// UI container displaying a shop.
+    /// </summary>
     public class ShopContainer : MonoBehaviour
     {
         private GameObject shopPanel;
@@ -24,6 +27,10 @@ namespace TUFG.UI
 
         private GameObject buttonPrefab;
         private bool isOpen = false;
+
+        /// <summary>
+        /// Is the container currently displaying a shop?
+        /// </summary>
         public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity methods
@@ -41,6 +48,7 @@ namespace TUFG.UI
         /// <summary>
         /// Display shop.
         /// </summary>
+        /// <param name="shop">Shop to be displayed.</param>
         public void ShowShop(Shop shop)
         {
             this.shop = shop;
@@ -79,6 +87,7 @@ namespace TUFG.UI
         /// <summary>
         /// Toggle shop visibility on or off.
         /// </summary>
+        /// <param name="shop">Shop to be displayed.</param>
         public void ToggleShop(Shop shop)
         {
             if (IsOpen)
@@ -108,6 +117,7 @@ namespace TUFG.UI
         /// Select an item in the shop and display its details and buttons.
         /// </summary>
         /// <param name="item">Item to select.</param>
+        /// <param name="isSelling">Is player selling the item?</param>
         public void SelectItem(Item item, bool isSelling)
         {
             itemDetailsContainer.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.name;
@@ -155,6 +165,8 @@ namespace TUFG.UI
         /// Create an item button in the items scroll view.
         /// </summary>
         /// <param name="item">Item to create button for.</param>
+        /// <param name="price">Price of the item including the shop margin.</param>
+        /// <param name="isSelling">Is player selling the item?</param>
         private GameObject CreateButton(Item item, int price, bool isSelling)
         {
             GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
@@ -168,10 +180,10 @@ namespace TUFG.UI
         }
 
         /// <summary>
-        /// Build the buttons.
+        /// Build the shop buttons.
         /// </summary>
-        /// <param name="items"></param>
-        /// <param name="isSelling"></param>
+        /// <param name="items">List of items to build buttons for.</param>
+        /// <param name="isSelling">Is player selling the items?</param>
         private Button[] BuildButtons(List<Item> items, bool isSelling)
         {
             Button[] result = new Button[items.Count];
@@ -204,8 +216,8 @@ namespace TUFG.UI
         /// <summary>
         /// Does player have enough money to buy this item?
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        /// <param name="item">Item to check the price.</param>
+        /// <returns>True if player has enough moneoy to buy the item.</returns>
         private bool CanBuyItem(Item item)
         {
             return GetItemPrice(item) <= InventoryManager.Instance.Gold;
@@ -214,8 +226,8 @@ namespace TUFG.UI
         /// <summary>
         /// Get item price with shop margin.
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        /// <param name="item">Item to get the price for.</param>
+        /// <returns>Price of the item including shop margin.</returns>
         private int GetItemPrice(Item item)
         {
             return Mathf.RoundToInt((float)item.price * shop.Margin);

@@ -6,14 +6,27 @@ using UnityEditor;
 
 namespace TUFG.Battle.AI
 {
+    /// <summary>
+    /// Type of unit AI.
+    /// </summary>
     public enum UnitAIType
     {
         Random,
         Player
     }
 
+    /// <summary>
+    /// Class that handles unit AI during battles.
+    /// </summary>
     public static class UnitAI
     {
+        /// <summary>
+        /// Get an ability based on the current battle and the AI of the unit.
+        /// </summary>
+        /// <param name="battle">Current battle.</param>
+        /// <param name="unit">Unit that is using an ability at the moment.</param>
+        /// <param name="ability">The resulting ability to be used.</param>
+        /// <param name="target">The target that the ability is used on.</param>
         public static void GetChosenAbility(Battle battle, Unit unit, out Ability ability, out Unit target)
         {
             ability = null;
@@ -27,6 +40,13 @@ namespace TUFG.Battle.AI
             }
         }
 
+        /// <summary>
+        /// Gets a random ability from the units abilities and targets it on a valid target.
+        /// </summary>
+        /// <param name="battle">Current battle.</param>
+        /// <param name="unit">Unit that is using an ability at the moment.</param>
+        /// <param name="ability">The resulting ability to be used.</param>
+        /// <param name="target">The target that the ability is used on.</param>
         internal static void GetRandomAbility(Battle battle, Unit unit, out Ability ability, out Unit target)
         {
             ability = null;

@@ -10,6 +10,9 @@ using UnityEngine.Events;
 
 namespace TUFG.UI
 {
+    /// <summary>
+    /// Enumeration of the dialogue button functions.
+    /// </summary>
     public enum DialogueButtonFunction
     {
         GoToNextNode,
@@ -21,6 +24,9 @@ namespace TUFG.UI
         OpenShop
     }
 
+    /// <summary>
+    /// Enumeration of generic button types.
+    /// </summary>
     public enum ButtonType
     {
         Dialogue,
@@ -28,20 +34,55 @@ namespace TUFG.UI
         Target
     }
 
+    /// <summary>
+    /// Class representing a generic button data.
+    /// </summary>
     [Serializable]
     public class GenericButton
     {
+        /// <summary>
+        /// Text of the button.
+        /// </summary>
         public string text;
+
+        /// <summary>
+        /// Type of the button.
+        /// </summary>
         public ButtonType buttonType;
+
+        /// <summary>
+        /// Function of the button. Only applies to dialogue buttons.
+        /// </summary>
         public DialogueButtonFunction dialogueFunction;
+
+        /// <summary>
+        /// ID of shop to open. Only applies to OpenShop dialogue button function.
+        /// </summary>
         public string shopId;
+
+        /// <summary>
+        /// Ability to select. Only applies to Ability button type.
+        /// </summary>
         public Ability ability;
+
+        /// <summary>
+        /// Target to select. Only applies to Target button type.
+        /// </summary>
         public Unit target;
 
+        /// <summary>
+        /// ID of node to jump to in dialogue. Only applies to JumpToNode dialogue button function.
+        /// </summary>
         public string jumpToNodeId;
 
+        /// <summary>
+        /// Array of units to start battle against. Only applies to StartBattle dialogue button function.
+        /// </summary>
         public UnitData[] enemies;
 
+        /// <summary>
+        /// Execute the function of the button.
+        /// </summary>
         public void ExecuteButtonFunction()
         {
             switch (buttonType)

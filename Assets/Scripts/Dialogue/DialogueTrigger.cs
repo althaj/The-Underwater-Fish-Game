@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace TUFG.Dialogue
 {
+    /// <summary>
+    /// Starts a dialogue after the player enters the trigger.
+    /// </summary>
     [RequireComponent(typeof(Collider2D))]
     public class DialogueTrigger : MonoBehaviour
     {
