@@ -15,6 +15,8 @@ namespace TUFG.Battle
     {
         public string unitID = "";
         public new string name = "";
+        public Sprite avatar;
+        [Multiline(lines: 4)] public string description = "";
 
         public AnimatorController animator = null;
         public UnitAIType aiType;
