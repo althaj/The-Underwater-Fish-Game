@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using TUFG.Battle;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TUFG.UI
 {
@@ -14,7 +15,9 @@ namespace TUFG.UI
     {
         private GameObject partyPanel;
         private bool isOpen = false;
+        private Unit selectedUnit;
 
+        private GameObject buttonPrefab;
         private TextMeshProUGUI nameText;
         private TextMeshProUGUI healthText;
         private TextMeshProUGUI armorText;
@@ -44,19 +47,73 @@ namespace TUFG.UI
             speedText = detailsPanel.GetChild(1).GetChild(9).GetComponent<TextMeshProUGUI>();
             descriptionText = detailsPanel.GetChild(2).GetComponent<TextMeshProUGUI>();
 
+            buttonPrefab = UIManager.Instance.GoonButtonPrefab;
+
             partyPanel.SetActive(false);
         }
         #endregion
 
         #region Public methods
-        public void SelectItem(Unit unit)
+        /// <summary>
+        /// Open the party managment window.
+        /// </summary>
+        /// <param name="units">Units that are in the party.</param>
+        public void ShowParty(List<Unit> units)
         {
-            throw new NotImplementedException();
+            FindObjectOfType<PlayerMovement>().DisableInput();
+
+            if (!IsOpen)
+            {
+                // TODO PLAY ANIMATION
+                partyPanel.SetActive(true);
+                IsOpen = true;
+            }
+
+            UIManager.Instance.ClearChildren(goonsPanel.gameObject);
+            List<Button> buttons = new List<Button>();
+
+            foreach (Unit unit in units)
+            {
+                GameObject button = CreateButton(unit);
+
+                buttons.Add(button.GetComponent<Button>());
+            }
+
+            UIManager.BuildListButtonNavigation(buttons.ToArray(), detailsPanel.GetComponentInChildren<Button>());
         }
 
-        public void ScrollToObject(Transform transform)
+        /// <summary>
+        /// Close the party manager window.
+        /// </summary>
+        public void HideParty()
         {
-            throw new NotImplementedException();
+            FindObjectOfType<PlayerMovement>().EnableInput();
+
+            partyPanel.SetActive(false);
+            IsOpen = false;
+        }
+
+        /// <summary>
+        /// Create a button for unit in party.
+        /// </summary>
+        /// <param name="unit">Unit to create the button for.</param>
+        /// <returns></returns>
+        private GameObject CreateButton(Unit unit)
+        {
+            GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
+            buttonInstance.transform.SetParent(goonsPanel);
+            buttonInstance.GetComponent<GoonButton>().InitButton(unit, this);
+
+            return buttonInstance;
+        }
+
+        /// <summary>
+        /// Select a unit.
+        /// </summary>
+        /// <param name="unit">Unit that is selected</param>
+        public void SelectItem(Unit unit)
+        {
+            selectedUnit = unit;
         }
         #endregion
     }

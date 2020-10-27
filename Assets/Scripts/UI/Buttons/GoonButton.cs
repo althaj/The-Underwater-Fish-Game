@@ -35,7 +35,6 @@ namespace TUFG.UI
         /// <param name="eventData"></param>
         public void OnSelect(UnityEngine.EventSystems.BaseEventData eventData)
         {
-            container.ScrollToObject(transform);
             container.SelectItem(unit);
         }
     } 
