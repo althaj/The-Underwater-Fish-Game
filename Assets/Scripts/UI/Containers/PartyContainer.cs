@@ -58,9 +58,12 @@ namespace TUFG.UI
         /// Open the party managment window.
         /// </summary>
         /// <param name="units">Units that are in the party.</param>
-        public void ShowParty(List<Unit> units)
+        public void ShowParty()
         {
             FindObjectOfType<PlayerMovement>().DisableInput();
+
+            // Get the units
+            List<Unit> units = new List<Unit>();
 
             if (!IsOpen)
             {

@@ -179,6 +179,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "OpenPartyManagement",
+                    "type": "Button",
+                    "id": "dcb4c95a-b90f-4cc8-bb4b-669b1fcff641",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -201,6 +209,28 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5a3f2713-fbb1-4959-8aa7-2cdcd064eabf",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenPartyManagement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7225ce8b-d707-4b9b-b1d5-8c3742a177a2",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenPartyManagement",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

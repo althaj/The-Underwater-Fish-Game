@@ -181,7 +181,8 @@ namespace TUFG.UI
             DontDestroyOnLoad(gameObject);
 
             Instance.controlsInput = new ControlsInput();
-            Instance.controlsInput.UI.OpenInventory.performed += _instance.InventoryButtonPressed;
+            Instance.controlsInput.UI.OpenInventory.performed += Instance.InventoryButtonPressed;
+            Instance.controlsInput.UI.OpenPartyManagement.performed += Instance.PartyButtonPressed;
 
             GameManager.Instance.LoadGame();
         }
@@ -283,6 +284,31 @@ namespace TUFG.UI
         public void HideShop()
         {
             ShopContainer.HideShop();
+        }
+
+        /// <summary>
+        /// Listener for the party button pressed.
+        /// </summary>
+        /// <param name="ctx"></param>
+        public void PartyButtonPressed(CallbackContext ctx)
+        {
+            ShowPartyWindow();
+        }
+
+        /// <summary>
+        /// Open party management window.
+        /// </summary>
+        public void ShowPartyWindow()
+        {
+            PartyContainer.ShowParty();
+        }
+
+        /// <summary>
+        /// Close the party management window.
+        /// </summary>
+        public void HidePartyWindow()
+        {
+            PartyContainer.HideParty();
         }
         #endregion
 
