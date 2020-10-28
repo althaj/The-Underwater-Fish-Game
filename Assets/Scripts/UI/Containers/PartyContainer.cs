@@ -63,7 +63,7 @@ namespace TUFG.UI
             FindObjectOfType<PlayerMovement>().DisableInput();
 
             // Get the units
-            List<Unit> units = new List<Unit>();
+            List<Unit> units = PartyManager.Instance.GetPlayerParty(false);
 
             if (!IsOpen)
             {
@@ -117,6 +117,23 @@ namespace TUFG.UI
         public void SelectItem(Unit unit)
         {
             selectedUnit = unit;
+
+            nameText.text = unit.Name;
+            healthText.text = $"{unit.Health} / {unit.MaxHealth}";
+            armorText.text = unit.Armor.ToString();
+            strengthText.text = unit.Strength.ToString();
+            powerText.text = unit.Power.ToString();
+            speedText.text = unit.Speed.ToString();
+            descriptionText.text = unit.UnitData.description;
+        }
+
+        /// <summary>
+        /// Kick the selected unit out of party.
+        /// </summary>
+        public void KickOut()
+        {
+            PartyManager.Instance.KickOut(selectedUnit);
+            ShowParty();
         }
         #endregion
     }

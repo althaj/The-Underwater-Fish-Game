@@ -55,7 +55,7 @@ namespace TUFG.Core
         {
             UnitData[] playerParty = new UnitData[3];
 
-            playerParty[0] = GetPlayerUnitData();
+            playerParty[0] = Instance.GetPlayerUnitData();
 
             playerParty[1] = AssetDatabase.LoadAssetAtPath<UnitData>("Assets/Prefabs/Battle/Units/GoonUnit.asset");
             playerParty[2] = AssetDatabase.LoadAssetAtPath<UnitData>("Assets/Prefabs/Battle/Units/GoonUnit.asset");
@@ -68,7 +68,7 @@ namespace TUFG.Core
         /// </summary>
         /// <remarks>This is not properly implemented yet.</remarks>
         /// <returns>Current player unit data.</returns>
-        public static UnitData GetPlayerUnitData()
+        public UnitData GetPlayerUnitData()
         {
             UnitData playerUnitData = ScriptableObject.CreateInstance<UnitData>();
             playerUnitData.unitID = "Player";

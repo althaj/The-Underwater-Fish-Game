@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace TUFG.UI
 {
-    public class GoonButton : MonoBehaviour
+    public class GoonButton : MonoBehaviour, UnityEngine.EventSystems.ISelectHandler
     {
         private Unit unit;
         private PartyContainer container;
