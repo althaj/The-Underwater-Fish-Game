@@ -21,7 +21,8 @@ namespace TUFG.UI
         SetDialogueValue,
         EndConversation,
         StartBattle,
-        OpenShop
+        OpenShop,
+        AddUnitToParty
     }
 
     /// <summary>
@@ -61,14 +62,14 @@ namespace TUFG.UI
         public string shopId;
 
         /// <summary>
-        /// Ability to select. Only applies to Ability button type.
-        /// </summary>
-        public Ability ability;
-
-        /// <summary>
         /// Target to select. Only applies to Target button type.
         /// </summary>
         public Unit target;
+
+        /// <summary>
+        /// Unit data used to add units to your party.
+        /// </summary>
+        public UnitData unitData;
 
         /// <summary>
         /// ID of node to jump to in dialogue. Only applies to JumpToNode dialogue button function.
@@ -79,6 +80,11 @@ namespace TUFG.UI
         /// Array of units to start battle against. Only applies to StartBattle dialogue button function.
         /// </summary>
         public UnitData[] enemies;
+
+        /// <summary>
+        /// Ability to select. Only applies to Ability button type.
+        /// </summary>
+        public Ability ability;
 
         /// <summary>
         /// Execute the function of the button.
@@ -109,6 +115,10 @@ namespace TUFG.UI
                             break;
                         case DialogueButtonFunction.OpenShop:
                             UIManager.Instance.ShowShop(ShopManager.Instance.GetShop(shopId));
+                            break;
+                        case DialogueButtonFunction.AddUnitToParty:
+                            DialogueManager.Instance.EndConversation();
+                            PartyManager.Instance.AddUnit(unitData);
                             break;
                     }
                     break;

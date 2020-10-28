@@ -292,7 +292,8 @@ namespace TUFG.UI
         /// <param name="ctx"></param>
         public void PartyButtonPressed(CallbackContext ctx)
         {
-            ShowPartyWindow();
+            if (!IsAnyWindowOpen())
+                ShowPartyWindow();
         }
 
         /// <summary>
@@ -312,6 +313,7 @@ namespace TUFG.UI
         }
         #endregion
 
+        #region Public methods
         /// <summary>
         /// Build generic buttons.
         /// </summary>
@@ -392,6 +394,7 @@ namespace TUFG.UI
         public bool IsAnyWindowOpen()
         {
             return InventoryContainer.IsOpen || BattleContainer.IsOpen || DialogueContainer.IsOpen || ShopContainer.IsOpen;
-        }
+        } 
+        #endregion
     }
 }

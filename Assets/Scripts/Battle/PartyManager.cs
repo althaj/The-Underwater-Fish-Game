@@ -42,8 +42,10 @@ namespace TUFG.Battle
         }
         #endregion
 
+        public static int MAX_PARTY_SIZE = 4;
         List<Unit> playerParty;
 
+        #region Public methods
         /// <summary>
         /// Get party members.
         /// </summary>
@@ -93,5 +95,41 @@ namespace TUFG.Battle
 
             playerParty.Remove(unit);
         }
+
+        /// <summary>
+        /// Add a unit to the player party.
+        /// </summary>
+        /// <param name="unit">Unit to be added.</param>
+        public bool AddUnit(Unit unit)
+        {
+            if (CanAddUnits())
+                return false;
+
+            playerParty.Add(unit);
+            return true;
+        }
+
+        /// <summary>
+        /// Add a unit to the player party.
+        /// </summary>
+        /// <param name="unitData">Unit data for default unit creation to be added.</param>
+        public bool AddUnit(UnitData unitData)
+        {
+            if (CanAddUnits())
+                return false;
+
+            playerParty.Add(GetDefaultUnit(unitData));
+            return true;
+        }
+
+        /// <summary>
+        /// Can there be more units added to the player party?
+        /// </summary>
+        /// <returns>True if you can add more units to your party.</returns>
+        public bool CanAddUnits()
+        {
+            return playerParty.Count >= MAX_PARTY_SIZE;
+        } 
+        #endregion
     } 
 }
