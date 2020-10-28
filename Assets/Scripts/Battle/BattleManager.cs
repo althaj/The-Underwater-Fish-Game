@@ -89,7 +89,7 @@ namespace TUFG.Battle
             if (currentBattle == null)
                 return;
 
-            UnitData[] alliesData = GameManager.GetPlayerParty();
+            List<Unit> allies = PartyManager.Instance.GetPlayerParty(true);
 
             Transform battleArena = FindObjectOfType<WorldInfo>().GetRandomArena();
             if (battleArena != null)
@@ -104,9 +104,9 @@ namespace TUFG.Battle
                 Vector2 position = battleArena.position - (Vector3.up * 1);
                 position.x -= 1;
 
-                for (int i = 0; i < alliesData.Length; i++)
+                foreach(Unit unit in allies)
                 {
-                    currentBattle.allies.Add(InstantiateUnit(alliesData[i], position, true));
+                    currentBattle.allies.Add(InstantiateUnit(unit, position));
 
                     position.x--;
                 }
@@ -148,6 +148,34 @@ namespace TUFG.Battle
             unit.UpdateHealthUI();
 
             return unit;
+        }
+
+        /// <summary>
+        /// Creates an instance of a unit.
+        /// </summary>
+        /// <param name="unit"></param>
+        /// <param name="position"></param>
+        private Unit InstantiateUnit(Unit unit, Vector2 position)
+        {
+            GameObject unitObject = (GameObject)Instantiate(UnitPrefab);
+
+            unitObject.name = unit.Name;
+            unitObject.transform.position = position;
+
+            SpriteRenderer sr = unitObject.GetComponent<SpriteRenderer>();
+            sr.flipX = !unit.IsAlly;
+
+            Animator animator = unitObject.GetComponent<Animator>();
+            animator.runtimeAnimatorController = unit.UnitData.animator;
+
+            Unit newUnit = unitObject.GetComponent<Unit>();
+            newUnit.UnitData = unit.UnitData;
+            newUnit.IsAlly = unit.IsAlly;
+            newUnit.IsPlayer = unit.IsPlayer;
+            newUnit.Health = unit.MaxHealth;
+            newUnit.UpdateHealthUI();
+
+            return newUnit;
         }
 
         /// <summary>

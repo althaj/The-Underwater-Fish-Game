@@ -9,6 +9,7 @@ using TUFG.Inventory;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Linq;
+using System;
 
 namespace TUFG.Core
 {
@@ -51,6 +52,7 @@ namespace TUFG.Core
         /// </summary>
         /// <remarks>This is not properly implemented yet.</remarks>
         /// <returns>Array of player party units, including the player.</returns>
+        [Obsolete("Party management has been moved to a PartyManager class.")]
         public static UnitData[] GetPlayerParty()
         {
             UnitData[] playerParty = new UnitData[3];

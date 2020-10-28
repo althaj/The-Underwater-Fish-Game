@@ -9,6 +9,7 @@ namespace TUFG.Battle
     /// <summary>
     /// Class responsible for managing player perty.
     /// </summary>
+    /// <remarks>Uses a singleton pattern.</remarks>
     public class PartyManager : MonoBehaviour
     {
         #region Singleton pattern
