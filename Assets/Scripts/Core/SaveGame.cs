@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TUFG.Inventory;
 using UnityEngine;
@@ -28,6 +29,11 @@ public class SaveGame
     /// List of all shops in the game.
     /// </summary>
     public List<ShopSave> shops;
+
+    /// <summary>
+    /// List of units represented by path to their unit data and current health points.
+    /// </summary>
+    public List<Tuple<string, int>> playerParty;
 }
 
 /// <summary>
@@ -36,7 +42,16 @@ public class SaveGame
 [System.Serializable]
 public class ShopSave
 {
+    /// <summary>
+    /// ID of the shop.
+    /// </summary>
     public string shopId;
+    /// <summary>
+    /// Paths to the items scriptable objects.
+    /// </summary>
     public List<string> itemPaths;
+    /// <summary>
+    /// Margin of the shop.
+    /// </summary>
     public float margin;
 }

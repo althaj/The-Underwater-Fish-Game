@@ -1,7 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TUFG.Battle.Abilities;
 using TUFG.Core;
+using TUFG.Inventory;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace TUFG.Battle
@@ -32,9 +37,6 @@ namespace TUFG.Battle
                         _instance = container.AddComponent<PartyManager>();
 
                         _instance.playerParty = new List<Unit>();
-
-                        _instance.playerParty.Add(_instance.GetDefaultUnit(AssetDatabase.LoadAssetAtPath<UnitData>("Assets/Prefabs/Battle/Units/GoonUnit.asset")));
-                        _instance.playerParty.Add(_instance.GetDefaultUnit(AssetDatabase.LoadAssetAtPath<UnitData>("Assets/Prefabs/Battle/Units/GoonUnit.asset")));
                     }
                 }
 
@@ -44,7 +46,8 @@ namespace TUFG.Battle
         #endregion
 
         public static int MAX_PARTY_SIZE = 4;
-        List<Unit> playerParty;
+        private List<Unit> playerParty;
+        private Unit playerUnit;
 
         #region Public methods
         /// <summary>
@@ -58,8 +61,7 @@ namespace TUFG.Battle
 
             if (addPlayer)
             {
-                UnitData playerUnitData = GameManager.Instance.GetPlayerUnitData();
-                party.Add(GetDefaultUnit(playerUnitData));
+                party.Add(playerUnit);
             }
 
             return party;
@@ -130,7 +132,88 @@ namespace TUFG.Battle
         public bool CanAddUnits()
         {
             return playerParty.Count >= MAX_PARTY_SIZE;
-        } 
+        }
+
+        /// <summary>
+        /// Gets player party for saving the game.
+        /// </summary>
+        /// <returns>List of tuples with path to the unit data and current health points.</returns>
+        public List<Tuple<string, int>> GetPlayerPartySave()
+        {
+            List<Tuple<string, int>> units = new List<Tuple<string, int>>();
+            units.Add(new Tuple<string, int>(AssetDatabase.GetAssetPath(playerUnit.UnitData), playerUnit.Health));
+
+            foreach (Unit unit in GetPlayerParty(false))
+            {
+                units.Add(new Tuple<string, int>(AssetDatabase.GetAssetPath(unit.UnitData), unit.Health));
+            }
+
+            return units;
+        }
+
+        /// <summary>
+        /// Loads player party from saved game.
+        /// </summary>
+        /// <param name="units">List of tuples with path to the unit data and current health points.</param>
+        public void LoadPlayerParty(List<Tuple<string, int>> units)
+        {
+            if (units != null && units.Count > 0)
+            {
+                playerParty = new List<Unit>();
+
+                UnitData playerData = AssetDatabase.LoadAssetAtPath<UnitData>(units[0].Item1);
+                playerUnit = GetDefaultUnit(playerData);
+                playerUnit.Health = units[0].Item2;
+
+                if (units.Count > 1)
+                {
+                    for (int i = 1; i < units.Count; i++)
+                    {
+                        UnitData data = AssetDatabase.LoadAssetAtPath<UnitData>(units[i].Item1);
+                        Unit u = GetDefaultUnit(data);
+                        u.Health = units[i].Item2;
+                        playerParty.Add(u);
+                    }
+                }
+            }
+            else
+            {
+                UnitData playerUnitData = AssetDatabase.LoadAssetAtPath<UnitData>("Assets/Prefabs/Battle/Units/Player.asset");
+                playerUnit = GetDefaultUnit(playerUnitData);
+            }
+        }
+
+        /// <summary>
+        /// Load abilities from equipped items. If no abilities are found, add a default punch ability.
+        /// </summary>
+        /// <returns>Array of current player abilities.</returns>
+        public static Ability[] LoadPlayerAbilities()
+        {
+            Ability[] result = InventoryManager.Instance.GetEquippedAbilities();
+            if (result.Length == 0)
+            {
+                result = new Ability[]
+                {
+                    new Ability
+                    {
+                        abilityID = "PlayerPunch",
+                        name = "Punch",
+                        targetting = AbilityTargetting.Single,
+                        primaryEffects = new AbilityEffect[]
+                        {
+                            new AbilityEffect
+                            {
+                                effectType = AbilityEffectType.Damage,
+                                effectValue = 3,
+                                powerMultiplier = 0,
+                                strenghtMultiplier = 1
+                            }
+                        }
+                    }
+                };
+            }
+            return result;
+        }
         #endregion
-    } 
+    }
 }

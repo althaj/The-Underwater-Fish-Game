@@ -47,97 +47,6 @@ namespace TUFG.Core
 
         private string currentSlot = "Demo";
 
-        /// <summary>
-        /// Returns the current player party data.
-        /// </summary>
-        /// <remarks>This is not properly implemented yet.</remarks>
-        /// <returns>Array of player party units, including the player.</returns>
-        [Obsolete("Party management has been moved to a PartyManager class.")]
-        public static UnitData[] GetPlayerParty()
-        {
-            UnitData[] playerParty = new UnitData[3];
-
-            playerParty[0] = Instance.GetPlayerUnitData();
-
-            playerParty[1] = AssetDatabase.LoadAssetAtPath<UnitData>("Assets/Prefabs/Battle/Units/GoonUnit.asset");
-            playerParty[2] = AssetDatabase.LoadAssetAtPath<UnitData>("Assets/Prefabs/Battle/Units/GoonUnit.asset");
-
-            return playerParty;
-        }
-
-        /// <summary>
-        /// Returns the current player unit data.
-        /// </summary>
-        /// <remarks>This is not properly implemented yet.</remarks>
-        /// <returns>Current player unit data.</returns>
-        public UnitData GetPlayerUnitData()
-        {
-            UnitData playerUnitData = ScriptableObject.CreateInstance<UnitData>();
-            playerUnitData.unitID = "Player";
-            playerUnitData.name = "Player";
-            playerUnitData.animator = AssetDatabase.LoadAssetAtPath<AnimatorController>("Assets/AnimatorControllers/Units/Player/PlayerAnimator.controller");
-            playerUnitData.aiType = Battle.AI.UnitAIType.Player;
-            playerUnitData.maxHealth = 100;
-            playerUnitData.health = 100;
-            playerUnitData.armor = 1;
-            playerUnitData.speed = 3;
-            playerUnitData.power = 12;
-            playerUnitData.strength = 4;
-
-            LoadPlayerItems();
-
-            playerUnitData.abilities = LoadPlayerAbilities();
-
-            return playerUnitData;
-        }
-
-        /// <summary>
-        /// Load player items.
-        /// </summary>
-        /// <remarks>This is not properly implemented yet.</remarks>
-        public static void LoadPlayerItems()
-        {
-            Item sword = AssetDatabase.LoadAssetAtPath<Item>("Assets/Prefabs/Inventory/Items/Sword of destiny.asset");
-            Item clothes = AssetDatabase.LoadAssetAtPath<Item>("Assets/Prefabs/Inventory/Items/Beggar's clothes.asset");
-
-            InventoryManager.Instance.PickUpItem(sword);
-            InventoryManager.Instance.EquipItem(sword);
-            InventoryManager.Instance.PickUpItem(clothes);
-            InventoryManager.Instance.EquipItem(clothes);
-        }
-
-        /// <summary>
-        /// Load abilities from equipped items. If no abilities are found, add a default punch ability.
-        /// </summary>
-        /// <returns>Array of current player abilities.</returns>
-        public static Ability[] LoadPlayerAbilities()
-        {
-            Ability[] result = InventoryManager.Instance.GetEquippedAbilities();
-            if (result.Length == 0)
-            {
-                result = new Ability[]
-                {
-                    new Ability
-                    {
-                        abilityID = "PlayerPunch",
-                        name = "Punch",
-                        targetting = AbilityTargetting.Single,
-                        primaryEffects = new AbilityEffect[]
-                        {
-                            new AbilityEffect
-                            {
-                                effectType = AbilityEffectType.Damage,
-                                effectValue = 3,
-                                powerMultiplier = 0,
-                                strenghtMultiplier = 1
-                            }
-                        }
-                    }
-                };
-            }
-            return result;
-        }
-
         #region Save game
         /// <summary>
         /// Save game to the current slot.
@@ -163,6 +72,7 @@ namespace TUFG.Core
             save.inventoryItemPaths = InventoryManager.Instance.GetInventoryItemPaths();
             save.gold = InventoryManager.Instance.Gold;
             save.shops = ShopManager.Instance.Shops.Select(x => x.ToShopSave()).ToList();
+            save.playerParty = PartyManager.Instance.GetPlayerPartySave();
 
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Create(GetSavePath(slot));
@@ -199,10 +109,13 @@ namespace TUFG.Core
                 if(save.shops != null)
                     ShopManager.Instance.LoadShops(save.shops);
 
+                PartyManager.Instance.LoadPlayerParty(save.playerParty);
+
                 Debug.Log($"Game loaded from slot {slot}.");
             }
             else
             {
+                PartyManager.Instance.LoadPlayerParty(null);
                 Debug.LogError($"Save file on path {savePath} not found!");
             }
         }
