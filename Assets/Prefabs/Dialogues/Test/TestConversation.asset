@@ -39,6 +39,10 @@ MonoBehaviour:
       buttonType: 0
       dialogueFunction: 0
       shopId: 
+      target: {fileID: 0}
+      unitData: {fileID: 0}
+      jumpToNodeId: TestNode1
+      enemies: []
       ability:
         name: 
         abilityID: 
@@ -47,32 +51,18 @@ MonoBehaviour:
         priorityStrenght: 0
         primaryEffects: []
         secondaryEffects: []
-      target: {fileID: 0}
-      jumpToNodeId: TestNode1
-      enemies: []
     - text: Let's fight!!
       buttonType: 0
       dialogueFunction: 5
       shopId: 
-      ability:
-        name: 
-        abilityID: 
-        targetting: 0
-        priority: 0
-        priorityStrenght: 0
-        primaryEffects: []
-        secondaryEffects: []
       target: {fileID: 0}
+      unitData: {fileID: 0}
       jumpToNodeId: 
       enemies:
       - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
       - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
       - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
       - {fileID: 11400000, guid: 15631c58e43550847a09716f5d8a71a0, type: 2}
-    - text: End conversation
-      buttonType: 0
-      dialogueFunction: 4
-      shopId: 
       ability:
         name: 
         abilityID: 
@@ -81,9 +71,22 @@ MonoBehaviour:
         priorityStrenght: 0
         primaryEffects: []
         secondaryEffects: []
+    - text: End conversation
+      buttonType: 0
+      dialogueFunction: 4
+      shopId: 
       target: {fileID: 0}
+      unitData: {fileID: 0}
       jumpToNodeId: 
       enemies: []
+      ability:
+        name: 
+        abilityID: 
+        targetting: 0
+        priority: 0
+        priorityStrenght: 0
+        primaryEffects: []
+        secondaryEffects: []
   - nodeID: TestNode3
     characterName: Althaj
     avatar: {fileID: 21300000, guid: 8a698063c580aa74498ba40ac412b042, type: 3}
@@ -97,21 +100,10 @@ MonoBehaviour:
       buttonType: 0
       dialogueFunction: 6
       shopId: tutorial_shop
-      ability:
-        name: 
-        abilityID: 
-        targetting: 0
-        priority: 0
-        priorityStrenght: 0
-        primaryEffects: []
-        secondaryEffects: []
       target: {fileID: 0}
+      unitData: {fileID: 0}
       jumpToNodeId: 
       enemies: []
-    - text: No
-      buttonType: 0
-      dialogueFunction: 1
-      shopId: 
       ability:
         name: 
         abilityID: 
@@ -120,6 +112,63 @@ MonoBehaviour:
         priorityStrenght: 0
         primaryEffects: []
         secondaryEffects: []
+    - text: No
+      buttonType: 0
+      dialogueFunction: 0
+      shopId: 
       target: {fileID: 0}
+      unitData: {fileID: 0}
       jumpToNodeId: TestNode1
       enemies: []
+      ability:
+        name: 
+        abilityID: 
+        targetting: 0
+        priority: 0
+        priorityStrenght: 0
+        primaryEffects: []
+        secondaryEffects: []
+  - nodeID: TestNode4
+    characterName: Althaj
+    avatar: {fileID: 21300000, guid: 8a698063c580aa74498ba40ac412b042, type: 3}
+    avatarPosition: 0
+    text: 'Do you want a new goon in your party?
+
+      New goon can really help
+      you out ;)'
+    textSpeed: 2
+    textSound: {fileID: 0}
+    font: {fileID: 0}
+    dialogueButtons:
+    - text: Yes
+      buttonType: 0
+      dialogueFunction: 7
+      shopId: 
+      target: {fileID: 0}
+      unitData: {fileID: 11400000, guid: 5d3587958876a6c458ba5576e63e47ea, type: 2}
+      jumpToNodeId: 
+      enemies: []
+      ability:
+        name: 
+        abilityID: 
+        targetting: 0
+        priority: 0
+        priorityStrenght: 0
+        primaryEffects: []
+        secondaryEffects: []
+    - text: No
+      buttonType: 0
+      dialogueFunction: 0
+      shopId: 
+      target: {fileID: 0}
+      unitData: {fileID: 0}
+      jumpToNodeId: TestNode1
+      enemies: []
+      ability:
+        name: 
+        abilityID: 
+        targetting: 0
+        priority: 0
+        priorityStrenght: 0
+        primaryEffects: []
+        secondaryEffects: []

@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 namespace TUFG.UI
 {
     /// <summary>
-    /// Vontainer with the dialogue panels.
+    /// Container with the dialogue panels.
     /// </summary>
     public class DialogueContainer : MonoBehaviour
     {

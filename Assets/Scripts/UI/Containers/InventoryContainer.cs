@@ -19,8 +19,8 @@ namespace TUFG.UI
         private Item currentItem;
         private bool currentItemIsEquipped;
 
-        [SerializeField]private Transform itemListContainer = null;
-        [SerializeField]private Transform itemDetailsContainer = null;
+        [SerializeField] private Transform itemListContainer = null;
+        [SerializeField] private Transform itemDetailsContainer = null;
         [SerializeField] private TextMeshProUGUI goldText = null;
 
         private GameObject buttonPrefab;

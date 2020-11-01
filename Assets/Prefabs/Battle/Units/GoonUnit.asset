@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitID: GoonUnit
   name: Goon
+  avatar: {fileID: 21300000, guid: 8bb4044084fe0f64baac0c1b698245f7, type: 3}
+  description: Regular old goon, not very smart, not very powerful, but at least
+    he's expendable.
   animator: {fileID: 9100000, guid: 10806f3097a02d041a4e99a228b36fc5, type: 2}
   aiType: 0
   maxHealth: 25

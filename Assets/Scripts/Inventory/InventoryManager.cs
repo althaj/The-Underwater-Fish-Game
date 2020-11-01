@@ -48,8 +48,6 @@ namespace TUFG.Inventory
                         _instance.inventoryItems = new List<Item>();
                         _instance.equippedItems = new List<Item>();
                     }
-
-                    GameManager.LoadPlayerItems();
                 }
 
                 return _instance;

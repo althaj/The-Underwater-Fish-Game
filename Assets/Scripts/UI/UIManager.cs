@@ -48,6 +48,7 @@ namespace TUFG.UI
         [SerializeField] private GameObject buttonPrefab = null;
         [SerializeField] private GameObject inventoryButtonPrefab = null;
         [SerializeField] private GameObject shopButtonPrefab = null;
+        [SerializeField] private GameObject goonButtonPrefab = null;
         [SerializeField] private Sprite handsSlotIcon = null;
         [SerializeField] private Sprite bodySlotIcon = null;
         [SerializeField] private Sprite legsSlotIcon = null;
@@ -68,6 +69,11 @@ namespace TUFG.UI
         /// Prefab of a shop button.
         /// </summary>
         public GameObject ShopButtonPrefab { get => shopButtonPrefab; set => shopButtonPrefab = value; }
+
+        /// <summary>
+        /// Prefab for a goon button in party manager.
+        /// </summary>
+        public GameObject GoonButtonPrefab { get => goonButtonPrefab; set => goonButtonPrefab = value; }
 
         /// <summary>
         /// Icon of hand slot in shop and inventory.
@@ -153,6 +159,20 @@ namespace TUFG.UI
                 return shopContainer;
             }
         }
+
+        internal static PartyContainer partyContainer;
+        internal static PartyContainer PartyContainer
+        {
+            get
+            {
+                if (partyContainer == null)
+                    partyContainer = Instance.GetComponentInChildren<PartyContainer>();
+
+                if (partyContainer == null)
+                    Debug.LogError("Cannot find the party container!!");
+                return partyContainer;
+            }
+        }
         #endregion
 
         #region Unity functions
@@ -161,7 +181,8 @@ namespace TUFG.UI
             DontDestroyOnLoad(gameObject);
 
             Instance.controlsInput = new ControlsInput();
-            Instance.controlsInput.UI.OpenInventory.performed += _instance.InventoryButtonPressed;
+            Instance.controlsInput.UI.OpenInventory.performed += Instance.InventoryButtonPressed;
+            Instance.controlsInput.UI.OpenPartyManagement.performed += Instance.PartyButtonPressed;
 
             GameManager.Instance.LoadGame();
         }
@@ -264,8 +285,35 @@ namespace TUFG.UI
         {
             ShopContainer.HideShop();
         }
+
+        /// <summary>
+        /// Listener for the party button pressed.
+        /// </summary>
+        /// <param name="ctx"></param>
+        public void PartyButtonPressed(CallbackContext ctx)
+        {
+            if (!IsAnyWindowOpen())
+                ShowPartyWindow();
+        }
+
+        /// <summary>
+        /// Open party management window.
+        /// </summary>
+        public void ShowPartyWindow()
+        {
+            PartyContainer.ShowParty();
+        }
+
+        /// <summary>
+        /// Close the party management window.
+        /// </summary>
+        public void HidePartyWindow()
+        {
+            PartyContainer.HideParty();
+        }
         #endregion
 
+        #region Public methods
         /// <summary>
         /// Build generic buttons.
         /// </summary>
@@ -346,6 +394,7 @@ namespace TUFG.UI
         public bool IsAnyWindowOpen()
         {
             return InventoryContainer.IsOpen || BattleContainer.IsOpen || DialogueContainer.IsOpen || ShopContainer.IsOpen;
-        }
+        } 
+        #endregion
     }
 }

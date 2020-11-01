@@ -194,6 +194,14 @@ namespace TUFG.Controls
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""OpenPartyManagement"",
+                    ""type"": ""Button"",
+                    ""id"": ""dcb4c95a-b90f-4cc8-bb4b-669b1fcff641"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -216,6 +224,28 @@ namespace TUFG.Controls
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a3f2713-fbb1-4959-8aa7-2cdcd064eabf"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenPartyManagement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7225ce8b-d707-4b9b-b1d5-8c3742a177a2"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenPartyManagement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -254,6 +284,7 @@ namespace TUFG.Controls
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_OpenInventory = m_UI.FindAction("OpenInventory", throwIfNotFound: true);
+            m_UI_OpenPartyManagement = m_UI.FindAction("OpenPartyManagement", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -345,11 +376,13 @@ namespace TUFG.Controls
         private readonly InputActionMap m_UI;
         private IUIActions m_UIActionsCallbackInterface;
         private readonly InputAction m_UI_OpenInventory;
+        private readonly InputAction m_UI_OpenPartyManagement;
         public struct UIActions
         {
             private @ControlsInput m_Wrapper;
             public UIActions(@ControlsInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @OpenInventory => m_Wrapper.m_UI_OpenInventory;
+            public InputAction @OpenPartyManagement => m_Wrapper.m_UI_OpenPartyManagement;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -362,6 +395,9 @@ namespace TUFG.Controls
                     @OpenInventory.started -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenInventory;
                     @OpenInventory.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenInventory;
                     @OpenInventory.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenInventory;
+                    @OpenPartyManagement.started -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenPartyManagement;
+                    @OpenPartyManagement.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenPartyManagement;
+                    @OpenPartyManagement.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenPartyManagement;
                 }
                 m_Wrapper.m_UIActionsCallbackInterface = instance;
                 if (instance != null)
@@ -369,6 +405,9 @@ namespace TUFG.Controls
                     @OpenInventory.started += instance.OnOpenInventory;
                     @OpenInventory.performed += instance.OnOpenInventory;
                     @OpenInventory.canceled += instance.OnOpenInventory;
+                    @OpenPartyManagement.started += instance.OnOpenPartyManagement;
+                    @OpenPartyManagement.performed += instance.OnOpenPartyManagement;
+                    @OpenPartyManagement.canceled += instance.OnOpenPartyManagement;
                 }
             }
         }
@@ -399,6 +438,7 @@ namespace TUFG.Controls
         public interface IUIActions
         {
             void OnOpenInventory(InputAction.CallbackContext context);
+            void OnOpenPartyManagement(InputAction.CallbackContext context);
         }
     }
 }
