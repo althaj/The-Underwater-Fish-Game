@@ -7,6 +7,7 @@ using TUFG.Inventory;
 using TUFG.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -173,6 +174,20 @@ namespace TUFG.UI
                 return partyContainer;
             }
         }
+
+        internal static MainMenuContainer mainMenuContainer;
+        internal static MainMenuContainer MainMenuContainer
+        {
+            get
+            {
+                if (mainMenuContainer == null)
+                    mainMenuContainer = Instance.GetComponentInChildren<MainMenuContainer>();
+
+                if (mainMenuContainer == null)
+                    Debug.LogError("Cannot find the main menu container!!");
+                return mainMenuContainer;
+            }
+        }
         #endregion
 
         #region Unity functions
@@ -184,7 +199,7 @@ namespace TUFG.UI
             Instance.controlsInput.UI.OpenInventory.performed += Instance.InventoryButtonPressed;
             Instance.controlsInput.UI.OpenPartyManagement.performed += Instance.PartyButtonPressed;
 
-            GameManager.Instance.LoadGame();
+            Invoke("ShowMainMenu", 0.5f);
         }
         private void OnEnable()
         {
@@ -198,11 +213,23 @@ namespace TUFG.UI
 
         private void OnApplicationQuit()
         {
-            GameManager.Instance.SaveGame();
+            //GameManager.Instance.SaveGame();
         }
         #endregion
 
         #region Show / Hide methods
+
+        /// <summary>
+        /// Open main menu and load the main menu scene.
+        /// </summary>
+        public void ShowMainMenu()
+        {
+            MainMenuContainer.OpenMainMenu();
+
+            if(SceneManager.GetActiveScene().buildIndex != 1)
+                SceneManager.LoadScene(1);
+        }
+
         /// <summary>
         /// Show a dialogue message.
         /// </summary>
