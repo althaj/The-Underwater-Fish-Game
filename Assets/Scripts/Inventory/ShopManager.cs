@@ -57,6 +57,20 @@ namespace TUFG.Inventory
             }
         }
 
+        public List<ShopSave> InitializeShops()
+        {
+            Shops = new List<Shop>();
+
+            Shops.Add(new Shop(
+                "tutorial_shop", new List<string>()
+                {
+                    "Assets/Prefabs/Inventory/Items/Bronze sword of hell.asset"
+                },
+                1.2f));
+
+            return Shops.Select(x => x.ToShopSave()).ToList();
+        }
+
         /// <summary>
         /// Returns shop by ID.
         /// </summary>

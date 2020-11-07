@@ -200,6 +200,9 @@ namespace TUFG.UI
             Instance.controlsInput.UI.OpenPartyManagement.performed += Instance.PartyButtonPressed;
 
             Invoke("ShowMainMenu", 0.5f);
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         private void OnEnable()
         {

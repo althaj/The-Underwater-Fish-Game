@@ -40,9 +40,6 @@ namespace TUFG
         {
             controlsInput = new ControlsInput();
             controlsInput.World.Move.performed += OnMoveInput;
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
         }
 
         private void Start()

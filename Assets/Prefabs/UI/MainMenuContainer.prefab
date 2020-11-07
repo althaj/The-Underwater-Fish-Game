@@ -155,6 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee854cd0acd1cf4991f50c2b351432d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadGameButton: {fileID: 455839188565896072}
 --- !u!1 &8716859871501910446
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,7 +377,7 @@ PrefabInstance:
     - target: {fileID: 5690242707334140525, guid: 9e2fafae7198cd4488335bb7d2e2a497,
         type: 3}
       propertyPath: m_Interactable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5690242707334140525, guid: 9e2fafae7198cd4488335bb7d2e2a497,
         type: 3}
@@ -532,6 +533,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5234514050993666533}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &455839188565896072 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5690242707334140525, guid: 9e2fafae7198cd4488335bb7d2e2a497,
+    type: 3}
+  m_PrefabInstance: {fileID: 5234514050993666533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5521498380606627474
 PrefabInstance:
   m_ObjectHideFlags: 0

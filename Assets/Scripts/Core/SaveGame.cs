@@ -34,6 +34,11 @@ public class SaveGame
     /// List of units represented by path to their unit data and current health points.
     /// </summary>
     public List<Tuple<string, int>> playerParty;
+
+    /// <summary>
+    /// ID of the current level.
+    /// </summary>
+    public int currentLevelID;
 }
 
 /// <summary>
