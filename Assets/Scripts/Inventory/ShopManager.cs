@@ -29,6 +29,8 @@ namespace TUFG.Inventory
                     {
                         GameObject container = new GameObject("Shop Manager");
                         _instance = container.AddComponent<ShopManager>();
+
+                        _instance.Shops = new List<Shop>();
                     }
                 }
 
@@ -37,8 +39,7 @@ namespace TUFG.Inventory
         }
         #endregion
 
-        [SerializeField] private List<Shop> shops;
-        public List<Shop> Shops { get => shops; set => shops = value; }
+        public List<Shop> Shops { get; set; }
 
         /// <summary>
         /// Load shops from save, preserving existing shops.
@@ -57,10 +58,12 @@ namespace TUFG.Inventory
             }
         }
 
+        /// <summary>
+        /// Initialize shops for new game.
+        /// </summary>
+        /// <returns>Save for shops for new game.</returns>
         public List<ShopSave> InitializeShops()
         {
-            Shops = new List<Shop>();
-
             Shops.Add(new Shop(
                 "tutorial_shop", new List<string>()
                 {
