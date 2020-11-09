@@ -36,6 +36,8 @@ namespace TUFG.Battle
                         GameObject container = new GameObject("Party Manager");
                         _instance = container.AddComponent<PartyManager>();
 
+                        DontDestroyOnLoad(container);
+
                         _instance.playerParty = new List<Unit>();
                     }
                 }
@@ -72,9 +74,10 @@ namespace TUFG.Battle
         /// </summary>
         /// <param name="data">Unit data to generate the unit from.</param>
         /// <returns>Generated unit from unit data.</returns>
-        private Unit GetDefaultUnit(UnitData data)
-        {
-            Unit unit = new Unit();
+        private Unit GetDefaultUnit(UnitData data) {
+            GameObject unitObject = new GameObject(data.name);
+            unitObject.transform.parent = transform;
+            Unit unit = unitObject.AddComponent<Unit>();
 
             unit.UnitData = data;
             unit.Health = unit.MaxHealth;
@@ -97,6 +100,9 @@ namespace TUFG.Battle
             }
 
             playerParty.Remove(unit);
+            Destroy(unit.gameObject);
+
+            GameManager.Instance.SaveGame();
         }
 
         /// <summary>
@@ -109,6 +115,9 @@ namespace TUFG.Battle
                 return false;
 
             playerParty.Add(unit);
+
+            GameManager.Instance.SaveGame();
+
             return true;
         }
 
@@ -118,11 +127,7 @@ namespace TUFG.Battle
         /// <param name="unitData">Unit data for default unit creation to be added.</param>
         public bool AddUnit(UnitData unitData)
         {
-            if (CanAddUnits())
-                return false;
-
-            playerParty.Add(GetDefaultUnit(unitData));
-            return true;
+            return AddUnit(GetDefaultUnit(unitData));
         }
 
         /// <summary>
@@ -140,8 +145,10 @@ namespace TUFG.Battle
         /// <returns>List of tuples with path to the unit data and current health points.</returns>
         public List<Tuple<string, int>> GetPlayerPartySave()
         {
-            List<Tuple<string, int>> units = new List<Tuple<string, int>>();
-            units.Add(new Tuple<string, int>(AssetDatabase.GetAssetPath(playerUnit.UnitData), playerUnit.Health));
+            List<Tuple<string, int>> units = new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>(AssetDatabase.GetAssetPath(playerUnit.UnitData), playerUnit.Health)
+            };
 
             foreach (Unit unit in GetPlayerParty(false))
             {
@@ -181,6 +188,8 @@ namespace TUFG.Battle
                 UnitData playerUnitData = AssetDatabase.LoadAssetAtPath<UnitData>("Assets/Prefabs/Battle/Units/Player.asset");
                 playerUnit = GetDefaultUnit(playerUnitData);
             }
+
+            playerUnit.UnitData.abilities = LoadPlayerAbilities();
         }
 
         /// <summary>
@@ -204,7 +213,7 @@ namespace TUFG.Battle
                             new AbilityEffect
                             {
                                 effectType = AbilityEffectType.Damage,
-                                effectValue = 3,
+                                effectValue = 5,
                                 powerMultiplier = 0,
                                 strenghtMultiplier = 1
                             }
@@ -213,6 +222,39 @@ namespace TUFG.Battle
                 };
             }
             return result;
+        }
+
+        /// <summary>
+        /// Set new player party.
+        /// </summary>
+        /// <param name="units">Player party to save.</param>
+        public void SetPlayerParty(List<Unit> units)
+        {
+            for (int i = playerParty.Count - 1; i >= 0; i--)
+                KickOut(playerParty[i]);
+
+            foreach(Unit unit in units)
+            {
+                Unit u = GetDefaultUnit(unit.UnitData);
+                u.Health = unit.Health;
+                playerParty.Add(u);
+            }
+        }
+
+        /// <summary>
+        /// Set new player unit.
+        /// </summary>
+        /// <param name="player">Player unit to save.</param>
+        public void SetPlayerUnit(Unit player)
+        {
+            if (player == null)
+                return;
+
+            Destroy(playerUnit.gameObject);
+
+            Unit u = GetDefaultUnit(player.UnitData);
+            u.Health = player.Health;
+            playerUnit = u;
         }
         #endregion
     }

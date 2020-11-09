@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TUFG.Core;
 using UnityEngine;
 
 namespace TUFG.Inventory
@@ -31,6 +32,8 @@ namespace TUFG.Inventory
                         _instance = container.AddComponent<ShopManager>();
 
                         _instance.Shops = new List<Shop>();
+
+                        DontDestroyOnLoad(container);
                     }
                 }
 
@@ -102,6 +105,8 @@ namespace TUFG.Inventory
             if (InventoryManager.Instance.RemoveItem(item))
             {
                 shop.Items.Add(item);
+                GameManager.Instance.SaveGame();
+
                 return true;
             }
             else
@@ -129,6 +134,8 @@ namespace TUFG.Inventory
             {
                 InventoryManager.Instance.PickUpItem(item);
                 shop.Items.Remove(item);
+
+                GameManager.Instance.SaveGame();
                 return true;
             } else
             {

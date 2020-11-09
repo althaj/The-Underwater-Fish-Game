@@ -47,6 +47,8 @@ namespace TUFG.Inventory
 
                         _instance.inventoryItems = new List<Item>();
                         _instance.equippedItems = new List<Item>();
+
+                        DontDestroyOnLoad(container);
                     }
                 }
 
@@ -93,6 +95,8 @@ namespace TUFG.Inventory
 
             equippedItems.Add(item);
             inventoryItems.Remove(item);
+
+            GameManager.Instance.SaveGame();
         }
 
         /// <summary>
@@ -109,6 +113,8 @@ namespace TUFG.Inventory
 
             equippedItems.Remove(item);
             inventoryItems.Add(item);
+
+            GameManager.Instance.SaveGame();
         }
 
         /// <summary>
@@ -118,6 +124,8 @@ namespace TUFG.Inventory
         public void PickUpItem(Item item)
         {
             inventoryItems.Add(item);
+
+            GameManager.Instance.SaveGame();
         }
 
         /// <summary>
@@ -132,6 +140,9 @@ namespace TUFG.Inventory
                 GameObject droppedObject = (GameObject)Instantiate(DroppedItemPrefab);
                 droppedObject.GetComponent<DroppedItem>().Init(item);
                 droppedObject.transform.position = FindObjectOfType<PlayerMovement>().transform.position;
+
+                GameManager.Instance.SaveGame();
+
                 return true;
             }
             else

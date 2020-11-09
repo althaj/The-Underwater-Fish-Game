@@ -38,6 +38,8 @@ namespace TUFG.Core
                     {
                         GameObject container = new GameObject("Game Manager");
                         _instance = container.AddComponent<GameManager>();
+
+                        DontDestroyOnLoad(container);
                     }
                 }
 

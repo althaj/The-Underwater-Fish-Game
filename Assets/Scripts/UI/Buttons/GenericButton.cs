@@ -97,7 +97,10 @@ namespace TUFG.UI
                     switch (dialogueFunction)
                     {
                         case DialogueButtonFunction.GoToNextNode:
-                            DialogueManager.Instance.GoToNextNode();
+                            if (BattleManager.Instance.IsBattleInProgress())
+                                BattleManager.Instance.WaitAction();
+                            else
+                                DialogueManager.Instance.GoToNextNode();
                             break;
                         case DialogueButtonFunction.EndConversation:
                             DialogueManager.Instance.EndConversation();

@@ -29,6 +29,8 @@ namespace TUFG.Dialogue
                     {
                         GameObject container = new GameObject("Dialogue Manager");
                         _instance = container.AddComponent<DialogueManager>();
+
+                        DontDestroyOnLoad(container);
                     }
                 }
 
