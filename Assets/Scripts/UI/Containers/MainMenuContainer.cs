@@ -17,14 +17,43 @@ namespace TUFG.UI
         public bool IsOpen { get; private set; }
 
         private GameObject mainMenuPanel;
+        private GameObject newGamePopup;
 
+        #region Unity methods
         private void Start()
         {
             mainMenuPanel = transform.GetChild(0).gameObject;
+            newGamePopup = transform.GetChild(1).gameObject;
 
             mainMenuPanel.SetActive(false);
+            newGamePopup.SetActive(false);
+        }
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Open the new game window.
+        /// </summary>
+        private void OpenNewGamePopup()
+        {
+            CloseMenu();
+            IsOpen = true;
+
+            newGamePopup.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(newGamePopup.GetComponentInChildren<Button>().gameObject);
         }
 
+        /// <summary>
+        /// Close the new game popup.
+        /// </summary>
+        private void CloseNewGamePopup()
+        {
+            newGamePopup.SetActive(false);
+            IsOpen = false;
+        }
+        #endregion
+
+        #region Public methods
         /// <summary>
         /// Open the main menu container.
         /// </summary>
@@ -52,12 +81,37 @@ namespace TUFG.UI
         }
 
         /// <summary>
-        /// Open the new game window.
+        /// Open the new game window. If there is no saved game, directly start a new game.
         /// </summary>
-        public void NewGame()
+        public void NewGameCheck()
+        {
+            if (GameManager.Instance.AnySaveExists())
+            {
+                OpenNewGamePopup();
+            }
+            else
+            {
+                StartNewGame();
+            }
+        }
+
+        /// <summary>
+        /// Get back to main menu after showing the new game popup.
+        /// </summary>
+        public void BackToMenu()
+        {
+            CloseNewGamePopup();
+            OpenMainMenu();
+        }
+
+        /// <summary>
+        /// Start a new game
+        /// </summary>
+        public void StartNewGame()
         {
             GameManager.Instance.NewGame();
             CloseMenu();
+            CloseNewGamePopup();
         }
 
         /// <summary>
@@ -67,8 +121,6 @@ namespace TUFG.UI
         {
             GameManager.Instance.LoadGame();
             CloseMenu();
-
-
         }
 
         /// <summary>
@@ -85,6 +137,7 @@ namespace TUFG.UI
         public void Exit()
         {
             Application.Quit();
-        }
+        } 
+        #endregion
     } 
 }
