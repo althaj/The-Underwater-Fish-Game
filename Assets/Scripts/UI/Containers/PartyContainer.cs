@@ -84,10 +84,9 @@ namespace TUFG.UI
         /// </summary>
         public override void Close()
         {
-            FindObjectOfType<PlayerMovement>().EnableInput();
-
             partyPanel.SetActive(false);
             IsOpen = false;
+            UIManager.Instance.OpenPauseMenu();
         }
 
         /// <summary>

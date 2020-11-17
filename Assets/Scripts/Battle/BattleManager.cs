@@ -298,7 +298,7 @@ namespace TUFG.Battle
             if (target.IsPlayer)
             {
                 // TODO proper game over
-                UIManager.Instance.ShowMainMenu();
+                UIManager.Instance.OpenMainMenu();
                 return;
             }
 
@@ -354,7 +354,7 @@ namespace TUFG.Battle
                                     ability = unit.Abilities[i]
                                 };
                             }
-                            UIManager.Instance.ShowBattleActions(buttons, "Choose your action");
+                            UIManager.Instance.OpenBattleActions(buttons, "Choose your action");
 
                             isSelectingAbility = true;
                         }
@@ -422,7 +422,7 @@ namespace TUFG.Battle
                     target = target
                 });
             }
-            UIManager.Instance.ShowBattleActions(buttons.ToArray(), "Select target");
+            UIManager.Instance.OpenBattleActions(buttons.ToArray(), "Select target");
         }
 
         /// <summary>
@@ -433,7 +433,7 @@ namespace TUFG.Battle
             isSelectingTarget = false;
             isSelectingAbility = false;
 
-            UIManager.Instance.HideActions();
+            UIManager.Instance.CloseActions();
 
             turnOrder.Remove(turnOrder[0]);
         }
@@ -458,7 +458,7 @@ namespace TUFG.Battle
 
             UseAbility(turnOrder[0], currentAbility, target);
 
-            UIManager.Instance.HideActions();
+            UIManager.Instance.CloseActions();
 
             turnOrder.Remove(turnOrder[0]);
         }

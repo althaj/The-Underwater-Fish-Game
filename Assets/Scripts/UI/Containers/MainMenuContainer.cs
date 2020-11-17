@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 namespace TUFG.UI
 {
+    /// <summary>
+    /// Main menu container of the game.
+    /// </summary>
     public class MainMenuContainer : ContainerBehaviour
     {
         [SerializeField] private Button loadGameButton;
@@ -72,7 +75,7 @@ namespace TUFG.UI
         public override void Close()
         {
             mainMenuPanel.SetActive(false);
-            IsOpen = true;
+            IsOpen = false;
         }
 
         /// <summary>

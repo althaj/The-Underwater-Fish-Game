@@ -117,7 +117,7 @@ namespace TUFG.UI
                             BattleManager.Instance.InitBattle(enemies);
                             break;
                         case DialogueButtonFunction.OpenShop:
-                            UIManager.Instance.ShowShop(ShopManager.Instance.GetShop(shopId));
+                            UIManager.Instance.OpenShop(ShopManager.Instance.GetShop(shopId));
                             break;
                         case DialogueButtonFunction.AddUnitToParty:
                             DialogueManager.Instance.EndConversation();

@@ -91,21 +91,9 @@ namespace TUFG.UI
         /// </summary>
         public override void Close()
         {
-            FindObjectOfType<PlayerMovement>().EnableInput();
-
             IsOpen = false;
             inventoryPanel.SetActive(false);
-        }
-
-        /// <summary>
-        /// Toggle inventory visibility on or off.
-        /// </summary>
-        public void ToggleInventory()
-        {
-            if (IsOpen)
-                Close();
-            else
-                Open();
+            UIManager.Instance.OpenPauseMenu();
         }
 
         /// <summary>

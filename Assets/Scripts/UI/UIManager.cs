@@ -188,6 +188,20 @@ namespace TUFG.UI
                 return mainMenuContainer;
             }
         }
+
+        internal static PauseContainer pauseContainer;
+        internal static PauseContainer PauseContainer
+        {
+            get
+            {
+                if (pauseContainer == null)
+                    pauseContainer = Instance.GetComponentInChildren<PauseContainer>();
+
+                if (pauseContainer == null)
+                    Debug.LogError("Cannot find the pause container!!");
+                return pauseContainer;
+            }
+        }
         #endregion
 
         #region Unity functions
@@ -196,10 +210,9 @@ namespace TUFG.UI
             DontDestroyOnLoad(gameObject);
 
             Instance.controlsInput = new ControlsInput();
-            Instance.controlsInput.UI.OpenInventory.performed += Instance.InventoryButtonPressed;
-            Instance.controlsInput.UI.OpenPartyManagement.performed += Instance.PartyButtonPressed;
+            Instance.controlsInput.UI.Pause.performed += Instance.PauseButtonPressed;
 
-            Invoke("ShowMainMenu", 0.5f);
+            Invoke("OpenMainMenu", 0.5f);
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -225,7 +238,7 @@ namespace TUFG.UI
         /// <summary>
         /// Open main menu and load the main menu scene.
         /// </summary>
-        public void ShowMainMenu()
+        public void OpenMainMenu()
         {
             MainMenuContainer.Open();
 
@@ -241,7 +254,7 @@ namespace TUFG.UI
         /// <param name="authorAvatar">Avatar of the author of the message.</param>
         /// <param name="buttons">Interaction buttons of the message.</param>
         /// <param name="avatarPosition">Position of the avatar in the dialogue panel.</param>
-        public void ShowMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
+        public void OpenMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
         {
             DialogueContainer.SetMessage(authorName, message, authorAvatar, buttons, avatarPosition);
             DialogueContainer.Open();
@@ -250,7 +263,7 @@ namespace TUFG.UI
         /// <summary>
         /// Hide current dialogue message.
         /// </summary>
-        public void HideMessage()
+        public void CloseMessage()
         {
             DialogueContainer.Close();
         }
@@ -260,7 +273,7 @@ namespace TUFG.UI
         /// </summary>
         /// <param name="buttons">Buttons to display.</param>
         /// <param name="text">Title text of the panel.</param>
-        public void ShowBattleActions(GenericButton[] buttons, string text)
+        public void OpenBattleActions(GenericButton[] buttons, string text)
         {
             BattleContainer.SetCurrentBattleActions(buttons, text);
             BattleContainer.Open();
@@ -269,7 +282,7 @@ namespace TUFG.UI
         /// <summary>
         /// Hide battle actions panel.
         /// </summary>
-        public void HideActions()
+        public void CloseActions()
         {
             BattleContainer.Close();
         }
@@ -277,25 +290,15 @@ namespace TUFG.UI
         /// <summary>
         /// Display inventory window.
         /// </summary>
-        public void ShowInventory()
+        public void OpenInventory()
         {
             InventoryContainer.Open();
         }
 
         /// <summary>
-        /// Callback for inventory button pressed, to toggle the inventory.
-        /// </summary>
-        /// <param name="ctx"></param>
-        public void InventoryButtonPressed(CallbackContext ctx)
-        {
-            if(!IsAnyWindowOpen() || InventoryContainer.IsOpen)
-                InventoryContainer.ToggleInventory();
-        }
-
-        /// <summary>
         /// Hide inventory window.
         /// </summary>
-        public void HideInventory()
+        public void CloseInventory()
         {
             InventoryContainer.Close();
         }
@@ -304,7 +307,7 @@ namespace TUFG.UI
         /// Display a shop window.
         /// </summary>
         /// <param name="shop">Shop to display.</param>
-        public void ShowShop(Shop shop)
+        public void OpenShop(Shop shop)
         {
             DialogueManager.Instance.EndConversation();
             ShopContainer.SetShop(shop);
@@ -314,25 +317,15 @@ namespace TUFG.UI
         /// <summary>
         /// Hide current shop.
         /// </summary>
-        public void HideShop()
+        public void CloseShop()
         {
             ShopContainer.Close();
         }
 
         /// <summary>
-        /// Listener for the party button pressed.
-        /// </summary>
-        /// <param name="ctx"></param>
-        public void PartyButtonPressed(CallbackContext ctx)
-        {
-            if (!IsAnyWindowOpen())
-                ShowPartyWindow();
-        }
-
-        /// <summary>
         /// Open party management window.
         /// </summary>
-        public void ShowPartyWindow()
+        public void OpenPartyWindow()
         {
             PartyContainer.Open();
         }
@@ -340,9 +333,37 @@ namespace TUFG.UI
         /// <summary>
         /// Close the party management window.
         /// </summary>
-        public void HidePartyWindow()
+        public void ClosePartyWindow()
         {
             PartyContainer.Close();
+        }
+
+        /// <summary>
+        /// Open the pause menu.
+        /// </summary>
+        public void OpenPauseMenu()
+        {
+            PauseContainer.Open();
+        }
+
+        /// <summary>
+        /// Close the pause menu.
+        /// </summary>
+        public void ClosePauseMenu()
+        {
+            PauseContainer.Close();
+        }
+
+        /// <summary>
+        /// The pause button has been pressed.
+        /// </summary>
+        /// <param name="ctx"></param>
+        public void PauseButtonPressed(CallbackContext ctx)
+        {
+            if (PauseContainer.IsOpen)
+                ClosePauseMenu();
+            else if(!IsAnyWindowOpen())
+                OpenPauseMenu();
         }
         #endregion
 
@@ -426,7 +447,7 @@ namespace TUFG.UI
         /// <returns></returns>
         public bool IsAnyWindowOpen()
         {
-            return InventoryContainer.IsOpen || BattleContainer.IsOpen || DialogueContainer.IsOpen || ShopContainer.IsOpen;
+            return InventoryContainer.IsOpen || BattleContainer.IsOpen || DialogueContainer.IsOpen || ShopContainer.IsOpen || MainMenuContainer.IsOpen;
         } 
         #endregion
     }
