@@ -1700,7 +1700,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2012684699589772052}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2818110715944102859}
+        m_TargetAssemblyTypeName: TUFG.UI.InventoryContainer, Assembly-CSharp
+        m_MethodName: DropCurrentItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4284448782345751077
 GameObject:
   m_ObjectHideFlags: 0
@@ -2518,7 +2530,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4137095239830091915}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2818110715944102859}
+        m_TargetAssemblyTypeName: TUFG.UI.InventoryContainer, Assembly-CSharp
+        m_MethodName: ToggleCurrentItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6399036855177141682
 GameObject:
   m_ObjectHideFlags: 0

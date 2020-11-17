@@ -7,14 +7,9 @@ using UnityEngine.UI;
 
 namespace TUFG.UI
 {
-    public class MainMenuContainer : MonoBehaviour
+    public class MainMenuContainer : ContainerBehaviour
     {
         [SerializeField] private Button loadGameButton;
-
-        /// <summary>
-        /// Is the container currently displaying main menu?
-        /// </summary>
-        public bool IsOpen { get; private set; }
 
         private GameObject mainMenuPanel;
         private GameObject newGamePopup;
@@ -36,7 +31,7 @@ namespace TUFG.UI
         /// </summary>
         private void OpenNewGamePopup()
         {
-            CloseMenu();
+            Close();
             IsOpen = true;
 
             newGamePopup.SetActive(true);
@@ -57,7 +52,7 @@ namespace TUFG.UI
         /// <summary>
         /// Open the main menu container.
         /// </summary>
-        public void OpenMainMenu()
+        public override void Open()
         {
             if (!IsOpen)
             {
@@ -74,7 +69,7 @@ namespace TUFG.UI
         /// <summary>
         /// Close the menu container.
         /// </summary>
-        public void CloseMenu()
+        public override void Close()
         {
             mainMenuPanel.SetActive(false);
             IsOpen = true;
@@ -101,7 +96,7 @@ namespace TUFG.UI
         public void BackToMenu()
         {
             CloseNewGamePopup();
-            OpenMainMenu();
+            Open();
         }
 
         /// <summary>
@@ -110,7 +105,7 @@ namespace TUFG.UI
         public void StartNewGame()
         {
             GameManager.Instance.NewGame();
-            CloseMenu();
+            Close();
             CloseNewGamePopup();
         }
 
@@ -120,7 +115,7 @@ namespace TUFG.UI
         public void LoadGame()
         {
             GameManager.Instance.LoadGame();
-            CloseMenu();
+            Close();
         }
 
         /// <summary>

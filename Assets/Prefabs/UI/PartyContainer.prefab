@@ -3242,7 +3242,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7818505401646271379}
         m_TargetAssemblyTypeName: TUFG.UI.PartyContainer, Assembly-CSharp
-        m_MethodName: HideParty
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

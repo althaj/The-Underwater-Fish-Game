@@ -11,7 +11,7 @@ namespace TUFG.UI
     /// <summary>
     /// Container with battle UI.
     /// </summary>
-    public class BattleContainer : MonoBehaviour
+    public class BattleContainer : ContainerBehaviour
     {
         [SerializeField] private TextMeshProUGUI titleText = null;
 
@@ -20,12 +20,9 @@ namespace TUFG.UI
         private GameObject buttonPrefab;
         private GameObject battlePanel;
 
-        private bool isOpen = false;
+        private GenericButton[] currentButtons;
+        private string currentText;
 
-        /// <summary>
-        /// Is the battle container open?
-        /// </summary>
-        public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity functions
 
@@ -40,11 +37,30 @@ namespace TUFG.UI
         #endregion
 
         /// <summary>
-        /// Shows actions available to the player.
+        /// Shows actions available to the player. Call Open() to show the battle container.
         /// </summary>
         /// <param name="buttons">Buttons with actions</param>
         /// <param name="text">Title text</param>
-        public void ShowBattleActions(GenericButton[] buttons, string text)
+        public void SetCurrentBattleActions(GenericButton[] buttons, string text)
+        {
+            currentButtons = buttons;
+            currentText = text;
+        }
+
+        /// <summary>
+        /// Hide player actions panel.
+        /// </summary>
+        public override void Close()
+        {
+            IsOpen = false;
+            battlePanel.SetActive(false);
+            buttonPanel.SetActive(false);
+        }
+
+        /// <summary>
+        /// Open the battle container.
+        /// </summary>
+        public override void Open()
         {
             if (!this.IsOpen)
             {
@@ -54,20 +70,10 @@ namespace TUFG.UI
                 IsOpen = true;
             }
 
-            titleText.text = text;
+            titleText.text = currentText;
 
             UIManager.Instance.ClearChildren(buttonPanel);
-            UIManager.Instance.BuildButtons(buttons, buttonPanel, "Wait");
-        }
-
-        /// <summary>
-        /// Hide player actions panel.
-        /// </summary>
-        public void HideActions()
-        {
-            IsOpen = false;
-            battlePanel.SetActive(false);
-            buttonPanel.SetActive(false);
+            UIManager.Instance.BuildButtons(currentButtons, buttonPanel, "Wait");
         }
     }
 }

@@ -11,10 +11,9 @@ namespace TUFG.UI
     /// <summary>
     /// Container holding window for party information and management.
     /// </summary>
-    public class PartyContainer : MonoBehaviour
+    public class PartyContainer : ContainerBehaviour
     {
         private GameObject partyPanel;
-        private bool isOpen = false;
         private Unit selectedUnit;
 
         private GameObject buttonPrefab;
@@ -28,11 +27,6 @@ namespace TUFG.UI
 
         [SerializeField] private Transform goonsPanel;
         [SerializeField] private Transform detailsPanel;
-
-        /// <summary>
-        /// Is the dialogue panel currently open?
-        /// </summary>
-        public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity methods
         private void Start()
@@ -58,7 +52,7 @@ namespace TUFG.UI
         /// Open the party managment window.
         /// </summary>
         /// <param name="units">Units that are in the party.</param>
-        public void ShowParty()
+        public override void Open()
         {
             FindObjectOfType<PlayerMovement>().DisableInput();
 
@@ -88,7 +82,7 @@ namespace TUFG.UI
         /// <summary>
         /// Close the party manager window.
         /// </summary>
-        public void HideParty()
+        public override void Close()
         {
             FindObjectOfType<PlayerMovement>().EnableInput();
 
@@ -133,7 +127,7 @@ namespace TUFG.UI
         public void KickOut()
         {
             PartyManager.Instance.KickOut(selectedUnit);
-            ShowParty();
+            Open();
         }
         #endregion
     }

@@ -13,7 +13,7 @@ namespace TUFG.UI
     /// <summary>
     /// Container with the inventory window.
     /// </summary>
-    public class InventoryContainer : MonoBehaviour
+    public class InventoryContainer : ContainerBehaviour
     {
         private GameObject inventoryPanel;
         private Item currentItem;
@@ -24,12 +24,6 @@ namespace TUFG.UI
         [SerializeField] private TextMeshProUGUI goldText = null;
 
         private GameObject buttonPrefab;
-        private bool isOpen = false;
-
-        /// <summary>
-        /// Is the inventory window currently open?
-        /// </summary>
-        public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity methods
         void Start()
@@ -46,7 +40,7 @@ namespace TUFG.UI
         /// <summary>
         /// Display the inventory.
         /// </summary>
-        public void ShowInventory()
+        public override void Open()
         {
             FindObjectOfType<PlayerMovement>().DisableInput();
 
@@ -95,7 +89,7 @@ namespace TUFG.UI
         /// <summary>
         /// Hide player inventory panel.
         /// </summary>
-        public void HideInventory()
+        public override void Close()
         {
             FindObjectOfType<PlayerMovement>().EnableInput();
 
@@ -109,9 +103,9 @@ namespace TUFG.UI
         public void ToggleInventory()
         {
             if (IsOpen)
-                HideInventory();
+                Close();
             else
-                ShowInventory();
+                Open();
         }
 
         /// <summary>
@@ -159,7 +153,7 @@ namespace TUFG.UI
                 InventoryManager.Instance.EquipItem(currentItem);
 
             currentItem = null;
-            ShowInventory();
+            Open();
         }
 
         /// <summary>
@@ -168,7 +162,7 @@ namespace TUFG.UI
         public void DropCurrentItem()
         {
             InventoryManager.Instance.DropItem(currentItem);
-            ShowInventory();
+            Open();
         }
         #endregion
 

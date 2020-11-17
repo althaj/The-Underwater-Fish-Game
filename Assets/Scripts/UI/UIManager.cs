@@ -227,7 +227,7 @@ namespace TUFG.UI
         /// </summary>
         public void ShowMainMenu()
         {
-            MainMenuContainer.OpenMainMenu();
+            MainMenuContainer.Open();
 
             if(SceneManager.GetActiveScene().buildIndex != 1)
                 SceneManager.LoadScene(1);
@@ -243,7 +243,8 @@ namespace TUFG.UI
         /// <param name="avatarPosition">Position of the avatar in the dialogue panel.</param>
         public void ShowMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
         {
-            DialogueContainer.ShowMessage(authorName, message, authorAvatar, buttons, avatarPosition);
+            DialogueContainer.SetMessage(authorName, message, authorAvatar, buttons, avatarPosition);
+            DialogueContainer.Open();
         }
 
         /// <summary>
@@ -251,7 +252,7 @@ namespace TUFG.UI
         /// </summary>
         public void HideMessage()
         {
-            DialogueContainer.HideMessage();
+            DialogueContainer.Close();
         }
 
         /// <summary>
@@ -261,7 +262,8 @@ namespace TUFG.UI
         /// <param name="text">Title text of the panel.</param>
         public void ShowBattleActions(GenericButton[] buttons, string text)
         {
-            BattleContainer.ShowBattleActions(buttons, text);
+            BattleContainer.SetCurrentBattleActions(buttons, text);
+            BattleContainer.Open();
         }
 
         /// <summary>
@@ -269,7 +271,7 @@ namespace TUFG.UI
         /// </summary>
         public void HideActions()
         {
-            BattleContainer.HideActions();
+            BattleContainer.Close();
         }
 
         /// <summary>
@@ -277,7 +279,7 @@ namespace TUFG.UI
         /// </summary>
         public void ShowInventory()
         {
-            InventoryContainer.ShowInventory();
+            InventoryContainer.Open();
         }
 
         /// <summary>
@@ -295,7 +297,7 @@ namespace TUFG.UI
         /// </summary>
         public void HideInventory()
         {
-            InventoryContainer.HideInventory();
+            InventoryContainer.Close();
         }
 
         /// <summary>
@@ -305,7 +307,8 @@ namespace TUFG.UI
         public void ShowShop(Shop shop)
         {
             DialogueManager.Instance.EndConversation();
-            ShopContainer.ShowShop(shop);
+            ShopContainer.SetShop(shop);
+            ShopContainer.Open();
         }
 
         /// <summary>
@@ -313,7 +316,7 @@ namespace TUFG.UI
         /// </summary>
         public void HideShop()
         {
-            ShopContainer.HideShop();
+            ShopContainer.Close();
         }
 
         /// <summary>
@@ -331,7 +334,7 @@ namespace TUFG.UI
         /// </summary>
         public void ShowPartyWindow()
         {
-            PartyContainer.ShowParty();
+            PartyContainer.Open();
         }
 
         /// <summary>
@@ -339,7 +342,7 @@ namespace TUFG.UI
         /// </summary>
         public void HidePartyWindow()
         {
-            PartyContainer.HideParty();
+            PartyContainer.Close();
         }
         #endregion
 
