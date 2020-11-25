@@ -56,7 +56,7 @@ namespace TUFG.UI
         /// </summary>
         public void Continue()
         {
-            Close();
+            UIManager.Instance.ClosePauseMenu();
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace TUFG.UI
         /// </summary>
         public void ShowInventory()
         {
-            Close();
+            UIManager.Instance.ClosePauseMenu();
             UIManager.Instance.OpenInventory();
         }
 
@@ -73,7 +73,7 @@ namespace TUFG.UI
         /// </summary>
         public void ShowParty()
         {
-            Close();
+            UIManager.Instance.ClosePauseMenu();
             UIManager.Instance.OpenPartyWindow();
         }
 
@@ -82,7 +82,7 @@ namespace TUFG.UI
         /// </summary>
         public void Exit()
         {
-            Close();
+            UIManager.Instance.ClosePauseMenu();
             UIManager.Instance.OpenMainMenu();
         }
 

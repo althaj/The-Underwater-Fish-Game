@@ -85,21 +85,6 @@ namespace TUFG.UI
         }
 
         /// <summary>
-        /// Toggle shop visibility on or off.
-        /// </summary>
-        /// <param name="shop">Shop to be displayed.</param>
-        public void ToggleShop(Shop shop)
-        {
-            if (IsOpen)
-                Close();
-            else
-            {
-                SetShop(shop);
-                Open();
-            }
-        }
-
-        /// <summary>
         /// Scroll to currently selected item
         /// </summary>
         /// <param name="obj">Item transform to scroll to.</param>
@@ -159,8 +144,7 @@ namespace TUFG.UI
             }
             currentItem = null;
 
-            SetShop(ShopManager.Instance.GetShop(shop.ShopId));
-            Open();
+            UIManager.Instance.OpenShop(shop);
         }
         #endregion
 

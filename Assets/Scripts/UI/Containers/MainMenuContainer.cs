@@ -99,7 +99,8 @@ namespace TUFG.UI
         public void BackToMenu()
         {
             CloseNewGamePopup();
-            Open();
+
+            UIManager.Instance.OpenMainMenu();
         }
 
         /// <summary>
@@ -108,8 +109,9 @@ namespace TUFG.UI
         public void StartNewGame()
         {
             GameManager.Instance.NewGame();
-            Close();
             CloseNewGamePopup();
+
+            UIManager.Instance.CloseMainMenu();
         }
 
         /// <summary>
@@ -118,7 +120,8 @@ namespace TUFG.UI
         public void LoadGame()
         {
             GameManager.Instance.LoadGame();
-            Close();
+
+            UIManager.Instance.CloseMainMenu();
         }
 
         /// <summary>

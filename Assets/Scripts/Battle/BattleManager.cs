@@ -468,6 +468,8 @@ namespace TUFG.Battle
         /// </summary>
         public void EndBattle()
         {
+            StopCoroutine("ProcessBattle");
+
             PartyManager.Instance.SetPlayerParty(currentBattle.allies.Where(x => !x.IsPlayer).ToList());
             PartyManager.Instance.SetPlayerUnit(currentBattle.allies.Where(x => x.IsPlayer).FirstOrDefault());
 

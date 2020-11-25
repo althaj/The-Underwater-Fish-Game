@@ -56,6 +56,8 @@ namespace TUFG.UI
         [SerializeField] private Sprite amuletSlotIcon = null;
         [SerializeField] private Sprite ringSlotIcon = null;
 
+        private List<ContainerBehaviour> openedContainers;
+
         /// <summary>
         /// Prefab of a generic button.
         /// </summary>
@@ -212,6 +214,8 @@ namespace TUFG.UI
             Instance.controlsInput = new ControlsInput();
             Instance.controlsInput.UI.Pause.performed += Instance.PauseButtonPressed;
 
+            openedContainers = new List<ContainerBehaviour>();
+
             Invoke("OpenMainMenu", 0.5f);
 
             Cursor.lockState = CursorLockMode.Locked;
@@ -244,6 +248,18 @@ namespace TUFG.UI
 
             if(SceneManager.GetActiveScene().buildIndex != 1)
                 SceneManager.LoadScene(1);
+
+            openedContainers.Add(MainMenuContainer);
+        }
+
+        /// <summary>
+        /// Close the main menu window.
+        /// </summary>
+        public void CloseMainMenu()
+        {
+            MainMenuContainer.Close();
+
+            openedContainers.Remove(MainMenuContainer);
         }
 
         /// <summary>
@@ -258,6 +274,8 @@ namespace TUFG.UI
         {
             DialogueContainer.SetMessage(authorName, message, authorAvatar, buttons, avatarPosition);
             DialogueContainer.Open();
+
+            openedContainers.Add(DialogueContainer);
         }
 
         /// <summary>
@@ -266,6 +284,8 @@ namespace TUFG.UI
         public void CloseMessage()
         {
             DialogueContainer.Close();
+
+            openedContainers.Remove(DialogueContainer);
         }
 
         /// <summary>
@@ -277,6 +297,8 @@ namespace TUFG.UI
         {
             BattleContainer.SetCurrentBattleActions(buttons, text);
             BattleContainer.Open();
+
+            openedContainers.Add(BattleContainer);
         }
 
         /// <summary>
@@ -285,6 +307,8 @@ namespace TUFG.UI
         public void CloseActions()
         {
             BattleContainer.Close();
+
+            openedContainers.Remove(BattleContainer);
         }
 
         /// <summary>
@@ -293,6 +317,8 @@ namespace TUFG.UI
         public void OpenInventory()
         {
             InventoryContainer.Open();
+
+            openedContainers.Add(InventoryContainer);
         }
 
         /// <summary>
@@ -301,6 +327,8 @@ namespace TUFG.UI
         public void CloseInventory()
         {
             InventoryContainer.Close();
+
+            openedContainers.Remove(InventoryContainer);
         }
 
         /// <summary>
@@ -312,6 +340,8 @@ namespace TUFG.UI
             DialogueManager.Instance.EndConversation();
             ShopContainer.SetShop(shop);
             ShopContainer.Open();
+
+            openedContainers.Add(ShopContainer);
         }
 
         /// <summary>
@@ -320,6 +350,8 @@ namespace TUFG.UI
         public void CloseShop()
         {
             ShopContainer.Close();
+
+            openedContainers.Remove(ShopContainer);
         }
 
         /// <summary>
@@ -328,6 +360,8 @@ namespace TUFG.UI
         public void OpenPartyWindow()
         {
             PartyContainer.Open();
+
+            openedContainers.Add(PartyContainer);
         }
 
         /// <summary>
@@ -336,6 +370,8 @@ namespace TUFG.UI
         public void ClosePartyWindow()
         {
             PartyContainer.Close();
+
+            openedContainers.Remove(PartyContainer);
         }
 
         /// <summary>
@@ -344,6 +380,8 @@ namespace TUFG.UI
         public void OpenPauseMenu()
         {
             PauseContainer.Open();
+
+            openedContainers.Add(PauseContainer);
         }
 
         /// <summary>
@@ -352,6 +390,8 @@ namespace TUFG.UI
         public void ClosePauseMenu()
         {
             PauseContainer.Close();
+
+            openedContainers.Remove(PauseContainer);
         }
 
         /// <summary>
@@ -447,7 +487,7 @@ namespace TUFG.UI
         /// <returns></returns>
         public bool IsAnyWindowOpen()
         {
-            return InventoryContainer.IsOpen || BattleContainer.IsOpen || DialogueContainer.IsOpen || ShopContainer.IsOpen || MainMenuContainer.IsOpen;
+            return openedContainers.Count > 0;
         } 
         #endregion
     }

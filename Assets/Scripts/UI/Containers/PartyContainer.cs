@@ -126,7 +126,7 @@ namespace TUFG.UI
         public void KickOut()
         {
             PartyManager.Instance.KickOut(selectedUnit);
-            Open();
+            UIManager.Instance.OpenPartyWindow();
         }
         #endregion
     }

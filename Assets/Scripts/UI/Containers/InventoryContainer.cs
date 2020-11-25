@@ -141,7 +141,7 @@ namespace TUFG.UI
                 InventoryManager.Instance.EquipItem(currentItem);
 
             currentItem = null;
-            Open();
+            UIManager.Instance.OpenInventory();
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace TUFG.UI
         public void DropCurrentItem()
         {
             InventoryManager.Instance.DropItem(currentItem);
-            Open();
+            UIManager.Instance.OpenInventory();
         }
         #endregion
 
