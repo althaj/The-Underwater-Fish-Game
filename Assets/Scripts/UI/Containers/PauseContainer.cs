@@ -64,7 +64,7 @@ namespace TUFG.UI
         /// </summary>
         public void ShowInventory()
         {
-            UIManager.Instance.ClosePauseMenu();
+            UIManager.Instance.HidePauseMenu();
             UIManager.Instance.OpenInventory();
         }
 
@@ -73,7 +73,7 @@ namespace TUFG.UI
         /// </summary>
         public void ShowParty()
         {
-            UIManager.Instance.ClosePauseMenu();
+            UIManager.Instance.HidePauseMenu();
             UIManager.Instance.OpenPartyWindow();
         }
 

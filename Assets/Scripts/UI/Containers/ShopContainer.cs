@@ -85,6 +85,14 @@ namespace TUFG.UI
         }
 
         /// <summary>
+        /// The close button has been pressed.
+        /// </summary>
+        public void CloseButtonPressed()
+        {
+            UIManager.Instance.CloseShop();
+        }
+
+        /// <summary>
         /// Scroll to currently selected item
         /// </summary>
         /// <param name="obj">Item transform to scroll to.</param>

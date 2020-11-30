@@ -93,7 +93,14 @@ namespace TUFG.UI
         {
             IsOpen = false;
             inventoryPanel.SetActive(false);
-            UIManager.Instance.OpenPauseMenu();
+        }
+
+        /// <summary>
+        /// Close button was pressed.
+        /// </summary>
+        public void CloseButtonPressed()
+        {
+            UIManager.Instance.CloseInventory();
         }
 
         /// <summary>

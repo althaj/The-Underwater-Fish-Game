@@ -238,6 +238,32 @@ namespace TUFG.UI
         #endregion
 
         #region Show / Hide methods
+        /// <summary>
+        /// Hide all openend windows. Does not close the windows, just hide them.
+        /// </summary>
+        public void HideOpenendWindows()
+        {
+            foreach(ContainerBehaviour container in openedContainers)
+            {
+                container.Close();
+            }
+        }
+
+        /// <summary>
+        /// Shows openend windows that were hidden by the method HideOpenendWindows().
+        /// </summary>
+        public void ShowOpenendWindows()
+        {
+            if(openedContainers.Count > 0)
+            {
+                foreach (ContainerBehaviour container in openedContainers)
+                {
+                    container.Open();
+                }
+
+                FindObjectOfType<PlayerMovement>().DisableInput();
+            }
+        }
 
         /// <summary>
         /// Open main menu and load the main menu scene.
@@ -272,10 +298,12 @@ namespace TUFG.UI
         /// <param name="avatarPosition">Position of the avatar in the dialogue panel.</param>
         public void OpenMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition = DialogueAvatarPosition.Left)
         {
+            if (!openedContainers.Contains(DialogueContainer))
+                openedContainers.Add(DialogueContainer);
+
+
             DialogueContainer.SetMessage(authorName, message, authorAvatar, buttons, avatarPosition);
             DialogueContainer.Open();
-
-            openedContainers.Add(DialogueContainer);
         }
 
         /// <summary>
@@ -295,10 +323,11 @@ namespace TUFG.UI
         /// <param name="text">Title text of the panel.</param>
         public void OpenBattleActions(GenericButton[] buttons, string text)
         {
+            if (!openedContainers.Contains(BattleContainer))
+                openedContainers.Add(BattleContainer);
+
             BattleContainer.SetCurrentBattleActions(buttons, text);
             BattleContainer.Open();
-
-            openedContainers.Add(BattleContainer);
         }
 
         /// <summary>
@@ -316,9 +345,10 @@ namespace TUFG.UI
         /// </summary>
         public void OpenInventory()
         {
-            InventoryContainer.Open();
+            if (!openedContainers.Contains(InventoryContainer))
+                openedContainers.Add(InventoryContainer);
 
-            openedContainers.Add(InventoryContainer);
+            InventoryContainer.Open();
         }
 
         /// <summary>
@@ -327,6 +357,7 @@ namespace TUFG.UI
         public void CloseInventory()
         {
             InventoryContainer.Close();
+            OpenPauseMenu();
 
             openedContainers.Remove(InventoryContainer);
         }
@@ -337,11 +368,12 @@ namespace TUFG.UI
         /// <param name="shop">Shop to display.</param>
         public void OpenShop(Shop shop)
         {
+            if (!openedContainers.Contains(ShopContainer))
+                openedContainers.Add(ShopContainer);
+
             DialogueManager.Instance.EndConversation();
             ShopContainer.SetShop(shop);
             ShopContainer.Open();
-
-            openedContainers.Add(ShopContainer);
         }
 
         /// <summary>
@@ -359,9 +391,10 @@ namespace TUFG.UI
         /// </summary>
         public void OpenPartyWindow()
         {
-            PartyContainer.Open();
+            if (!openedContainers.Contains(PartyContainer))
+                openedContainers.Add(PartyContainer);
 
-            openedContainers.Add(PartyContainer);
+            PartyContainer.Open();
         }
 
         /// <summary>
@@ -370,6 +403,7 @@ namespace TUFG.UI
         public void ClosePartyWindow()
         {
             PartyContainer.Close();
+            OpenPauseMenu();
 
             openedContainers.Remove(PartyContainer);
         }
@@ -379,9 +413,17 @@ namespace TUFG.UI
         /// </summary>
         public void OpenPauseMenu()
         {
-            PauseContainer.Open();
+            if (!openedContainers.Contains(PauseContainer))
+                openedContainers.Add(PauseContainer);
 
-            openedContainers.Add(PauseContainer);
+            if (InventoryContainer.IsOpen)
+                CloseInventory();
+
+            if (PartyContainer.IsOpen)
+                ClosePartyWindow();
+
+            HideOpenendWindows();
+            PauseContainer.Open();
         }
 
         /// <summary>
@@ -390,8 +432,17 @@ namespace TUFG.UI
         public void ClosePauseMenu()
         {
             PauseContainer.Close();
-
             openedContainers.Remove(PauseContainer);
+
+            ShowOpenendWindows();
+        }
+
+        /// <summary>
+        /// Hide the pause menu without closing it.
+        /// </summary>
+        public void HidePauseMenu()
+        {
+            PauseContainer.Close();
         }
 
         /// <summary>
@@ -400,9 +451,12 @@ namespace TUFG.UI
         /// <param name="ctx"></param>
         public void PauseButtonPressed(CallbackContext ctx)
         {
+            if (MainMenuContainer.IsOpen)
+                return;
+
             if (PauseContainer.IsOpen)
                 ClosePauseMenu();
-            else if(!IsAnyWindowOpen())
+            else
                 OpenPauseMenu();
         }
         #endregion

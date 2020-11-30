@@ -2258,7 +2258,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2818110715944102859}
         m_TargetAssemblyTypeName: TUFG.UI.InventoryContainer, Assembly-CSharp
-        m_MethodName: Close
+        m_MethodName: CloseButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

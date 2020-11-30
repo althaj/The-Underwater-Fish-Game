@@ -23,7 +23,6 @@ namespace TUFG.UI
         private GenericButton[] currentButtons;
         private string currentText;
 
-
         #region Unity functions
 
         private void Start()

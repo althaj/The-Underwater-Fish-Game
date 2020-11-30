@@ -86,7 +86,14 @@ namespace TUFG.UI
         {
             partyPanel.SetActive(false);
             IsOpen = false;
-            UIManager.Instance.OpenPauseMenu();
+        }
+
+        /// <summary>
+        /// The close button has been pressed.
+        /// </summary>
+        public void CloseButtonPressed()
+        {
+            UIManager.Instance.ClosePartyWindow();
         }
 
         /// <summary>

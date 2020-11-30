@@ -623,12 +623,12 @@ PrefabInstance:
     - target: {fileID: 2715360850921218382, guid: f77301e905477b843979891c19a9cd4c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 368.4444
+      value: 369.3334
       objectReference: {fileID: 0}
     - target: {fileID: 2715360851348415117, guid: f77301e905477b843979891c19a9cd4c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000015258789
+      value: -0.00012207031
       objectReference: {fileID: 0}
     - target: {fileID: 2802682510734620902, guid: f77301e905477b843979891c19a9cd4c,
         type: 3}
@@ -903,7 +903,7 @@ PrefabInstance:
     - target: {fileID: 4409374554297833906, guid: f77301e905477b843979891c19a9cd4c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000045776367
+      value: -0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 5269953981865090548, guid: f77301e905477b843979891c19a9cd4c,
         type: 3}
@@ -1379,6 +1379,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109000499425880094, guid: f77301e905477b843979891c19a9cd4c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseButtonPressed
       objectReference: {fileID: 0}
     - target: {fileID: 7202103059360553243, guid: f77301e905477b843979891c19a9cd4c,
         type: 3}
