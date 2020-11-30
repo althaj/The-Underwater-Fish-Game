@@ -468,7 +468,7 @@ namespace TUFG.Battle
         /// </summary>
         public void EndBattle()
         {
-            StopCoroutine("ProcessBattle");
+            StopCoroutine(ProcessBattle());
 
             PartyManager.Instance.SetPlayerParty(currentBattle.allies.Where(x => !x.IsPlayer).ToList());
             PartyManager.Instance.SetPlayerUnit(currentBattle.allies.Where(x => x.IsPlayer).FirstOrDefault());
@@ -481,10 +481,6 @@ namespace TUFG.Battle
             WorldCamera camera = FindObjectOfType<WorldCamera>();
             camera.SetPosition(player.transform.position + (Vector3.up * 1));
             camera.SetTarget(player.transform);
-
-            Instance.StartCoroutine(ProcessBattle());
-
-            // TODO Save player party
 
             GameManager.Instance.SaveGame();
         }
