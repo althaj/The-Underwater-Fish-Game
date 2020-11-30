@@ -11,7 +11,7 @@ namespace TUFG.UI
     /// <summary>
     /// Container with the dialogue panels.
     /// </summary>
-    public class DialogueContainer : MonoBehaviour
+    public class DialogueContainer : ContainerBehaviour
     {
         [SerializeField] private TextMeshProUGUI authorNameText = null;
         [SerializeField] private TextMeshProUGUI messageText = null;
@@ -22,12 +22,12 @@ namespace TUFG.UI
                 
         private GameObject buttonPrefab;
         private GameObject dialoguePanel;
-        private bool isOpen = false;
 
-        /// <summary>
-        /// Is the dialogue panel currently open?
-        /// </summary>
-        public bool IsOpen { get => isOpen; private set => isOpen = value; }
+        private string currentAuthorName;
+        private string currentMessage;
+        private Sprite currentAuthorAvatar;
+        private GenericButton[] currentButtons;
+        private DialogueAvatarPosition currentAvatarPosition;
 
         #region Unity functions
 
@@ -42,39 +42,51 @@ namespace TUFG.UI
         #endregion
 
         /// <summary>
-        /// Show dialogue message.
+        /// Show dialogue message. You need to call Open() to display the container.
         /// </summary>
         /// <param name="authorName">Author name to be displayed</param>
         /// <param name="message">Message to be displayed</param>
         /// <param name="authorAvatar">Avatar of the speaker</param>
         /// <param name="buttons">Action buttons</param>
         /// <param name="avatarPosition">Position on left or right</param>
-        public void ShowMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition)
+        public void SetMessage(string authorName, string message, Sprite authorAvatar, GenericButton[] buttons, DialogueAvatarPosition avatarPosition)
         {
-            if (!this.isOpen)
+            currentAuthorName = authorName;
+            currentMessage = message;
+            currentAuthorAvatar = authorAvatar;
+            currentButtons = buttons;
+            currentAvatarPosition = avatarPosition;
+        }
+
+        /// <summary>
+        /// Open the dialogue container.
+        /// </summary>
+        public override void Open()
+        {
+            if (!this.IsOpen)
             {
                 // TODO PLAY ANIMATION
                 dialoguePanel.SetActive(true);
                 buttonPanel.SetActive(true);
-                isOpen = true;
+                IsOpen = true;
             }
 
-            authorNameText.text = authorName;
-            messageText.text = message;
-            avatarImage.sprite = authorAvatar;
+            authorNameText.text = currentAuthorName;
+            messageText.text = currentMessage;
+            avatarImage.sprite = currentAuthorAvatar;
 
-            middlePanelLayoutGroup.reverseArrangement = avatarPosition == DialogueAvatarPosition.Right;
+            middlePanelLayoutGroup.reverseArrangement = currentAvatarPosition == DialogueAvatarPosition.Right;
 
             UIManager.Instance.ClearChildren(buttonPanel);
-            UIManager.Instance.BuildButtons(buttons, buttonPanel, "Continue");
+            UIManager.Instance.BuildButtons(currentButtons, buttonPanel, "Continue");
         }
 
         /// <summary>
-        /// Hide dialogue message.
+        /// Hide dialogue container.
         /// </summary>
-        public void HideMessage()
+        public override void Close()
         {
-            isOpen = false;
+            IsOpen = false;
             dialoguePanel.SetActive(false);
             buttonPanel.SetActive(false);
         }

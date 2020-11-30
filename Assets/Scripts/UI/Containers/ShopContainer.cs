@@ -13,7 +13,7 @@ namespace TUFG.UI
     /// <summary>
     /// UI container displaying a shop.
     /// </summary>
-    public class ShopContainer : MonoBehaviour
+    public class ShopContainer : ContainerBehaviour
     {
         private GameObject shopPanel;
         private Item currentItem;
@@ -26,12 +26,6 @@ namespace TUFG.UI
         [SerializeField] private TextMeshProUGUI goldText = null;
 
         private GameObject buttonPrefab;
-        private bool isOpen = false;
-
-        /// <summary>
-        /// Is the container currently displaying a shop?
-        /// </summary>
-        public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity methods
         void Start()
@@ -46,13 +40,19 @@ namespace TUFG.UI
 
         #region Public methods
         /// <summary>
-        /// Display shop.
+        /// Set the current shop. You need to call Open() to display the shop.
         /// </summary>
         /// <param name="shop">Shop to be displayed.</param>
-        public void ShowShop(Shop shop)
+        public void SetShop(Shop shop)
         {
             this.shop = shop;
+        }
 
+        /// <summary>
+        /// Open the shop container.
+        /// </summary>
+        public override void Open()
+        {
             FindObjectOfType<PlayerMovement>().DisableInput();
 
             List<Item> buyItems = shop.Items;
@@ -76,7 +76,7 @@ namespace TUFG.UI
         /// <summary>
         /// Hide shop panel.
         /// </summary>
-        public void HideShop()
+        public override void Close()
         {
             FindObjectOfType<PlayerMovement>().EnableInput();
 
@@ -85,15 +85,11 @@ namespace TUFG.UI
         }
 
         /// <summary>
-        /// Toggle shop visibility on or off.
+        /// The close button has been pressed.
         /// </summary>
-        /// <param name="shop">Shop to be displayed.</param>
-        public void ToggleShop(Shop shop)
+        public void CloseButtonPressed()
         {
-            if (IsOpen)
-                HideShop();
-            else
-                ShowShop(shop);
+            UIManager.Instance.CloseShop();
         }
 
         /// <summary>
@@ -156,7 +152,7 @@ namespace TUFG.UI
             }
             currentItem = null;
 
-            ShowShop(ShopManager.Instance.GetShop(shop.ShopId));
+            UIManager.Instance.OpenShop(shop);
         }
         #endregion
 

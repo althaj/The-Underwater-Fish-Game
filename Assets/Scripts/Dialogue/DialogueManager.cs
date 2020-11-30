@@ -29,6 +29,8 @@ namespace TUFG.Dialogue
                     {
                         GameObject container = new GameObject("Dialogue Manager");
                         _instance = container.AddComponent<DialogueManager>();
+
+                        DontDestroyOnLoad(container);
                     }
                 }
 
@@ -69,12 +71,12 @@ namespace TUFG.Dialogue
             DialogueNode currentNode = CurrentDialogueNode;
             if (currentNode == null)
             {
-                UIManager.Instance.HideMessage();
+                UIManager.Instance.CloseMessage();
             }
             else
             {
                 NodeContent content = currentNode.GetNodeContent();
-                UIManager.Instance.ShowMessage(content.characterName, content.dialogueText, content.avatar, content.dialogueButtons, content.avatarPosition);
+                UIManager.Instance.OpenMessage(content.characterName, content.dialogueText, content.avatar, content.dialogueButtons, content.avatarPosition);
             }
         }
 

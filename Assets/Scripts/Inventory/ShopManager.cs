@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TUFG.Core;
 using UnityEngine;
 
 namespace TUFG.Inventory
@@ -29,6 +30,10 @@ namespace TUFG.Inventory
                     {
                         GameObject container = new GameObject("Shop Manager");
                         _instance = container.AddComponent<ShopManager>();
+
+                        _instance.Shops = new List<Shop>();
+
+                        DontDestroyOnLoad(container);
                     }
                 }
 
@@ -37,8 +42,7 @@ namespace TUFG.Inventory
         }
         #endregion
 
-        [SerializeField] private List<Shop> shops;
-        public List<Shop> Shops { get => shops; set => shops = value; }
+        public List<Shop> Shops { get; set; }
 
         /// <summary>
         /// Load shops from save, preserving existing shops.
@@ -55,6 +59,22 @@ namespace TUFG.Inventory
 
                 Shops.Add(new Shop(save.shopId, save.itemPaths, save.margin));
             }
+        }
+
+        /// <summary>
+        /// Initialize shops for new game.
+        /// </summary>
+        /// <returns>Save for shops for new game.</returns>
+        public List<ShopSave> InitializeShops()
+        {
+            Shops.Add(new Shop(
+                "tutorial_shop", new List<string>()
+                {
+                    "Assets/Prefabs/Inventory/Items/Bronze sword of hell.asset"
+                },
+                1.2f));
+
+            return Shops.Select(x => x.ToShopSave()).ToList();
         }
 
         /// <summary>
@@ -85,6 +105,8 @@ namespace TUFG.Inventory
             if (InventoryManager.Instance.RemoveItem(item))
             {
                 shop.Items.Add(item);
+                GameManager.Instance.SaveGame();
+
                 return true;
             }
             else
@@ -112,6 +134,8 @@ namespace TUFG.Inventory
             {
                 InventoryManager.Instance.PickUpItem(item);
                 shop.Items.Remove(item);
+
+                GameManager.Instance.SaveGame();
                 return true;
             } else
             {

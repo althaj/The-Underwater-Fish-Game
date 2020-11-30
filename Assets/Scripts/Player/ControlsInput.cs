@@ -188,17 +188,9 @@ namespace TUFG.Controls
             ""id"": ""5078d073-783a-4919-8e95-bc0f52505c51"",
             ""actions"": [
                 {
-                    ""name"": ""OpenInventory"",
+                    ""name"": ""Pause"",
                     ""type"": ""Button"",
-                    ""id"": ""f48c5c08-f4f2-458f-90c1-858279d2a6ac"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""OpenPartyManagement"",
-                    ""type"": ""Button"",
-                    ""id"": ""dcb4c95a-b90f-4cc8-bb4b-669b1fcff641"",
+                    ""id"": ""90402fa2-f0e6-4dc7-823c-c9aea200f9a5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -207,45 +199,34 @@ namespace TUFG.Controls
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""690b28b3-81d3-4048-839f-66c7babaa9b1"",
-                    ""path"": ""<Gamepad>/select"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""OpenInventory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""34865e19-1309-44b9-8be6-6aa4c8cf79b0"",
-                    ""path"": ""<Keyboard>/i"",
+                    ""id"": ""f50c2a67-cb71-4fa9-9c19-552354d4b301"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""OpenInventory"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5a3f2713-fbb1-4959-8aa7-2cdcd064eabf"",
-                    ""path"": ""<Keyboard>/p"",
+                    ""id"": ""749a171f-e775-4799-a813-9d2b3d78d843"",
+                    ""path"": ""<Keyboard>/backspace"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenPartyManagement"",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7225ce8b-d707-4b9b-b1d5-8c3742a177a2"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""id"": ""383623f4-82f5-4775-a80c-0a903cf51843"",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenPartyManagement"",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -283,8 +264,7 @@ namespace TUFG.Controls
             m_World_PickUp = m_World.FindAction("PickUp", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-            m_UI_OpenInventory = m_UI.FindAction("OpenInventory", throwIfNotFound: true);
-            m_UI_OpenPartyManagement = m_UI.FindAction("OpenPartyManagement", throwIfNotFound: true);
+            m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -375,14 +355,12 @@ namespace TUFG.Controls
         // UI
         private readonly InputActionMap m_UI;
         private IUIActions m_UIActionsCallbackInterface;
-        private readonly InputAction m_UI_OpenInventory;
-        private readonly InputAction m_UI_OpenPartyManagement;
+        private readonly InputAction m_UI_Pause;
         public struct UIActions
         {
             private @ControlsInput m_Wrapper;
             public UIActions(@ControlsInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @OpenInventory => m_Wrapper.m_UI_OpenInventory;
-            public InputAction @OpenPartyManagement => m_Wrapper.m_UI_OpenPartyManagement;
+            public InputAction @Pause => m_Wrapper.m_UI_Pause;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -392,22 +370,16 @@ namespace TUFG.Controls
             {
                 if (m_Wrapper.m_UIActionsCallbackInterface != null)
                 {
-                    @OpenInventory.started -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenInventory;
-                    @OpenInventory.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenInventory;
-                    @OpenInventory.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenInventory;
-                    @OpenPartyManagement.started -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenPartyManagement;
-                    @OpenPartyManagement.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenPartyManagement;
-                    @OpenPartyManagement.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenPartyManagement;
+                    @Pause.started -= m_Wrapper.m_UIActionsCallbackInterface.OnPause;
+                    @Pause.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnPause;
+                    @Pause.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnPause;
                 }
                 m_Wrapper.m_UIActionsCallbackInterface = instance;
                 if (instance != null)
                 {
-                    @OpenInventory.started += instance.OnOpenInventory;
-                    @OpenInventory.performed += instance.OnOpenInventory;
-                    @OpenInventory.canceled += instance.OnOpenInventory;
-                    @OpenPartyManagement.started += instance.OnOpenPartyManagement;
-                    @OpenPartyManagement.performed += instance.OnOpenPartyManagement;
-                    @OpenPartyManagement.canceled += instance.OnOpenPartyManagement;
+                    @Pause.started += instance.OnPause;
+                    @Pause.performed += instance.OnPause;
+                    @Pause.canceled += instance.OnPause;
                 }
             }
         }
@@ -437,8 +409,7 @@ namespace TUFG.Controls
         }
         public interface IUIActions
         {
-            void OnOpenInventory(InputAction.CallbackContext context);
-            void OnOpenPartyManagement(InputAction.CallbackContext context);
+            void OnPause(InputAction.CallbackContext context);
         }
     }
 }

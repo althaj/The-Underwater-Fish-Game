@@ -37,6 +37,8 @@ namespace TUFG.Battle
                     {
                         GameObject container = new GameObject("Battle Manager");
                         _instance = container.AddComponent<BattleManager>();
+
+                        DontDestroyOnLoad(container);
                     }
                 }
 
@@ -51,15 +53,15 @@ namespace TUFG.Battle
         // Current player selected ability
         private static Ability currentAbility = null;
 
-        private static bool isSelectingAbility = false;
-        private static bool isSelectingTarget = false;
+        private bool isSelectingAbility = false;
+        private bool isSelectingTarget = false;
 
         private static UnityEngine.Object unitPrefab = null;
         private static UnityEngine.Object UnitPrefab
         {
             get
             {
-                if(unitPrefab == null)
+                if (unitPrefab == null)
                     unitPrefab = Resources.Load("Battle/Unit");
 
                 return unitPrefab;
@@ -104,7 +106,7 @@ namespace TUFG.Battle
                 Vector2 position = battleArena.position - (Vector3.up * 1);
                 position.x -= 1;
 
-                foreach(Unit unit in allies)
+                foreach (Unit unit in allies)
                 {
                     currentBattle.allies.Add(InstantiateUnit(unit, position));
 
@@ -172,7 +174,7 @@ namespace TUFG.Battle
             newUnit.UnitData = unit.UnitData;
             newUnit.IsAlly = unit.IsAlly;
             newUnit.IsPlayer = unit.IsPlayer;
-            newUnit.Health = unit.MaxHealth;
+            newUnit.Health = unit.Health;
             newUnit.UpdateHealthUI();
 
             return newUnit;
@@ -228,7 +230,7 @@ namespace TUFG.Battle
                     List<Unit> possibleTargets = target.IsAlly ? currentBattle.allies : currentBattle.enemies;
 
                     int index = possibleTargets.IndexOf(target);
-                    
+
                     if (index < 0 || index >= possibleTargets.Count)
                         break;
 
@@ -270,7 +272,7 @@ namespace TUFG.Battle
 
             foreach (AbilityEffect effect in effects)
             {
-                foreach(Unit target in targets)
+                foreach (Unit target in targets)
                 {
                     switch (effect.effectType)
                     {
@@ -293,10 +295,21 @@ namespace TUFG.Battle
         /// <param name="target">Unit to be killed.</param>
         private void KillUnit(Unit target)
         {
+            if (target.IsPlayer)
+            {
+                // TODO proper game over
+                UIManager.Instance.OpenMainMenu();
+                return;
+            }
+
             if (target.IsAlly)
+            {
                 currentBattle.allies.Remove(target);
+            }
             else
+            {
                 currentBattle.enemies.Remove(target);
+            }
 
             if (turnOrder.Contains(target))
                 turnOrder.Remove(target);
@@ -317,7 +330,8 @@ namespace TUFG.Battle
             int roundNumber = 0;
 
             // Main battle loop
-            while(currentBattle != null) {
+            while (currentBattle != null)
+            {
                 BuildTurnOrder();
                 roundNumber++;
 
@@ -340,7 +354,7 @@ namespace TUFG.Battle
                                     ability = unit.Abilities[i]
                                 };
                             }
-                            UIManager.Instance.ShowBattleActions(buttons, "Choose your action");
+                            UIManager.Instance.OpenBattleActions(buttons, "Choose your action");
 
                             isSelectingAbility = true;
                         }
@@ -399,7 +413,7 @@ namespace TUFG.Battle
 
             List<GenericButton> buttons = new List<GenericButton>();
 
-            foreach(Unit target in targets)
+            foreach (Unit target in targets)
             {
                 buttons.Add(new GenericButton
                 {
@@ -408,7 +422,29 @@ namespace TUFG.Battle
                     target = target
                 });
             }
-            UIManager.Instance.ShowBattleActions(buttons.ToArray(), "Select target");
+            UIManager.Instance.OpenBattleActions(buttons.ToArray(), "Select target");
+        }
+
+        /// <summary>
+        /// Use wait action.
+        /// </summary>
+        public void WaitAction()
+        {
+            isSelectingTarget = false;
+            isSelectingAbility = false;
+
+            UIManager.Instance.CloseActions();
+
+            turnOrder.Remove(turnOrder[0]);
+        }
+
+        /// <summary>
+        /// Is there a battle in progress currently?
+        /// </summary>
+        /// <returns>If there is a battle right now.</returns>
+        public bool IsBattleInProgress()
+        {
+            return currentBattle != null;
         }
 
         /// <summary>
@@ -422,7 +458,7 @@ namespace TUFG.Battle
 
             UseAbility(turnOrder[0], currentAbility, target);
 
-            UIManager.Instance.HideActions();
+            UIManager.Instance.CloseActions();
 
             turnOrder.Remove(turnOrder[0]);
         }
@@ -432,6 +468,11 @@ namespace TUFG.Battle
         /// </summary>
         public void EndBattle()
         {
+            StopCoroutine(ProcessBattle());
+
+            PartyManager.Instance.SetPlayerParty(currentBattle.allies.Where(x => !x.IsPlayer).ToList());
+            PartyManager.Instance.SetPlayerUnit(currentBattle.allies.Where(x => x.IsPlayer).FirstOrDefault());
+
             currentBattle = null;
 
             PlayerMovement player = FindObjectOfType<PlayerMovement>();
@@ -441,7 +482,7 @@ namespace TUFG.Battle
             camera.SetPosition(player.transform.position + (Vector3.up * 1));
             camera.SetTarget(player.transform);
 
-            Instance.StartCoroutine(ProcessBattle());
+            GameManager.Instance.SaveGame();
         }
     }
 }

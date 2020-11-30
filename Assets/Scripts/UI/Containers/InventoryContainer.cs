@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using TUFG.Battle;
 using TUFG.Inventory;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,7 +14,7 @@ namespace TUFG.UI
     /// <summary>
     /// Container with the inventory window.
     /// </summary>
-    public class InventoryContainer : MonoBehaviour
+    public class InventoryContainer : ContainerBehaviour
     {
         private GameObject inventoryPanel;
         private Item currentItem;
@@ -24,12 +25,6 @@ namespace TUFG.UI
         [SerializeField] private TextMeshProUGUI goldText = null;
 
         private GameObject buttonPrefab;
-        private bool isOpen = false;
-
-        /// <summary>
-        /// Is the inventory window currently open?
-        /// </summary>
-        public bool IsOpen { get => isOpen; private set => isOpen = value; }
 
         #region Unity methods
         void Start()
@@ -46,7 +41,7 @@ namespace TUFG.UI
         /// <summary>
         /// Display the inventory.
         /// </summary>
-        public void ShowInventory()
+        public override void Open()
         {
             FindObjectOfType<PlayerMovement>().DisableInput();
 
@@ -89,29 +84,35 @@ namespace TUFG.UI
             if (itemButtons.Count > 0)
                 ScrollToObject(itemButtons[0].transform);
 
-            UIManager.BuildListButtonNavigation(itemButtons.ToArray(), itemDetailsContainer.GetComponentInChildren<Button>());
+            Button rightButton;
+            if (BattleManager.Instance.IsBattleInProgress())
+            {
+                rightButton = itemDetailsContainer.GetChild(4).GetChild(1).GetComponent<Button>();
+                itemDetailsContainer.GetChild(4).GetChild(0).GetComponent<Button>().interactable = false;
+            } else
+            {
+                rightButton = itemDetailsContainer.GetComponentInChildren<Button>();
+                itemDetailsContainer.GetChild(4).GetChild(0).GetComponent<Button>().interactable = true;
+            }
+
+            UIManager.BuildListButtonNavigation(itemButtons.ToArray(), rightButton);
         }
 
         /// <summary>
         /// Hide player inventory panel.
         /// </summary>
-        public void HideInventory()
+        public override void Close()
         {
-            FindObjectOfType<PlayerMovement>().EnableInput();
-
             IsOpen = false;
             inventoryPanel.SetActive(false);
         }
 
         /// <summary>
-        /// Toggle inventory visibility on or off.
+        /// Close button was pressed.
         /// </summary>
-        public void ToggleInventory()
+        public void CloseButtonPressed()
         {
-            if (IsOpen)
-                HideInventory();
-            else
-                ShowInventory();
+            UIManager.Instance.CloseInventory();
         }
 
         /// <summary>
@@ -159,7 +160,7 @@ namespace TUFG.UI
                 InventoryManager.Instance.EquipItem(currentItem);
 
             currentItem = null;
-            ShowInventory();
+            UIManager.Instance.OpenInventory();
         }
 
         /// <summary>
@@ -168,7 +169,7 @@ namespace TUFG.UI
         public void DropCurrentItem()
         {
             InventoryManager.Instance.DropItem(currentItem);
-            ShowInventory();
+            UIManager.Instance.OpenInventory();
         }
         #endregion
 

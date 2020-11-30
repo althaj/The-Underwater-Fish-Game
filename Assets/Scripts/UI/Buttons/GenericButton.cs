@@ -97,7 +97,10 @@ namespace TUFG.UI
                     switch (dialogueFunction)
                     {
                         case DialogueButtonFunction.GoToNextNode:
-                            DialogueManager.Instance.GoToNextNode();
+                            if (BattleManager.Instance.IsBattleInProgress())
+                                BattleManager.Instance.WaitAction();
+                            else
+                                DialogueManager.Instance.GoToNextNode();
                             break;
                         case DialogueButtonFunction.EndConversation:
                             DialogueManager.Instance.EndConversation();
@@ -114,7 +117,7 @@ namespace TUFG.UI
                             BattleManager.Instance.InitBattle(enemies);
                             break;
                         case DialogueButtonFunction.OpenShop:
-                            UIManager.Instance.ShowShop(ShopManager.Instance.GetShop(shopId));
+                            UIManager.Instance.OpenShop(ShopManager.Instance.GetShop(shopId));
                             break;
                         case DialogueButtonFunction.AddUnitToParty:
                             DialogueManager.Instance.EndConversation();

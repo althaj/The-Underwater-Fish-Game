@@ -10,6 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Linq;
 using System;
+using UnityEngine.SceneManagement;
 
 namespace TUFG.Core
 {
@@ -37,6 +38,8 @@ namespace TUFG.Core
                     {
                         GameObject container = new GameObject("Game Manager");
                         _instance = container.AddComponent<GameManager>();
+
+                        DontDestroyOnLoad(container);
                     }
                 }
 
@@ -62,8 +65,8 @@ namespace TUFG.Core
         /// <param name="slot">Name of the slot and the save file.</param>
         public void SaveGame(string slot)
         {
-            if (!Directory.Exists(GetSaveDirectory()))
-                Directory.CreateDirectory(GetSaveDirectory());
+            if (!Directory.Exists(GetSaveDirectoryPath()))
+                Directory.CreateDirectory(GetSaveDirectoryPath());
 
             SaveGame save = new SaveGame();
 
@@ -73,6 +76,7 @@ namespace TUFG.Core
             save.gold = InventoryManager.Instance.Gold;
             save.shops = ShopManager.Instance.Shops.Select(x => x.ToShopSave()).ToList();
             save.playerParty = PartyManager.Instance.GetPlayerPartySave();
+            save.currentLevelID = SceneManager.GetActiveScene().buildIndex;
 
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Create(GetSavePath(slot));
@@ -111,6 +115,8 @@ namespace TUFG.Core
 
                 PartyManager.Instance.LoadPlayerParty(save.playerParty);
 
+                SceneManager.LoadScene(save.currentLevelID);
+
                 Debug.Log($"Game loaded from slot {slot}.");
             }
             else
@@ -121,22 +127,87 @@ namespace TUFG.Core
         }
 
         /// <summary>
+        /// Create new game save at the default slot and load it.
+        /// </summary>
+        public void NewGame()
+        {
+            NewGame(currentSlot);
+        }
+
+        /// <summary>
+        /// Create new game save and load it.
+        /// </summary>
+        /// <param name="slot">Slot to create the game at.</param>
+        public void NewGame(string slot)
+        {
+            if (!Directory.Exists(GetSaveDirectoryPath()))
+                Directory.CreateDirectory(GetSaveDirectoryPath());
+
+            SaveGame save = new SaveGame();
+
+            // Inventory
+            save.equippedItemPaths = new List<string>();
+            save.inventoryItemPaths = new List<string>();
+            save.gold = 50;
+            save.shops = ShopManager.Instance.InitializeShops();
+            save.playerParty = new List<Tuple<string, int>>();
+            save.currentLevelID = 2;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(GetSavePath(slot));
+            bf.Serialize(file, save);
+            file.Close();
+
+            Debug.Log($"Game saved to slot {slot}.");
+
+            LoadGame(slot);
+        }
+
+        /// <summary>
         /// Returns a path to the save file on a save slot.
         /// </summary>
         /// <param name="slot">Name of the slot and the save file.</param>
         /// <returns></returns>
         public string GetSavePath(string slot)
         {
-            return $"{GetSaveDirectory()}/{slot}.tufg";
+            return $"{GetSaveDirectoryPath()}/{slot}.tufg";
         }
 
         /// <summary>
         /// Return a path to the save directory.
         /// </summary>
         /// <returns></returns>
-        public string GetSaveDirectory()
+        public string GetSaveDirectoryPath()
         {
             return $"{Application.persistentDataPath}/save";
+        }
+
+        /// <summary>
+        /// Is there a save game on a slot?
+        /// </summary>
+        /// <param name="slot">Slot to be tested.</param>
+        /// <returns>If there is a save game on the slot.</returns>
+        public bool IsSaveOnSlot(string slot)
+        {
+            return File.Exists(GetSavePath(slot));
+        }
+
+        /// <summary>
+        /// Is there a save game on the current slot?
+        /// </summary>
+        /// <returns>If there is a save game on the current slot.</returns>
+        public bool IsSaveOnSlot()
+        {
+            return IsSaveOnSlot(currentSlot);
+        }
+
+        /// <summary>
+        /// Is there any save file in the save directory?
+        /// </summary>
+        /// <returns>If any save file exists.</returns>
+        public bool AnySaveExists()
+        {
+            return Directory.GetFiles(GetSaveDirectoryPath(), "*.tufg").Count() > 0;
         }
         #endregion
     }
