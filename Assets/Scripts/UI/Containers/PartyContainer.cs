@@ -76,7 +76,20 @@ namespace TUFG.UI
                 buttons.Add(button.GetComponent<Button>());
             }
 
-            UIManager.BuildListButtonNavigation(buttons.ToArray(), detailsPanel.GetComponentInChildren<Button>());
+            Button rightButton;
+
+            if (BattleManager.Instance.IsBattleInProgress())
+            {
+                rightButton = detailsPanel.GetChild(3).GetChild(1).GetComponent<Button>();
+                detailsPanel.GetChild(3).GetChild(0).GetComponent<Button>().interactable = false;
+            } else
+            {
+                rightButton = detailsPanel.GetChild(3).GetChild(0).GetComponent<Button>();
+                detailsPanel.GetChild(3).GetChild(0).GetComponent<Button>().interactable = true;
+            }
+
+            UIManager.BuildListButtonNavigation(buttons.ToArray(), rightButton);
+
         }
 
         /// <summary>

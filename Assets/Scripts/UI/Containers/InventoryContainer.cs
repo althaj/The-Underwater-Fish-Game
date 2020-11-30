@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using TUFG.Battle;
 using TUFG.Inventory;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -83,7 +84,18 @@ namespace TUFG.UI
             if (itemButtons.Count > 0)
                 ScrollToObject(itemButtons[0].transform);
 
-            UIManager.BuildListButtonNavigation(itemButtons.ToArray(), itemDetailsContainer.GetComponentInChildren<Button>());
+            Button rightButton;
+            if (BattleManager.Instance.IsBattleInProgress())
+            {
+                rightButton = itemDetailsContainer.GetChild(4).GetChild(1).GetComponent<Button>();
+                itemDetailsContainer.GetChild(4).GetChild(0).GetComponent<Button>().interactable = false;
+            } else
+            {
+                rightButton = itemDetailsContainer.GetComponentInChildren<Button>();
+                itemDetailsContainer.GetChild(4).GetChild(0).GetComponent<Button>().interactable = true;
+            }
+
+            UIManager.BuildListButtonNavigation(itemButtons.ToArray(), rightButton);
         }
 
         /// <summary>
