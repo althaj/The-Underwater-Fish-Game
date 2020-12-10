@@ -67,6 +67,7 @@ namespace TUFG.Inventory
                     case ItemSlot.Legs: return "Legs";
                     case ItemSlot.Amulet: return "Amulet";
                     case ItemSlot.Ring: return "Ring";
+                    case ItemSlot.None: return "";
                     default:
                         Debug.LogError($"Item slot {slot.ToString()} doesn't have a text representation!");
                         return "";

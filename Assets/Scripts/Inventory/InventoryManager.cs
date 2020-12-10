@@ -13,6 +13,7 @@ namespace TUFG.Inventory
     /// </summary>
     public enum ItemSlot
     {
+        None,
         Hands,
         Body,
         Legs,
