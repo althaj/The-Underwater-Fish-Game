@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   unitID: Player
-  name: Player
-  avatar: {fileID: 0}
-  description: 
+  name: Jorgen
+  avatar: {fileID: 21300000, guid: 08f5bc5e39d83374e8d4efc11d033f45, type: 3}
+  description: 'This is you.
+
+
+    Jorgen is a true adventurer. He seeks glory and
+    riches and women.'
   animator: {fileID: 9100000, guid: 480743572049e5743a04c7fbb3943e75, type: 2}
   aiType: 1
   maxHealth: 100
@@ -24,4 +28,15 @@ MonoBehaviour:
   speed: 4
   strength: 5
   power: 0
-  abilities: []
+  abilities:
+  - name: Punch
+    abilityID: PlayerPunch
+    targetting: 0
+    priority: 0
+    priorityStrenght: 0
+    primaryEffects:
+    - effectType: 0
+      effectValue: 5
+      strenghtMultiplier: 1
+      powerMultiplier: 0
+    secondaryEffects: []

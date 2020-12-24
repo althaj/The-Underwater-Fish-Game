@@ -59,12 +59,13 @@ namespace TUFG.Battle
         /// <returns>List of units in the player party.</returns>
         public List<Unit> GetPlayerParty(bool addPlayer)
         {
-            List<Unit> party = playerParty;
+            List<Unit> party = new List<Unit>();
 
             if (addPlayer)
-            {
                 party.Add(playerUnit);
-            }
+
+            foreach(Unit u in playerParty)
+                party.Add(GetDefaultUnit(u.UnitData));
 
             return party;
         }
