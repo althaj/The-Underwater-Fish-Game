@@ -24,6 +24,15 @@ namespace TUFG.UI
         [SerializeField] private Transform itemDetailsContainer = null;
         [SerializeField] private TextMeshProUGUI goldText = null;
 
+        private Button equipButton;
+        private Button dropButton;
+        private Button closeButton;
+
+        private TextMeshProUGUI nameText;
+        private TextMeshProUGUI slotLabel;
+        private TextMeshProUGUI slotText;
+        private TextMeshProUGUI descriptionText;
+
         private GameObject buttonPrefab;
 
         #region Unity methods
@@ -32,6 +41,14 @@ namespace TUFG.UI
             buttonPrefab = UIManager.Instance.InventoryButtonPrefab;
 
             inventoryPanel = transform.GetChild(0).gameObject;
+            equipButton = itemDetailsContainer.GetChild(4).GetChild(0).GetComponent<Button>();
+            dropButton = itemDetailsContainer.GetChild(4).GetChild(1).GetComponent<Button>();
+            closeButton = itemDetailsContainer.GetChild(4).GetChild(2).GetComponent<Button>();
+
+            nameText = itemDetailsContainer.GetChild(0).GetComponent<TextMeshProUGUI>();
+            slotLabel = itemDetailsContainer.GetChild(1).GetComponent<TextMeshProUGUI>();
+            slotText = itemDetailsContainer.GetChild(2).GetComponent<TextMeshProUGUI>();
+            descriptionText = itemDetailsContainer.GetChild(3).GetComponent<TextMeshProUGUI>();
 
             inventoryPanel.SetActive(false);
         }
@@ -65,14 +82,12 @@ namespace TUFG.UI
             for (int i = 0; i < equippedItems.Count; i++)
             {
                 GameObject button = CreateButton(equippedItems[i], true);
-
                 itemButtons.Add(button.GetComponent<Button>());
             }
 
             for (int i = 0; i < inventoryItems.Count; i++)
             {
                 GameObject button = CreateButton(inventoryItems[i], false);
-
                 itemButtons.Add(button.GetComponent<Button>());
             }
 
@@ -81,21 +96,31 @@ namespace TUFG.UI
             sizeDelta.y = itemButtons.Count * buttonPrefab.GetComponent<RectTransform>().sizeDelta.y + (itemButtons.Count - 1) * layout.spacing + layout.padding.top + layout.padding.bottom;
             itemListContainer.GetComponent<RectTransform>().sizeDelta = sizeDelta;
 
-            if (itemButtons.Count > 0)
-                ScrollToObject(itemButtons[0].transform);
-
-            Button rightButton;
+            // Build navigation
             if (BattleManager.Instance.IsBattleInProgress())
             {
-                rightButton = itemDetailsContainer.GetChild(4).GetChild(1).GetComponent<Button>();
-                itemDetailsContainer.GetChild(4).GetChild(0).GetComponent<Button>().interactable = false;
-            } else
+                equipButton.interactable = false;
+                dropButton.interactable = false;
+                UIManager.BuildListButtonNavigation(itemButtons.ToArray(), closeButton);
+            }
+            else
             {
-                rightButton = itemDetailsContainer.GetComponentInChildren<Button>();
-                itemDetailsContainer.GetChild(4).GetChild(0).GetComponent<Button>().interactable = true;
+                equipButton.interactable = true;
+                dropButton.interactable = true;
+                UIManager.BuildListButtonNavigation(itemButtons.ToArray(), equipButton);
             }
 
-            UIManager.BuildListButtonNavigation(itemButtons.ToArray(), rightButton);
+            // Select first item
+            if (itemButtons.Count > 0)
+            {
+                ScrollToObject(itemButtons[0].transform);
+            }
+            else
+            {
+                SelectItem(null, false);
+                EventSystem.current.SetSelectedGameObject(closeButton.gameObject);
+            }
+
         }
 
         /// <summary>
@@ -122,12 +147,30 @@ namespace TUFG.UI
         /// <param name="isEquipped">Is the item currently eqipped?</param>
         public void SelectItem(Item item, bool isEquipped)
         {
-            itemDetailsContainer.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.name;
-            itemDetailsContainer.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.SlotText;
-            itemDetailsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = item.description;
+            if (item != null)
+            {
+                nameText.text = item.name;
+                slotText.text = item.SlotText;
+                descriptionText.text = item.description;
 
-            TextMeshProUGUI buttonText = itemDetailsContainer.GetChild(4).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
-            buttonText.text = isEquipped ? "Unequip" : "Equip";
+                slotLabel.gameObject.SetActive(true);
+
+                equipButton.interactable = true;
+                dropButton.interactable = true;
+            }
+            else
+            {
+                nameText.text = "";
+                slotText.text = "";
+                descriptionText.text = "";
+
+                slotLabel.gameObject.SetActive(false);
+
+                equipButton.interactable = false;
+                dropButton.interactable = false;
+            }
+
+            equipButton.GetComponentInChildren<TextMeshProUGUI>().text = isEquipped ? "Unequip" : "Equip";
 
             currentItem = item;
             currentItemIsEquipped = isEquipped;
@@ -143,7 +186,6 @@ namespace TUFG.UI
             ScrollRect scroll = itemListContainer.parent.parent.GetComponent<ScrollRect>();
 
             Vector2 anchored = itemListContainer.GetComponent<RectTransform>().anchoredPosition;
-
             anchored.y = scroll.transform.InverseTransformPoint(itemListContainer.position).y - scroll.transform.InverseTransformPoint(obj.position).y - itemListContainer.GetComponent<VerticalLayoutGroup>().padding.top;
 
             itemListContainer.GetComponent<RectTransform>().anchoredPosition = anchored;

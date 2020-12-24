@@ -71,6 +71,17 @@ namespace TUFG.UI
             Button[] sellButtons = BuildButtons(sellItems, true);
             Button[] buttons = buyButtons.Concat(sellButtons).ToArray();
             UIManager.BuildListButtonNavigation(buttons, itemDetailsContainer.GetComponentInChildren<Button>());
+
+            // If there are no buttons, disable the buy / sell button and select the close button.
+            if(buttons.Length == 0)
+            {
+                itemDetailsContainer.GetChild(4).GetChild(0).GetComponent<Button>().interactable = false;
+                EventSystem.current.SetSelectedGameObject(itemDetailsContainer.GetChild(4).GetChild(1).gameObject);
+                SetItemDescription(new Item());
+            } else
+            {
+                itemDetailsContainer.GetChild(4).GetChild(0).GetComponent<Button>().interactable = true;
+            }
         }
 
         /// <summary>
@@ -116,9 +127,7 @@ namespace TUFG.UI
         /// <param name="isSelling">Is player selling the item?</param>
         public void SelectItem(Item item, bool isSelling)
         {
-            itemDetailsContainer.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.name;
-            itemDetailsContainer.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.SlotText;
-            itemDetailsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = item.description;
+            SetItemDescription(item);
 
             TextMeshProUGUI sellButton = itemDetailsContainer.GetChild(4).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
             sellButton.text = isSelling ? "Sell item" : "Buy item";
@@ -227,6 +236,23 @@ namespace TUFG.UI
         private int GetItemPrice(Item item)
         {
             return Mathf.RoundToInt((float)item.price * shop.Margin);
+        }
+
+        /// <summary>
+        /// Set the description of the item to display in the shop.
+        /// </summary>
+        /// <param name="item">Item to display.</param>
+        private void SetItemDescription(Item item)
+        {
+            itemDetailsContainer.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.name;
+            itemDetailsContainer.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.SlotText;
+
+            if (item.slot == ItemSlot.None)
+                itemDetailsContainer.GetChild(1).gameObject.SetActive(false);
+            else
+                itemDetailsContainer.GetChild(1).gameObject.SetActive(true);
+
+            itemDetailsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = item.description;
         }
         #endregion
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using TUFG.Battle;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace TUFG.UI
@@ -25,6 +26,9 @@ namespace TUFG.UI
         private TextMeshProUGUI speedText;
         private TextMeshProUGUI descriptionText;
 
+        private Button kickOutButton;
+        private Button closeButton;
+
         [SerializeField] private Transform goonsPanel;
         [SerializeField] private Transform detailsPanel;
 
@@ -40,6 +44,9 @@ namespace TUFG.UI
             powerText = detailsPanel.GetChild(1).GetChild(7).GetComponent<TextMeshProUGUI>();
             speedText = detailsPanel.GetChild(1).GetChild(9).GetComponent<TextMeshProUGUI>();
             descriptionText = detailsPanel.GetChild(2).GetComponent<TextMeshProUGUI>();
+
+            kickOutButton = detailsPanel.GetChild(3).GetChild(0).GetComponent<Button>();
+            closeButton = detailsPanel.GetChild(3).GetChild(1).GetComponent<Button>();
 
             buttonPrefab = UIManager.Instance.GoonButtonPrefab;
 
@@ -57,7 +64,7 @@ namespace TUFG.UI
             FindObjectOfType<PlayerMovement>().DisableInput();
 
             // Get the units
-            List<Unit> units = PartyManager.Instance.GetPlayerParty(false);
+            List<Unit> units = PartyManager.Instance.GetPlayerParty(true);
 
             if (!IsOpen)
             {
@@ -68,28 +75,36 @@ namespace TUFG.UI
 
             UIManager.Instance.ClearChildren(goonsPanel.gameObject);
             List<Button> buttons = new List<Button>();
+            Button playerButton = null;
 
             foreach (Unit unit in units)
             {
-                GameObject button = CreateButton(unit);
+                Button button = CreateButton(unit);
 
-                buttons.Add(button.GetComponent<Button>());
+                buttons.Add(button);
+
+                if (unit.IsPlayer)
+                    playerButton = button;
             }
 
             Button rightButton;
 
             if (BattleManager.Instance.IsBattleInProgress())
             {
-                rightButton = detailsPanel.GetChild(3).GetChild(1).GetComponent<Button>();
-                detailsPanel.GetChild(3).GetChild(0).GetComponent<Button>().interactable = false;
-            } else
+                rightButton = closeButton;
+                kickOutButton.interactable = false;
+            }
+            else
             {
-                rightButton = detailsPanel.GetChild(3).GetChild(0).GetComponent<Button>();
-                detailsPanel.GetChild(3).GetChild(0).GetComponent<Button>().interactable = true;
+                rightButton = kickOutButton;
+                kickOutButton.interactable = true;
             }
 
             UIManager.BuildListButtonNavigation(buttons.ToArray(), rightButton);
 
+            Navigation playerNav = playerButton.navigation;
+            playerNav.selectOnRight = closeButton;
+            playerButton.navigation = playerNav;
         }
 
         /// <summary>
@@ -114,13 +129,13 @@ namespace TUFG.UI
         /// </summary>
         /// <param name="unit">Unit to create the button for.</param>
         /// <returns></returns>
-        private GameObject CreateButton(Unit unit)
+        private Button CreateButton(Unit unit)
         {
-            GameObject buttonInstance = Instantiate<GameObject>(buttonPrefab);
+            GameObject buttonInstance = Instantiate(buttonPrefab);
             buttonInstance.transform.SetParent(goonsPanel);
             buttonInstance.GetComponent<GoonButton>().InitButton(unit, this);
 
-            return buttonInstance;
+            return buttonInstance.GetComponent<Button>();
         }
 
         /// <summary>
@@ -138,6 +153,15 @@ namespace TUFG.UI
             powerText.text = unit.Power.ToString();
             speedText.text = unit.Speed.ToString();
             descriptionText.text = unit.UnitData.description;
+
+            if (unit.IsPlayer)
+            {
+                kickOutButton.interactable = false;
+            }
+            else
+            {
+                kickOutButton.interactable = true;
+            }
         }
 
         /// <summary>
