@@ -92,8 +92,6 @@ namespace TUFG
                     }
                 }
 
-                playerAnimator.SetFloat("Speed", translation.y);
-
             } else
             {
                 if (moveVector.y > 0.5f)
@@ -114,10 +112,16 @@ namespace TUFG
                     else
                         translation = Vector3.up * gravity * Time.fixedDeltaTime;
 
-                playerAnimator.SetFloat("Speed", translation.x);
+
+                if(translation.x > 0)
+                    playerAnimator.SetBool("IsRight", true);
+
+                if (translation.x < 0)
+                    playerAnimator.SetBool("IsRight", false);
             }
 
             transform.Translate(translation);
+            playerAnimator.SetFloat("Speed", translation.sqrMagnitude * 100);
             playerAnimator.SetBool("IsClimbing", isClimbing);
             playerAnimator.SetBool("IsGrounded", isGrounded);
         }
