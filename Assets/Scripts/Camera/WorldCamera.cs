@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -17,16 +18,40 @@ namespace TUFG.Camera
         /// </summary>
         /// <param name="targetPosition">Position of an object you want to view.</param>
         /// <returns></returns>
-        public Vector2 GetCameraPosition (Vector2 targetPosition)
+        public Vector3 GetCameraPosition (Vector3 targetPosition)
         {
-            Vector2 result = Vector2.zero;
+            Vector3 result = Vector3.zero;
 
             result.x = Mathf.Clamp(targetPosition.x, transform.position.x - bounds.x, transform.position.x + bounds.x);
             result.y = Mathf.Clamp(targetPosition.y, transform.position.y - bounds.y, transform.position.y + bounds.y);
+            result.z = -10f;
 
             return result;
         }
 
+        /// <summary>
+        /// Turns off the triggers for camera transition.
+        /// </summary>
+        public void Deactivate()
+        {
+            foreach (var transition in GetComponentsInChildren<CameraTransition>())
+            {
+                transition.enabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Turns on all the triggers for the camera transition.
+        /// </summary>
+        public void Activate()
+        {
+            foreach (var transition in GetComponentsInChildren<CameraTransition>())
+            {
+                transition.enabled = true;
+            }
+        }
+
+        #region Draw in editor
         /// <summary>
         /// Draw helper gizmos when the camera object is selected.
         /// </summary>
@@ -46,7 +71,7 @@ namespace TUFG.Camera
             // Draw the camera bounds.
             drawColor.a = 0.1f;
             Gizmos.color = drawColor;
-            Gizmos.DrawCube(transform.position, new Vector3(screenSize.x / 2 + bounds.x / 2, screenSize.y / 2 + bounds.y / 2, 0));
+            Gizmos.DrawCube(transform.position, new Vector3(screenSize.x / 2 + bounds.x * 2, screenSize.y / 2 + bounds.y * 2, 0));
         }
 
         /// <summary>
@@ -68,7 +93,8 @@ namespace TUFG.Camera
             // Draw the camera bounds.
             drawColor.a = 0.1f;
             Gizmos.color = drawColor;
-            Gizmos.DrawWireCube(transform.position, new Vector3(screenSize.x / 2 + bounds.x / 2, screenSize.y / 2 + bounds.y / 2, 0));
+            Gizmos.DrawWireCube(transform.position, new Vector3(screenSize.x / 2 + bounds.x * 2, screenSize.y / 2 + bounds.y * 2, 0));
         }
+        #endregion
     }
 }
