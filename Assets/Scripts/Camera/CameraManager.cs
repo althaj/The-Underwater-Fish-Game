@@ -59,8 +59,27 @@ namespace TUFG.Camera
         // Update is called once per frame
         void Update()
         {
-            if(mainCamera != null && currentCamera != null)
+            if(mainCamera != null && currentCamera != null && target != null)
                 mainCamera.position = currentCamera.GetCameraPosition(target.position);
+        }
+
+        /// <summary>
+        /// Set the position of the camera. This sets the target to null.
+        /// </summary>
+        /// <param name="position">New position of the camera.</param>
+        public void SetPosition(Vector3 position)
+        {
+            mainCamera.position = position;
+            SetTarget(null);
+        }
+
+        /// <summary>
+        /// Set a new target for the camera.
+        /// </summary>
+        /// <param name="target">New target for the camera.</param>
+        public void SetTarget(Transform target)
+        {
+            this.target = target;
         }
 
         /// <summary>
