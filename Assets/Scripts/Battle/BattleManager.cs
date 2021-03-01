@@ -96,9 +96,7 @@ namespace TUFG.Battle
             Transform battleArena = FindObjectOfType<WorldInfo>().GetRandomArena();
             if (battleArena != null)
             {
-                WorldCamera camera = FindObjectOfType<WorldCamera>();
-                camera.SetPosition(battleArena.position + (Vector3.up * 1));
-                camera.SetTarget(battleArena);
+                CameraManager.Instance.SetPosition(battleArena.position);
 
                 currentBattle.allies = new List<Unit>();
                 currentBattle.enemies = new List<Unit>();
@@ -478,9 +476,7 @@ namespace TUFG.Battle
             PlayerMovement player = FindObjectOfType<PlayerMovement>();
             player.EnableInput();
 
-            WorldCamera camera = FindObjectOfType<WorldCamera>();
-            camera.SetPosition(player.transform.position + (Vector3.up * 1));
-            camera.SetTarget(player.transform);
+            CameraManager.Instance.SetTarget(player.transform);
 
             GameManager.Instance.SaveGame();
         }
