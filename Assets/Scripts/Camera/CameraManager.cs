@@ -46,7 +46,7 @@ namespace TUFG.Camera
 
             // Set the first camera.
             if (cameras.Length > 0)
-                Transition(cameras[cameras.Length - 1]);
+                Transition(cameras[0]);
             else
                 Transition(null);
 
