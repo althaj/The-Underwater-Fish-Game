@@ -19,10 +19,12 @@ namespace TUFG
             new Vector3(-0.3f, 0.15f),
             new Vector3(0.3f, 0.15f)
         };
-        private readonly float groundRayLength = 0.3f;
+        private Vector3 wallRayOrigin = new Vector3(0, 0.5f);
+        private readonly float rayLength = 0.3f;
         private bool isGrounded = true;
         private float gravity = 0;
         private LayerMask groundLayer;
+        private LayerMask wallLayer;
 
         private ControlsInput controlsInput;
         private Vector2 moveVector = Vector2.zero;
@@ -49,6 +51,7 @@ namespace TUFG
             playerAnimator = GetComponentInChildren<Animator>();
 
             groundLayer = LayerMask.GetMask("Ground");
+            wallLayer = LayerMask.GetMask("Wall");
         }
 
         private void OnEnable()
@@ -105,6 +108,9 @@ namespace TUFG
                     if (ladderID >= 0)
                         StartClimbing(ladderID, World.LadderType.Top);
                 }
+
+                if (HitsWall())
+                    moveVector.x = 0;
 
                 if (!isClimbing)
                     if (isGrounded)
@@ -209,12 +215,33 @@ namespace TUFG
 
             foreach (Vector3 groundRayOrigin in groundRayOrigins)
             {
-                hit = Physics2D.Raycast(transform.position + groundRayOrigin, Vector2.down, groundRayLength, groundLayer);
+                hit = Physics2D.Raycast(transform.position + groundRayOrigin, Vector2.down, rayLength, groundLayer);
                 if (hit.collider != null)
                 {
                     transform.position = new Vector2(transform.position.x, hit.point.y);
                     return true;
                 }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Does the player hit a wall in the current direction?
+        /// </summary>
+        /// <returns>If the player is currently near a wall.</returns>
+        public bool HitsWall()
+        {
+            if (isClimbing)
+                return false;
+
+            RaycastHit2D hit;
+
+            hit = Physics2D.Raycast(transform.position + wallRayOrigin, new Vector2(moveVector.x, 0), rayLength, wallLayer);
+            if (hit.collider != null)
+            {
+                
+                return true;
             }
 
             return false;
