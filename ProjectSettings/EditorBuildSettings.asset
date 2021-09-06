@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 400eea9c1a37fdf488200317c902cf33
   - enabled: 1
-    path: Assets/Scenes/Prototype/WorldScene.unity
-    guid: 8141b6c7e96edd24c87005a2c0f4155b
+    path: Assets/Scenes/Levels/Beach/Beach1.unity
+    guid: d6ee84c087fc76443b4bf42619148b2b
   m_configObjects: {}
